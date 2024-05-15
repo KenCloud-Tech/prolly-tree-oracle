@@ -8,6 +8,9 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func init() {
@@ -27,8 +30,19 @@ func init() {
 }
 
 func main() {
-	api.CreatEventListener()
+	go api.CreatEventListener()
+	go api.PutEventListener()
+	go api.GetEventListener()
+	go api.IndexEventListener()
+	go api.SearchEventListener()
 
-	for true {
-	}
+	// 设置一个用于接收信号的通道
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	// 等待信号
+	sig := <-sigs
+	log.Printf("Received signal %s, exiting...\n", sig)
+	// 这里可以添加清理工作，比如关闭打开的文件、数据库连接等
+	// 然后退出程序
+	os.Exit(0)
 }

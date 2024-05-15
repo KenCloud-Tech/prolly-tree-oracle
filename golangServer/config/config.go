@@ -7,8 +7,8 @@ import (
 
 const (
 	URL             = "ws://127.0.0.1:8545"
-	OracleOwner     = "0xAB40890Ff19775832AC05cb184533Bc5C7Cdc32E"
-	ContractAddress = "0x569229C06ED415E32523FCa73744d43A689BC66E"
+	OracleOwner     = "0xCb5f3F9E5b36E6e4070aF11FF9E2b01D74D079E3"
+	ContractAddress = "0x292320687B85839EFc977003Ac544AfA2F485757"
 )
 
 var OracleContract *Oracle.Oracle

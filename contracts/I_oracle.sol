@@ -5,12 +5,20 @@ import {Permission} from "./interfaces/permission.sol";
 
 contract IOracle{
 
-    struct ReqController{
-        uint reqID;
-        bytes data;
-        bool statement;// true or false
-    }
+    // struct ReqController{
+    //     uint reqID;
+    //     address userAdd;//requester`s address
+    //     string callBack;//callback function
+    //     bool statement;// true or false
+    // }
+    bytes32 equal = keccak256(abi.encodePacked("equal"));
+    bytes32 compare = keccak256(abi.encodePacked("compare"));
+    bytes32 sort = keccak256(abi.encodePacked("sort"));
+    bytes32 limit = keccak256(abi.encodePacked("limit"));
+    bytes32 skip = keccak256(abi.encodePacked("skip"));
+
     uint internal CurrentReqID;
+    event ReqState(uint reqID, address user, bool statement, string info);
 
     //contract owner
     address private owner;
@@ -19,7 +27,7 @@ contract IOracle{
     // A mapping of user address to db control permission.
     mapping(address=>mapping(string=>Permission)) internal permission;
     // A mapping of user address to request statement
-    mapping(address => mapping(uint=>ReqController)) internal reqStatement;
+    // mapping(address => mapping(uint=>ReqController)) internal reqStatement;
 
     constructor() {
             owner = msg.sender;

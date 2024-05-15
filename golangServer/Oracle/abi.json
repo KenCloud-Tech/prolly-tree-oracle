@@ -10,6 +10,37 @@
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "statement",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
+      }
+    ],
+    "name": "ReqState",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "dbName",
         "type": "string"
@@ -47,14 +78,14 @@
       },
       {
         "indexed": false,
-        "internalType": "string",
-        "name": "Key",
-        "type": "string"
+        "internalType": "bytes",
+        "name": "recordID",
+        "type": "bytes"
       },
       {
         "indexed": false,
         "internalType": "string",
-        "name": "Val",
+        "name": "callBack",
         "type": "string"
       },
       {
@@ -65,6 +96,37 @@
       }
     ],
     "name": "get",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "Key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "index",
     "type": "event"
   },
   {
@@ -96,6 +158,96 @@
       }
     ],
     "name": "put",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "k",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "str",
+            "type": "string"
+          },
+          {
+            "internalType": "int64",
+            "name": "integer",
+            "type": "int64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "uinteger",
+            "type": "uint64"
+          },
+          {
+            "internalType": "bytes",
+            "name": "bytess",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bool",
+            "name": "boolean",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "comDataType",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "comIndex",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "comOp",
+            "type": "string"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct OracleInterface.SearchController",
+        "name": "Val",
+        "type": "tuple"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "Method",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "search",
     "type": "event"
   },
   {
@@ -141,8 +293,13 @@
       },
       {
         "internalType": "address",
-        "name": "owner",
+        "name": "sender",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
       }
     ],
     "name": "CreatRsp",
@@ -182,13 +339,13 @@
         "type": "string"
       },
       {
-        "internalType": "string",
-        "name": "Key",
-        "type": "string"
+        "internalType": "bytes",
+        "name": "recordID",
+        "type": "bytes"
       },
       {
         "internalType": "string",
-        "name": "Val",
+        "name": "callBack",
         "type": "string"
       }
     ],
@@ -221,12 +378,74 @@
         "type": "bytes"
       },
       {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
         "internalType": "address",
         "name": "sender",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
       }
     ],
     "name": "GetRsp",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "Key",
+        "type": "string"
+      }
+    ],
+    "name": "Index",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "statement",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
+      }
+    ],
+    "name": "IndexRsp",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -271,9 +490,133 @@
         "internalType": "address",
         "name": "sender",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
       }
     ],
     "name": "PutRsp",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "k",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "str",
+            "type": "string"
+          },
+          {
+            "internalType": "int64",
+            "name": "integer",
+            "type": "int64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "uinteger",
+            "type": "uint64"
+          },
+          {
+            "internalType": "bytes",
+            "name": "bytess",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bool",
+            "name": "boolean",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "comDataType",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "comIndex",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "comOp",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct OracleInterface.SearchController",
+        "name": "Val",
+        "type": "tuple"
+      },
+      {
+        "internalType": "string",
+        "name": "Method",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      }
+    ],
+    "name": "Search",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "statement",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
+      }
+    ],
+    "name": "SearchRsp",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

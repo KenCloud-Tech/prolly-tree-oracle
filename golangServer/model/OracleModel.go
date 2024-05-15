@@ -6,7 +6,7 @@ import (
 )
 
 type OracleModel struct {
-	DbID string
-	Ctx  context.Context
-	Db   *indexer.Collection
+	DbName string
+	Ctx    context.Context
+	Db     *indexer.Collection
 }
