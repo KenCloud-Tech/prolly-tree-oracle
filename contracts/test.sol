@@ -38,6 +38,7 @@ contract OracleTest{
         or.Search(dbName,Val,Method,callBack);
     }
 
+    // catch data and emit event
     event sendData(bytes data);
     function catchData(bytes calldata data) external{
         emit sendData(data);

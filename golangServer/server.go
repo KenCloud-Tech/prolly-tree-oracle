@@ -20,14 +20,14 @@ func init() {
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
 	}
-	config.PrivateKey, err = crypto.HexToECDSA(config.OracleOwnerPrivateKey[2:]) // 移除前缀"0x"
+	config.PrivateKey, err = crypto.HexToECDSA(config.OracleOwnerPrivateKey[2:]) // Remove prefix "0x"
 	if err != nil {
 		log.Fatalf("Invalid private key: %v", err)
 	}
 
-	// 将字符串地址转换为`common.Address`类型
+	// Convert string address to `common.Address` type
 	contractAddr := common.HexToAddress(config.ContractAddress)
-	// 使用合约地址和client创建一个新的实例
+	// Create a new instance using the contract address and client
 	config.OracleContract, err = Oracle.NewOracle(contractAddr, config.Client)
 	if err != nil {
 		log.Fatalf("Failed to instantiate a Oracle contract: %v", err)
@@ -42,13 +42,12 @@ func main() {
 	go api.GetEventListener()
 	go api.SearchEventListener()
 
-	// 设置一个用于接收信号的通道
+	// Set up a channel for receiving signals
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	// 等待信号
+	// wait for signal
 	sig := <-sigs
 	log.Printf("Received signal %s, exiting...\n", sig)
-	// 这里可以添加清理工作，比如关闭打开的文件、数据库连接等
-	// 然后退出程序
+	// Cleaning work can be added here, such as closing open files, database connections, etc.
 	os.Exit(0)
 }

@@ -70,7 +70,29 @@ func search(event *Oracle.OracleSearch) {
 		}
 		data = nodeTobyte(node)
 		statement = true
-	//case "compare":
+	case "compare":
+		query := indexer.Query{
+			Compare: &indexer.CompareCondition{Cmp: indexer.Op(event.Val.ComOp), IndexName: event.Val.K, IndexVal: creatNode(event)},
+		}
+		results, err := dbC.Search(ctx, query)
+		if err != nil {
+			log.Println("[", event.DbName, "]", "Search data  ERROR: ", err)
+			info := fmt.Sprintf("Search data  ERROR: %v", err)
+			statement = false
+			//response to oracle
+			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
+			return
+		}
+		record := <-results
+		node := record.Data
+		if node == nil {
+			statement = false
+			//response to oracle
+			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
+			return
+		}
+		data = nodeTobyte(node)
+		statement = true
 	case "sort":
 		query := indexer.Query{
 			Sort: event.Val.Str,

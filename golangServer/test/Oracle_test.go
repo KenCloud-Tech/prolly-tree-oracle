@@ -165,7 +165,7 @@ func RspListener() {
 		case err := <-eventSub.Err():
 			log.Println("[Error in Event CREAT]:", err)
 		case event := <-Logs:
-			log.Printf("[Rsq: %v]  state: %v  info: %v", event.ReqID, event.Statement, event.Info)
+			log.Printf("[Rsp: %v]  state: %v  info: %v", event.ReqID, event.Statement, event.Info)
 		}
 	}
 }

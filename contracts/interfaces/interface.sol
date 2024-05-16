@@ -14,17 +14,16 @@ pragma solidity ^0.8.0;
 interface OracleInterface{
 
     struct SearchController{
-        string k;
-
+        string k; // the key for search
+        // the value for search , just use one
         string str;
         int64 integer;
         uint64 uinteger;
         bytes bytess;
         bool boolean;
-        string comDataType;//string,int,uint,bytes,bool
 
-        string comIndex;
-        string comOp;
+        string DataType; // type of value string,int,uint,bytes or bool,
+        string comOp; // compare optiong: "GreaterThan" or "LessThan"
     }
 
     function Create(string calldata dbName, string calldata primaryKey) external;
@@ -46,7 +45,7 @@ interface OracleInterface{
     function Index(string calldata dbName, string calldata Key) external;
     event index(uint reqID, string dbName, string Key, address sender);
 
-    
+
     function Search(string calldata dbName, SearchController calldata Val, string calldata Method, string calldata callBack) external;
     event search(uint reqID, string dbName, SearchController Val,string Method, string callBack, address sender);
 }
