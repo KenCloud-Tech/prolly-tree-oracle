@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
 	"log"
 	"strings"
 )
@@ -36,9 +35,7 @@ func PutEventListener() {
 // Put data to memory db
 func put(event *Oracle.OraclePut) {
 	var statement bool
-	tps := &bind.TransactOpts{
-		From: common.BytesToAddress([]byte(config.OracleOwner)),
-	}
+	tps := GenTransactOpts(config.GasLimit)
 
 	dbName := event.DbName
 	ctx, dbC := config.Dbs[dbName].Ctx, config.Dbs[dbName].Db

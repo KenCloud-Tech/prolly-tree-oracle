@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ipld/go-ipld-prime"
 	"github.com/ipld/go-ipld-prime/datamodel"
 	"github.com/ipld/go-ipld-prime/printer"
@@ -39,9 +38,7 @@ func GetEventListener() {
 // Get data from memory db
 func get(event *Oracle.OracleGet) {
 	var statement bool
-	tps := &bind.TransactOpts{
-		From: common.BytesToAddress([]byte(config.OracleOwner)),
-	}
+	tps := GenTransactOpts(config.GasLimit)
 
 	dbName := event.DbName
 	ctx, dbC := config.Dbs[dbName].Ctx, config.Dbs[dbName].Db
@@ -52,6 +49,13 @@ func get(event *Oracle.OracleGet) {
 		statement = false
 		//response to oracle
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		return
+	}
+	if node == nil {
+		statement = false
+		//response to oracle
+		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
+		return
 	}
 	data := nodeTobyte(node)
 	statement = true

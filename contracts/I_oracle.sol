@@ -27,11 +27,15 @@ contract IOracle{
     // A mapping of user address to db control permission.
     mapping(address=>mapping(string=>Permission)) internal permission;
     // A mapping of user address to request statement
-    // mapping(address => mapping(uint=>ReqController)) internal reqStatement;
+    mapping(uint=>bool) internal reqStatement;
+
+    function GetReqState(uint ReqID) public view returns(bool){
+        return reqStatement[ReqID];
+    }
 
     constructor() {
             owner = msg.sender;
-            CurrentReqID = 0;
+            CurrentReqID = 1;
         }
     
     modifier onlyOracleOwner() {

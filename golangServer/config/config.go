@@ -3,14 +3,25 @@ package config
 import (
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/model"
+	"crypto/ecdsa"
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 const (
-	URL             = "ws://127.0.0.1:8545"
-	OracleOwner     = "0xCb5f3F9E5b36E6e4070aF11FF9E2b01D74D079E3"
-	ContractAddress = "0x292320687B85839EFc977003Ac544AfA2F485757"
+	URL                   = "ws://127.0.0.1:8545"
+	OracleOwnerPrivateKey = "0xfd6bb83200bb7dafb2e247fcfcd88c296d6d65f6542c5ad3cb66856ddac160f2"
+	ContractAddress       = "0x825E9Ec368aE314949FD60D098e3C616cCBcD0BF"
+	ChainID               = 1337
 )
 
-var OracleContract *Oracle.Oracle
+var (
+	Client *ethclient.Client
 
-var Dbs map[string]*model.OracleModel
+	PrivateKey *ecdsa.PrivateKey
+
+	OracleContract *Oracle.Oracle
+
+	Dbs map[string]*model.OracleModel
+
+	GasLimit uint64 = 300000
+)

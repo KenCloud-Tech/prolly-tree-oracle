@@ -6,6 +6,7 @@ import (
 	"Oracle.com/golangServer/config"
 	"Oracle.com/golangServer/model"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
 	"os"
@@ -14,15 +15,20 @@ import (
 )
 
 func init() {
-	client, err := ethclient.Dial(config.URL)
+	var err error
+	config.Client, err = ethclient.Dial(config.URL)
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
+	}
+	config.PrivateKey, err = crypto.HexToECDSA(config.OracleOwnerPrivateKey[2:]) // 移除前缀"0x"
+	if err != nil {
+		log.Fatalf("Invalid private key: %v", err)
 	}
 
 	// 将字符串地址转换为`common.Address`类型
 	contractAddr := common.HexToAddress(config.ContractAddress)
 	// 使用合约地址和client创建一个新的实例
-	config.OracleContract, err = Oracle.NewOracle(contractAddr, client)
+	config.OracleContract, err = Oracle.NewOracle(contractAddr, config.Client)
 	if err != nil {
 		log.Fatalf("Failed to instantiate a Oracle contract: %v", err)
 	}
@@ -32,8 +38,8 @@ func init() {
 func main() {
 	go api.CreatEventListener()
 	go api.PutEventListener()
-	go api.GetEventListener()
 	go api.IndexEventListener()
+	go api.GetEventListener()
 	go api.SearchEventListener()
 
 	// 设置一个用于接收信号的通道

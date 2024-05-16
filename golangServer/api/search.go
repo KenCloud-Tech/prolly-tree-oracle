@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ipld/go-ipld-prime"
 	"github.com/ipld/go-ipld-prime/node/basicnode"
 	"log"
@@ -38,9 +37,7 @@ func SearchEventListener() {
 // Search data from memory db
 func search(event *Oracle.OracleSearch) {
 	var statement bool
-	tps := &bind.TransactOpts{
-		From: common.BytesToAddress([]byte(config.OracleOwner)),
-	}
+	tps := GenTransactOpts(config.GasLimit)
 	var data []byte
 
 	dbName := event.DbName
@@ -61,9 +58,16 @@ func search(event *Oracle.OracleSearch) {
 			statement = false
 			//response to oracle
 			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
+			return
 		}
 		record := <-results
 		node := record.Data
+		if node == nil {
+			statement = false
+			//response to oracle
+			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
+			return
+		}
 		data = nodeTobyte(node)
 		statement = true
 	//case "compare":
@@ -78,9 +82,16 @@ func search(event *Oracle.OracleSearch) {
 			statement = false
 			//response to oracle
 			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
+			return
 		}
 		record := <-results
 		node := record.Data
+		if node == nil {
+			statement = false
+			//response to oracle
+			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
+			return
+		}
 		data = nodeTobyte(node)
 		statement = true
 	case "limit":
@@ -94,9 +105,16 @@ func search(event *Oracle.OracleSearch) {
 			statement = false
 			//response to oracle
 			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
+			return
 		}
 		record := <-results
 		node := record.Data
+		if node == nil {
+			statement = false
+			//response to oracle
+			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
+			return
+		}
 		data = nodeTobyte(node)
 		statement = true
 	case "skip":
@@ -110,9 +128,16 @@ func search(event *Oracle.OracleSearch) {
 			statement = false
 			//response to oracle
 			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
+			return
 		}
 		record := <-results
 		node := record.Data
+		if node == nil {
+			statement = false
+			//response to oracle
+			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
+			return
+		}
 		data = nodeTobyte(node)
 		statement = true
 	}
