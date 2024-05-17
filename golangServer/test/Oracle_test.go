@@ -3,7 +3,7 @@ package test
 import (
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
-	"Oracle.com/golangServer/test/testContract"
+	OracleTest "Oracle.com/golangServer/test/testContract"
 	"context"
 	"crypto/ecdsa"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -21,9 +21,9 @@ import (
 
 const (
 	URL                 = "ws://127.0.0.1:8545"
-	UserPrimaryKey      = "0xdadd9db9c1c0d5098de6f6138051ecf3a9ff17ac33082c96f2757fbc34529b9a"
+	UserPrimaryKey      = "0x9945e953c3b37004a00d238d4b20a561e263cc578fb14fde6872cf76222ff702"
 	OracleAddress       = config.ContractAddress
-	TestContractAddress = "0xf6C221Caa234D3b1D7AB0e2Aa228bE532ce7f710"
+	TestContractAddress = "0x5c2a450cA28C5af7E95682ca262D42D0e8103a1e"
 	ChainID             = 1337
 )
 
@@ -77,7 +77,7 @@ func TestOracle(t *testing.T) {
 
 	//get data
 	recordID := []byte{129, 99, 66, 111, 98}
-	_, err = toc.Get(tps, dbName, recordID, "catchData(bytes)")
+	_, err = toc.Get(tps, dbName, recordID, "CBFunc(bytes)")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
@@ -85,13 +85,13 @@ func TestOracle(t *testing.T) {
 	time.Sleep(time.Second * 2)
 
 	//search data
-	val1 := OracleTest.OracleInterfaceSearchController{K: "name", Str: "Bob", ComDataType: "string"}
-	_, err = toc.Search(tps, dbName, val1, "equal", "catchData(bytes)")
+	val1 := OracleTest.OracleInterfaceSearchController{K: "name", Str: "Bob", DataType: "string"}
+	_, err = toc.Search(tps, dbName, val1, "equal", "CBFunc(bytes)")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
-	val2 := OracleTest.OracleInterfaceSearchController{K: "age", Integer: 20, ComDataType: "int"}
-	_, err = toc.Search(tps, dbName, val2, "equal", "catchData(bytes)")
+	val2 := OracleTest.OracleInterfaceSearchController{K: "age", Integer: 20, DataType: "int"}
+	_, err = toc.Search(tps, dbName, val2, "equal", "CBFunc(bytes)")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
@@ -105,14 +105,10 @@ func TestOracle(t *testing.T) {
 		log.Println("Failed to send transaction: ", err)
 	}
 
-	// 设置一个用于接收信号的通道
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	// 等待信号
 	sig := <-sigs
 	log.Printf("Received signal %s, exiting...\n", sig)
-	// 这里可以添加清理工作，比如关闭打开的文件、数据库连接等
-	// 然后退出程序
 	os.Exit(0)
 
 }
@@ -124,14 +120,14 @@ func InitClient() {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
 	}
 
-	PrivateKey, err = crypto.HexToECDSA(UserPrimaryKey[2:]) // 移除前缀"0x"
+	PrivateKey, err = crypto.HexToECDSA(UserPrimaryKey[2:]) // Remove prefix "0x"
 	if err != nil {
 		log.Fatalf("Invalid private key: %v", err)
 	}
 
-	// 将字符串地址转换为`common.Address`类型
+	// Convert string address to `common.Address` type
 	contractAddr := common.HexToAddress(TestContractAddress)
-	// 使用合约地址和client创建一个新的实例
+	// Create a new instance using the contract address and client
 	toc, err = OracleTest.NewOracleTest(contractAddr, Client)
 	if err != nil {
 		log.Fatalf("Failed to instantiate a Oracle contract: %v", err)
@@ -146,9 +142,7 @@ func RspListener() {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
 	}
 
-	// 将字符串地址转换为`common.Address`类型
 	contractAddr := common.HexToAddress(OracleAddress)
-	// 使用合约地址和client创建一个新的实例
 	OOOC, err := Oracle.NewOracle(contractAddr, cli)
 	// Create channels for logs
 	Logs := make(chan *Oracle.OracleReqState)
@@ -172,10 +166,10 @@ func RspListener() {
 
 func CatchListener() {
 	// Get channels for logs
-	Logs := make(chan *OracleTest.OracleTestSendData)
+	Logs := make(chan *OracleTest.OracleTestCatchData)
 	// Subscribe to each event
 	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
-	eventSub, err := toc.WatchSendData(opts, Logs)
+	eventSub, err := toc.WatchCatchData(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to Get events:", err)
 	}
@@ -192,13 +186,13 @@ func CatchListener() {
 }
 
 func GenTransactOpts(GasLimit uint64) *bind.TransactOpts {
-	// 从私钥生成TransactOpts
+	// Generate TransactOpts from private key
 	auth, err := bind.NewKeyedTransactorWithChainID(PrivateKey, big.NewInt(ChainID))
 	if err != nil {
 		log.Fatalf("Failed to create authorized transactor: %v", err)
 	}
 
-	// 设置Gas价格和Gas限额，这些可以通过客户端查询来更智能地设置
+	// Set gas prices and gas limits, these can be set more intelligently through client queries
 	gasPrice, err := Client.SuggestGasPrice(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to suggest gas price: %v", err)

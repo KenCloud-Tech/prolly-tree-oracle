@@ -31,20 +31,19 @@ var (
 
 // OracleInterfaceSearchController is an auto generated low-level Go binding around an user-defined struct.
 type OracleInterfaceSearchController struct {
-	K           string
-	Str         string
-	Integer     int64
-	Uinteger    uint64
-	Bytess      []byte
-	Boolean     bool
-	ComDataType string
-	ComIndex    string
-	ComOp       string
+	K        string
+	Str      string
+	Integer  int64
+	Uinteger uint64
+	Bytess   []byte
+	Boolean  bool
+	DataType string
+	ComOp    string
 }
 
 // OracleTestMetaData contains all meta data concerning the OracleTest contract.
 var OracleTestMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"sendData\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"AllowWrite\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"}],\"name\":\"Create\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Get\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"}],\"name\":\"Index\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"Put\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"k\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"str\",\"type\":\"string\"},{\"internalType\":\"int64\",\"name\":\"integer\",\"type\":\"int64\"},{\"internalType\":\"uint64\",\"name\":\"uinteger\",\"type\":\"uint64\"},{\"internalType\":\"bytes\",\"name\":\"bytess\",\"type\":\"bytes\"},{\"internalType\":\"bool\",\"name\":\"boolean\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"comDataType\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"comIndex\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"comOp\",\"type\":\"string\"}],\"internalType\":\"structOracleInterface.SearchController\",\"name\":\"Val\",\"type\":\"tuple\"},{\"internalType\":\"string\",\"name\":\"Method\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Search\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"catchData\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"or\",\"outputs\":[{\"internalType\":\"contractOracle\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"add\",\"type\":\"address\"}],\"name\":\"setOracle\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"CatchData\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"AllowWrite\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"CBFunc\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"}],\"name\":\"Create\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Get\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"}],\"name\":\"Index\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"Put\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"k\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"str\",\"type\":\"string\"},{\"internalType\":\"int64\",\"name\":\"integer\",\"type\":\"int64\"},{\"internalType\":\"uint64\",\"name\":\"uinteger\",\"type\":\"uint64\"},{\"internalType\":\"bytes\",\"name\":\"bytess\",\"type\":\"bytes\"},{\"internalType\":\"bool\",\"name\":\"boolean\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"DataType\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"comOp\",\"type\":\"string\"}],\"internalType\":\"structOracleInterface.SearchController\",\"name\":\"Val\",\"type\":\"tuple\"},{\"internalType\":\"string\",\"name\":\"Method\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Search\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"or\",\"outputs\":[{\"internalType\":\"contractOracle\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"add\",\"type\":\"address\"}],\"name\":\"setOracle\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // OracleTestABI is the input ABI used to generate the binding from.
@@ -245,6 +244,27 @@ func (_OracleTest *OracleTestTransactorSession) AllowWrite(dbName string, to com
 	return _OracleTest.Contract.AllowWrite(&_OracleTest.TransactOpts, dbName, to)
 }
 
+// CBFunc is a paid mutator transaction binding the contract method 0xa374f08b.
+//
+// Solidity: function CBFunc(bytes data) returns()
+func (_OracleTest *OracleTestTransactor) CBFunc(opts *bind.TransactOpts, data []byte) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "CBFunc", data)
+}
+
+// CBFunc is a paid mutator transaction binding the contract method 0xa374f08b.
+//
+// Solidity: function CBFunc(bytes data) returns()
+func (_OracleTest *OracleTestSession) CBFunc(data []byte) (*types.Transaction, error) {
+	return _OracleTest.Contract.CBFunc(&_OracleTest.TransactOpts, data)
+}
+
+// CBFunc is a paid mutator transaction binding the contract method 0xa374f08b.
+//
+// Solidity: function CBFunc(bytes data) returns()
+func (_OracleTest *OracleTestTransactorSession) CBFunc(data []byte) (*types.Transaction, error) {
+	return _OracleTest.Contract.CBFunc(&_OracleTest.TransactOpts, data)
+}
+
 // Create is a paid mutator transaction binding the contract method 0x38a96ba3.
 //
 // Solidity: function Create(string dbName, string primaryKey) returns()
@@ -329,46 +349,25 @@ func (_OracleTest *OracleTestTransactorSession) Put(dbName string, data []byte) 
 	return _OracleTest.Contract.Put(&_OracleTest.TransactOpts, dbName, data)
 }
 
-// Search is a paid mutator transaction binding the contract method 0xf2df1b28.
+// Search is a paid mutator transaction binding the contract method 0xffa6088a.
 //
-// Solidity: function Search(string dbName, (string,string,int64,uint64,bytes,bool,string,string,string) Val, string Method, string callBack) returns()
+// Solidity: function Search(string dbName, (string,string,int64,uint64,bytes,bool,string,string) Val, string Method, string callBack) returns()
 func (_OracleTest *OracleTestTransactor) Search(opts *bind.TransactOpts, dbName string, Val OracleInterfaceSearchController, Method string, callBack string) (*types.Transaction, error) {
 	return _OracleTest.contract.Transact(opts, "Search", dbName, Val, Method, callBack)
 }
 
-// Search is a paid mutator transaction binding the contract method 0xf2df1b28.
+// Search is a paid mutator transaction binding the contract method 0xffa6088a.
 //
-// Solidity: function Search(string dbName, (string,string,int64,uint64,bytes,bool,string,string,string) Val, string Method, string callBack) returns()
+// Solidity: function Search(string dbName, (string,string,int64,uint64,bytes,bool,string,string) Val, string Method, string callBack) returns()
 func (_OracleTest *OracleTestSession) Search(dbName string, Val OracleInterfaceSearchController, Method string, callBack string) (*types.Transaction, error) {
 	return _OracleTest.Contract.Search(&_OracleTest.TransactOpts, dbName, Val, Method, callBack)
 }
 
-// Search is a paid mutator transaction binding the contract method 0xf2df1b28.
+// Search is a paid mutator transaction binding the contract method 0xffa6088a.
 //
-// Solidity: function Search(string dbName, (string,string,int64,uint64,bytes,bool,string,string,string) Val, string Method, string callBack) returns()
+// Solidity: function Search(string dbName, (string,string,int64,uint64,bytes,bool,string,string) Val, string Method, string callBack) returns()
 func (_OracleTest *OracleTestTransactorSession) Search(dbName string, Val OracleInterfaceSearchController, Method string, callBack string) (*types.Transaction, error) {
 	return _OracleTest.Contract.Search(&_OracleTest.TransactOpts, dbName, Val, Method, callBack)
-}
-
-// CatchData is a paid mutator transaction binding the contract method 0x1777d108.
-//
-// Solidity: function catchData(bytes data) returns()
-func (_OracleTest *OracleTestTransactor) CatchData(opts *bind.TransactOpts, data []byte) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "catchData", data)
-}
-
-// CatchData is a paid mutator transaction binding the contract method 0x1777d108.
-//
-// Solidity: function catchData(bytes data) returns()
-func (_OracleTest *OracleTestSession) CatchData(data []byte) (*types.Transaction, error) {
-	return _OracleTest.Contract.CatchData(&_OracleTest.TransactOpts, data)
-}
-
-// CatchData is a paid mutator transaction binding the contract method 0x1777d108.
-//
-// Solidity: function catchData(bytes data) returns()
-func (_OracleTest *OracleTestTransactorSession) CatchData(data []byte) (*types.Transaction, error) {
-	return _OracleTest.Contract.CatchData(&_OracleTest.TransactOpts, data)
 }
 
 // SetOracle is a paid mutator transaction binding the contract method 0x7adbf973.
@@ -392,9 +391,9 @@ func (_OracleTest *OracleTestTransactorSession) SetOracle(add common.Address) (*
 	return _OracleTest.Contract.SetOracle(&_OracleTest.TransactOpts, add)
 }
 
-// OracleTestSendDataIterator is returned from FilterSendData and is used to iterate over the raw logs and unpacked data for SendData events raised by the OracleTest contract.
-type OracleTestSendDataIterator struct {
-	Event *OracleTestSendData // Event containing the contract specifics and raw log
+// OracleTestCatchDataIterator is returned from FilterCatchData and is used to iterate over the raw logs and unpacked data for CatchData events raised by the OracleTest contract.
+type OracleTestCatchDataIterator struct {
+	Event *OracleTestCatchData // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -408,7 +407,7 @@ type OracleTestSendDataIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *OracleTestSendDataIterator) Next() bool {
+func (it *OracleTestCatchDataIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -417,7 +416,7 @@ func (it *OracleTestSendDataIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(OracleTestSendData)
+			it.Event = new(OracleTestCatchData)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -432,7 +431,7 @@ func (it *OracleTestSendDataIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(OracleTestSendData)
+		it.Event = new(OracleTestCatchData)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -448,41 +447,41 @@ func (it *OracleTestSendDataIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *OracleTestSendDataIterator) Error() error {
+func (it *OracleTestCatchDataIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *OracleTestSendDataIterator) Close() error {
+func (it *OracleTestCatchDataIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// OracleTestSendData represents a SendData event raised by the OracleTest contract.
-type OracleTestSendData struct {
+// OracleTestCatchData represents a CatchData event raised by the OracleTest contract.
+type OracleTestCatchData struct {
 	Data []byte
 	Raw  types.Log // Blockchain specific contextual infos
 }
 
-// FilterSendData is a free log retrieval operation binding the contract event 0x093165d3b516390a96c78f42f1e685c37e9532077b64c46c5b41fdfed346383d.
+// FilterCatchData is a free log retrieval operation binding the contract event 0x4a2b9b80018c64b0e457c10afc077611e20cfdb20be120b8e33903d368cf9e92.
 //
-// Solidity: event sendData(bytes data)
-func (_OracleTest *OracleTestFilterer) FilterSendData(opts *bind.FilterOpts) (*OracleTestSendDataIterator, error) {
+// Solidity: event CatchData(bytes data)
+func (_OracleTest *OracleTestFilterer) FilterCatchData(opts *bind.FilterOpts) (*OracleTestCatchDataIterator, error) {
 
-	logs, sub, err := _OracleTest.contract.FilterLogs(opts, "sendData")
+	logs, sub, err := _OracleTest.contract.FilterLogs(opts, "CatchData")
 	if err != nil {
 		return nil, err
 	}
-	return &OracleTestSendDataIterator{contract: _OracleTest.contract, event: "sendData", logs: logs, sub: sub}, nil
+	return &OracleTestCatchDataIterator{contract: _OracleTest.contract, event: "CatchData", logs: logs, sub: sub}, nil
 }
 
-// WatchSendData is a free log subscription operation binding the contract event 0x093165d3b516390a96c78f42f1e685c37e9532077b64c46c5b41fdfed346383d.
+// WatchCatchData is a free log subscription operation binding the contract event 0x4a2b9b80018c64b0e457c10afc077611e20cfdb20be120b8e33903d368cf9e92.
 //
-// Solidity: event sendData(bytes data)
-func (_OracleTest *OracleTestFilterer) WatchSendData(opts *bind.WatchOpts, sink chan<- *OracleTestSendData) (event.Subscription, error) {
+// Solidity: event CatchData(bytes data)
+func (_OracleTest *OracleTestFilterer) WatchCatchData(opts *bind.WatchOpts, sink chan<- *OracleTestCatchData) (event.Subscription, error) {
 
-	logs, sub, err := _OracleTest.contract.WatchLogs(opts, "sendData")
+	logs, sub, err := _OracleTest.contract.WatchLogs(opts, "CatchData")
 	if err != nil {
 		return nil, err
 	}
@@ -492,8 +491,8 @@ func (_OracleTest *OracleTestFilterer) WatchSendData(opts *bind.WatchOpts, sink 
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(OracleTestSendData)
-				if err := _OracleTest.contract.UnpackLog(event, "sendData", log); err != nil {
+				event := new(OracleTestCatchData)
+				if err := _OracleTest.contract.UnpackLog(event, "CatchData", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -514,12 +513,12 @@ func (_OracleTest *OracleTestFilterer) WatchSendData(opts *bind.WatchOpts, sink 
 	}), nil
 }
 
-// ParseSendData is a log parse operation binding the contract event 0x093165d3b516390a96c78f42f1e685c37e9532077b64c46c5b41fdfed346383d.
+// ParseCatchData is a log parse operation binding the contract event 0x4a2b9b80018c64b0e457c10afc077611e20cfdb20be120b8e33903d368cf9e92.
 //
-// Solidity: event sendData(bytes data)
-func (_OracleTest *OracleTestFilterer) ParseSendData(log types.Log) (*OracleTestSendData, error) {
-	event := new(OracleTestSendData)
-	if err := _OracleTest.contract.UnpackLog(event, "sendData", log); err != nil {
+// Solidity: event CatchData(bytes data)
+func (_OracleTest *OracleTestFilterer) ParseCatchData(log types.Log) (*OracleTestCatchData, error) {
+	event := new(OracleTestCatchData)
+	if err := _OracleTest.contract.UnpackLog(event, "CatchData", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

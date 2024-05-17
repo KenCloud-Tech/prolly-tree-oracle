@@ -7,7 +7,7 @@ import {Permission} from "./interfaces/permission.sol";
 
 contract Oracle is IOracle, OracleInterface {
     //allow a address write
-    function AllowWrite(string calldata dbName, address to) external override onlyDbOwner(dbName) {
+    function AllowWrite(string calldata dbName, address to) external override dbIsExsist(dbName) onlyDbOwner(dbName) {
         uint reqID = CurrentReqID;
         CurrentReqID++;
         permission[to][dbName] = Permission(true, true, true);
@@ -36,7 +36,7 @@ contract Oracle is IOracle, OracleInterface {
     }
 
     // put data to db
-    function Put(string calldata dbName, bytes calldata data) external override allowWrite(dbName) {
+    function Put(string calldata dbName, bytes calldata data) external override dbIsExsist(dbName) allowWrite(dbName) {
         uint reqID = CurrentReqID;
         CurrentReqID++;
         emit put(reqID, dbName, data, msg.sender);
@@ -53,7 +53,7 @@ contract Oracle is IOracle, OracleInterface {
     }
 
     //get data from db
-    function Get(string calldata dbName, bytes calldata recordID, string calldata callBack) external override allowQuery(dbName) {
+    function Get(string calldata dbName, bytes calldata recordID, string calldata callBack) external override dbIsExsist(dbName) allowQuery(dbName) {
         uint reqID = CurrentReqID;
         CurrentReqID++;
         emit get(reqID, dbName, recordID, callBack, msg.sender);
@@ -75,7 +75,7 @@ contract Oracle is IOracle, OracleInterface {
 
 
     //creat index
-    function Index(string calldata dbName, string calldata Key) external allowWrite(dbName) override {
+    function Index(string calldata dbName, string calldata Key) external dbIsExsist(dbName) allowWrite(dbName) override {
         uint reqID = CurrentReqID;
         CurrentReqID++;
         emit index(reqID, dbName, Key, msg.sender);
@@ -94,7 +94,7 @@ contract Oracle is IOracle, OracleInterface {
 
 
     //query by {equals, compare, sort, limit, skip}
-    function Search(string calldata dbName, SearchController calldata Val, string calldata Method, string calldata callBack) external allowQuery(dbName) override {
+    function Search(string calldata dbName, SearchController calldata Val, string calldata Method, string calldata callBack) external dbIsExsist(dbName) allowQuery(dbName) override {
         bytes32 method = keccak256(abi.encodePacked(Method));
         require(method == equal || method == compare || method == sort || method == limit || method == skip, "The search method is wrong, only supports: equal,compare,sort,limit and skip.");
         uint reqID = CurrentReqID;

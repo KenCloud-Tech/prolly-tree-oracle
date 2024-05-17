@@ -9,8 +9,8 @@ import (
 
 const (
 	URL                   = "ws://127.0.0.1:8545"
-	OracleOwnerPrivateKey = "0xfd6bb83200bb7dafb2e247fcfcd88c296d6d65f6542c5ad3cb66856ddac160f2"
-	ContractAddress       = "0x825E9Ec368aE314949FD60D098e3C616cCBcD0BF"
+	OracleOwnerPrivateKey = "0xa1c02aed7d70e580c62576f066ce6708aa01546a3490339aeb7193e5cede8b6d"
+	ContractAddress       = "0xF7Cd6920dc8B1380c2c0751f78a292f160C39FAf"
 	ChainID               = 1337
 )
 

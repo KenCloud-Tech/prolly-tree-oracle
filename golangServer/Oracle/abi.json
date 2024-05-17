@@ -209,12 +209,7 @@
           },
           {
             "internalType": "string",
-            "name": "comDataType",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "comIndex",
+            "name": "DataType",
             "type": "string"
           },
           {
@@ -532,12 +527,7 @@
           },
           {
             "internalType": "string",
-            "name": "comDataType",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "comIndex",
+            "name": "DataType",
             "type": "string"
           },
           {

@@ -9,7 +9,7 @@
         "type": "bytes"
       }
     ],
-    "name": "sendData",
+    "name": "CatchData",
     "type": "event"
   },
   {
@@ -26,6 +26,19 @@
       }
     ],
     "name": "AllowWrite",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "CBFunc",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -148,12 +161,7 @@
           },
           {
             "internalType": "string",
-            "name": "comDataType",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "comIndex",
+            "name": "DataType",
             "type": "string"
           },
           {
@@ -178,19 +186,6 @@
       }
     ],
     "name": "Search",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "catchData",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

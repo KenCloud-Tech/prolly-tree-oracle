@@ -42,6 +42,10 @@ contract IOracle {
         require(msg.sender == dbOwner[dbName], "Only the db owner can call this function");
         _;
     }
+    modifier dbIsExsist(string calldata dbName) {
+        require(dbOwner[dbName] != address(0), "This db has not been created yet");
+        _;
+    }
     // modifier allowInsert(string calldata dbName){
     //     require(permission[msg.sender][dbName].allowInsert == true,"You do not have permission to insert");
     //     _;

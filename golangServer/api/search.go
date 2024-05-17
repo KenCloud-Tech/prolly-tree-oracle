@@ -169,7 +169,7 @@ func search(event *Oracle.OracleSearch) {
 }
 
 func creatNode(event *Oracle.OracleSearch) (node ipld.Node) {
-	switch event.Val.ComDataType {
+	switch event.Val.DataType {
 	case "string":
 		node = basicnode.NewString(event.Val.Str)
 	case "int":

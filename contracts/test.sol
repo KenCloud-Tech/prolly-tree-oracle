@@ -39,9 +39,10 @@ contract OracleTest{
     }
 
     // catch data and emit event
-    event sendData(bytes data);
-    function catchData(bytes calldata data) external{
-        emit sendData(data);
+    event CatchData(bytes data);
+    function CBFunc(bytes calldata data) external{
+        //You can process the obtained data here.
+        emit CatchData(data);
     }
 
 }
