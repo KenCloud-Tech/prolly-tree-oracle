@@ -13,45 +13,68 @@
 * oracle publishes tree under ipns
 * can we get read/write access gating based on wallets or multisigs?
 
-[//]: # (## API:)
+## API:
 
-[//]: # (* create&#40;owner wallet, prolly config params&#41;=>id)
+* create(owner wallet, prolly config params)=>id
 
-[//]: # (* allowWrite&#40;wallet&#41;)
+* allowWrite(wallet)
 
-[//]: # (* put&#40;id,collection,JSON document, primaryKey?&#41; => primaryKey)
+* put(id,collection,JSON document, primaryKey?) => primaryKey
 
-[//]: # (* index&#40;id, collection, fields&#41;)
+* index(id, collection, fields)
 
-[//]: # (* get&#40;id, collection, primaryKey&#41;->JSON)
+* get(id, collection, primaryKey)->JSON
 
-[//]: # (* search&#40;id, collection, query {equals, sort, limit, skip}&#41;)
+* search(id, collection, query {equals, sort, limit, skip})
 
 ## Architecture
 ![](/sources/Architecture.png)
 
 
-## API:
+## API Implementation:
 * **function Create(string dbName, string primaryKey)**<br>
 To initialize a new database, you need to provide the name and primary key of the database. 
-<br>There can be multiple primary keys, separated by ",".<br><br>
+<br>There can be multiple primary keys, separated by ",".<br>
+**NOTE:** <br>
+   1.  The owner of db is obtained by "msg.sender" when calling the Create method and does not need to be used as a parameter.<br>
+   2.  The interface for creating a new db by polly-tree-indexer does not require config, so the parameters of the API only require "dbName" and "PrimaryKey"<br>
+
 
 * **function AllowWrite(string dbName, address to)**<br>
-  Grant user "to" read and write permissions on database "dbName".<br><br>
+  Grant user "to" read and write permissions on database "dbName".<br>
+**NOTE:**<br>
+  1. When authorizing, in addition to providing the authorized user, you should also provide the authorized db<br>
+
 
 * **Put(string dbName, bytes data)**<br>
-  Save json data "data" to database "dbName".<br><br>
+  Save json data "data" to database "dbName".<br>
+  **NOTE:**<br>
+  1. When putting data, the collection can be obtained through "dbName" and does not require "PrimaryKey"
+  
 
 * **Get(string dbName, bytes recordID, string callBack)**<br>
   To obtain data from database "dbName" based on "recordID", you need to provide a callback function to receive data.<br>
   For example, the callback function I defined in the consumer contract is:`function CallBackFunc(bytes calldata data)`.<br>
-  So, the callBack parameter of string type is `"CallBackFunc(bytes)"`.<br><br>
+  So, the callBack parameter of string type is `"CallBackFunc(bytes)"`.<br>
+  **NOTE:**<br>
+  1. The get method of polly-tree-indexer obtains data through "recordID"
+  2. The collection can be obtained through "dbName"
+  3. Need to provide a callback function to receive data
+
 
 * **Index(string dbName, string index)**<br>
-  Add index "index" to database "dName".<br><br>
+  Add index "index" to database "dName".<br>
+  **NOTE:**<br>
+  1. The collection can be obtained through "dbName"
+
 
 * **Search(string dbName, SearchController Val, string Method, string callBack)**<br>
   Obtain data through the "method" method in the database "dName", methods:`{equal, compare, sort, limit, skip}`<br>
+  **NOTE:**<br>
+  1. The collection can be obtained through "dbName"<br>
+  2. Need to provide a callback function to receive data
+  3. Values of multiple data types may be used when searching, so "SearchController" is added and "mehod" is used to indicate the search method.
+  
   You need to provide a "SearchController", defined as follows:<br>
 ````
 struct SearchController{
@@ -69,7 +92,8 @@ struct SearchController{
         string comOp; // When the search method is compare, you need to provide compare optiong: "GreaterThan" or "LessThan"
     }
 ````
-Similarly, a callback function needs to be provided to receive data
+Similarly, a callback function needs to be provided to receive data<br>
+
 
 # Usage
 ### [Click here to learn how to start the service](https://www.bilibili.com/video/BV1pjMmevEuk/?vd_source=ee780f4788898ae6b4f984d6ec5cec16)
