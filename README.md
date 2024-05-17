@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-# prolly-tree-oracle
-Prolly Tree Oracle
-=======
+
 # Prolly Tree Oracle
 ___
 ## What
@@ -335,5 +332,3 @@ func GenTransactOpts(GasLimit uint64) *bind.TransactOpts {
 	return auth
 }
 
-```
->>>>>>> master
