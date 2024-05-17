@@ -1,6 +1,6 @@
 
 # Prolly Tree Oracle
-___
+
 ## What
 * EVM oracle
 * Based on [ipld prolly tree indexer](https://github.com/RangerMauve/ipld-prolly-indexer)
@@ -29,7 +29,7 @@ ___
 
 ## Architecture
 ![](/sources/Architecture.png)
-___
+
 
 ## API:
 * **function Create(string dbName, string primaryKey)**<br>
@@ -70,7 +70,7 @@ struct SearchController{
     }
 ````
 Similarly, a callback function needs to be provided to receive data
-___
+
 # Usage
 ## Consumer Contract
 ```
@@ -331,4 +331,4 @@ func GenTransactOpts(GasLimit uint64) *bind.TransactOpts {
 	auth.GasLimit = GasLimit
 	return auth
 }
-
+```
