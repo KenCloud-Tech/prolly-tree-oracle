@@ -96,7 +96,7 @@ Similarly, a callback function needs to be provided to receive data<br>
 
 
 # Usage
-### [Click here to learn how to start the service](https://www.bilibili.com/video/BV1pjMmevEuk/?vd_source=ee780f4788898ae6b4f984d6ec5cec16)
+### [Click here to learn how to start the service](https://www.youtube.com/watch?v=_T4nLVJaQ5k)
 ## Consumer Contract
 ```
 // SPDX-License-Identifier: UNLICENSED
