@@ -1,142 +1,9 @@
-<<<<<<< HEAD
-# prolly-tree-oracle
-Prolly Tree Oracle
-=======
-# Prolly Tree Oracle
-___
-## What
-* EVM oracle
-* Based on [ipld prolly tree indexer](https://github.com/RangerMauve/ipld-prolly-indexer)
-* Enable contracts to create/read/update/delete to prolly trees.
-* Index over collections to enable faster queries
-* charge gas or eth for transactions (e.g. if the field you query isn't indexed, charge more)
-* maybe gas costs per lPLD block loaded? That way people deploying oracles can set theiown costs.
-* allow querying by existing cid
-* advertise prolly tree root on lPFS network to query offchain
-* oracle publishes tree under ipns
-* can we get read/write access gating based on wallets or multisigs?
-
-[//]: # (## API:)
-
-[//]: # (* create&#40;owner wallet, prolly config params&#41;=>id)
-
-[//]: # (* allowWrite&#40;wallet&#41;)
-
-[//]: # (* put&#40;id,collection,JSON document, primaryKey?&#41; => primaryKey)
-
-[//]: # (* index&#40;id, collection, fields&#41;)
-
-[//]: # (* get&#40;id, collection, primaryKey&#41;->JSON)
-
-[//]: # (* search&#40;id, collection, query {equals, sort, limit, skip}&#41;)
-
-## Architecture
-![](/sources/Architecture.png)
-___
-
-## API:
-* **function Create(string dbName, string primaryKey)**<br>
-To initialize a new database, you need to provide the name and primary key of the database. 
-<br>There can be multiple primary keys, separated by ",".<br><br>
-
-* **function AllowWrite(string dbName, address to)**<br>
-  Grant user "to" read and write permissions on database "dbName".<br><br>
-
-* **Put(string dbName, bytes data)**<br>
-  Save json data "data" to database "dbName".<br><br>
-
-* **Get(string dbName, bytes recordID, string callBack)**<br>
-  To obtain data from database "dbName" based on "recordID", you need to provide a callback function to receive data.<br>
-  For example, the callback function I defined in the consumer contract is:`function CallBackFunc(bytes calldata data)`.<br>
-  So, the callBack parameter of string type is `"CallBackFunc(bytes)"`.<br><br>
-
-* **Index(string dbName, string index)**<br>
-  Add index "index" to database "dName".<br><br>
-
-* **Search(string dbName, SearchController Val, string Method, string callBack)**<br>
-  Obtain data through the "method" method in the database "dName", methods:`{equal, compare, sort, limit, skip}`<br>
-  You need to provide a "SearchController", defined as follows:<br>
-````
-struct SearchController{
-        string k; // The key for search
-        
-        // The value used for search,
-        // Select the appropriate member according to the type of value
-        string str;
-        int64 integer;
-        uint64 uinteger;
-        bytes bytess;
-        bool boolean;
-
-        string DataType; // The type of value, assigned as "string", "int", "uint", "bytes" or "bool",
-        string comOp; // When the search method is compare, you need to provide compare optiong: "GreaterThan" or "LessThan"
-    }
-````
-Similarly, a callback function needs to be provided to receive data
-___
-# Usage
-## Consumer Contract
-```
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
-
-import {Oracle} from "./oracle.sol";
-
-contract OracleTest{
-    Oracle public or;
-    function setOracle(address add) public{
-        or = Oracle(add);
-    }
-    //allow a address write
-    function AllowWrite(string calldata dbName, address to) external{
-        or.AllowWrite(dbName,to);
-    }
-
-    //creat a new db
-    function Create(string calldata dbName, string calldata primaryKey) external{
-        or.Create(dbName,primaryKey);
-    }
-
-    // put data to db
-    function Put(string calldata dbName, bytes calldata data) external{
-        or.Put(dbName,data);
-    }
-
-    //get data from db
-    function Get(string calldata dbName, bytes calldata recordID, string calldata callBack) external{
-        or.Get(dbName,recordID,callBack);
-    }
-
-    //creat index
-    function Index(string calldata dbName, string calldata Key) external{
-        or.Index(dbName,Key);
-    }
-    
-    //query by {equals, compare, sort, limit, skip}
-    function Search(string calldata dbName, Oracle.SearchController calldata Val, string calldata Method, string calldata callBack) external{
-        or.Search(dbName,Val,Method,callBack);
-    }
-
-    // catch data and emit event
-    event CatchData(bytes data);
-    function CBFunc(bytes calldata data) external{
-        //You can process the obtained data here.
-        emit CatchData(data);
-    }
-
-}
-```
-Compile the **Consumer Contract** to obtain the ABI file, and use the ***[abigen](https://geth.ethereum.org/docs/tools/abigen)*** to generate **Golang package** corresponding to the contract:
-`abigen --abi={ Path to abi.json } --pkg={ Package name } --out={ The path to the generated .go file }`
-## Golang Client
-Use a Golang test program to call the request function in the Consumer Contract for testing the oracle.
-```
 package test
 
 import (
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
-	"Oracle.com/golangServer/test/testContract"
+	OracleTest "Oracle.com/golangServer/test/testContract"
 	"context"
 	"crypto/ecdsa"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -154,9 +21,9 @@ import (
 
 const (
 	URL                 = "ws://127.0.0.1:8545"
-	UserPrimaryKey      = "0xdadd9db9c1c0d5098de6f6138051ecf3a9ff17ac33082c96f2757fbc34529b9a"
-	OracleAddress       = "0x825E9Ec368aE314949FD60D098e3C616cCBcD0BF"
-	TestContractAddress = "0xf6C221Caa234D3b1D7AB0e2Aa228bE532ce7f710"
+	UserPrimaryKey      = "0x9945e953c3b37004a00d238d4b20a561e263cc578fb14fde6872cf76222ff702"
+	OracleAddress       = config.ContractAddress
+	TestContractAddress = "0x5c2a450cA28C5af7E95682ca262D42D0e8103a1e"
 	ChainID             = 1337
 )
 
@@ -334,6 +201,3 @@ func GenTransactOpts(GasLimit uint64) *bind.TransactOpts {
 	auth.GasLimit = GasLimit
 	return auth
 }
-
-```
->>>>>>> master
