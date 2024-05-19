@@ -15,6 +15,7 @@
 
 ## API:
 
+
 * create(owner wallet, prolly config params)=>id
 
 * allowWrite(wallet)
