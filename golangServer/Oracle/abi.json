@@ -4,6 +4,25 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      }
+    ],
+    "name": "NewCid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "reqID",
         "type": "uint256"
@@ -42,7 +61,13 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -73,7 +98,13 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -110,7 +141,81 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "getCol",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "colName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "getIndex",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -141,7 +246,13 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -172,11 +283,22 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
         "components": [
+          {
+            "internalType": "string",
+            "name": "method",
+            "type": "string"
+          },
           {
             "internalType": "string",
             "name": "k",
@@ -226,12 +348,6 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "Method",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
         "name": "callBack",
         "type": "string"
       },
@@ -247,11 +363,6 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "string",
-        "name": "dbName",
-        "type": "string"
-      },
       {
         "internalType": "address",
         "name": "to",
@@ -277,7 +388,17 @@
       },
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "newcid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "oldcid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -300,7 +421,12 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -318,7 +444,12 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -333,6 +464,123 @@
       }
     ],
     "name": "Get",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      }
+    ],
+    "name": "GetCol",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "statement",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
+      }
+    ],
+    "name": "GetColRsp",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      }
+    ],
+    "name": "GetIndex",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "statement",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
+      }
+    ],
+    "name": "GetIndexRsp",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -398,7 +646,12 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -444,7 +697,12 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -471,6 +729,16 @@
         "type": "bool"
       },
       {
+        "internalType": "string",
+        "name": "newcid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "oldcid",
+        "type": "string"
+      },
+      {
         "internalType": "address",
         "name": "sender",
         "type": "address"
@@ -490,11 +758,21 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
         "components": [
+          {
+            "internalType": "string",
+            "name": "method",
+            "type": "string"
+          },
           {
             "internalType": "string",
             "name": "k",
@@ -539,11 +817,6 @@
         "internalType": "struct OracleInterface.SearchController",
         "name": "Val",
         "type": "tuple"
-      },
-      {
-        "internalType": "string",
-        "name": "Method",
-        "type": "string"
       },
       {
         "internalType": "string",
@@ -592,6 +865,19 @@
     "name": "SearchRsp",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRootCid",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]

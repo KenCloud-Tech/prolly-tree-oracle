@@ -8,7 +8,6 @@ import (
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ipld/go-ipld-prime"
-	"github.com/ipld/go-ipld-prime/node/basicnode"
 	"log"
 )
 
@@ -40,9 +39,19 @@ func search(event *Oracle.OracleSearch) {
 	tps := GenTransactOpts(config.GasLimit)
 	var data []byte
 
-	dbName := event.DbName
-	ctx, dbC := config.Dbs[dbName].Ctx, config.Dbs[dbName].Db
-	method := event.Method
+	colName := event.ColName
+	ctx := context.Background()
+	db := config.Dbs[event.Cid]
+	dbC, err := db.Collection(colName, "")
+	if err != nil {
+		log.Println("Get collection ERROR: ", err)
+		info := fmt.Sprintf("Get collection ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		return
+	}
+	method := event.Val.Method
 
 	switch method {
 	case "equal":
@@ -53,7 +62,7 @@ func search(event *Oracle.OracleSearch) {
 		}
 		results, err := dbC.Search(ctx, query)
 		if err != nil {
-			log.Println("[", event.DbName, "]", "Search data  ERROR: ", err)
+			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
 			info := fmt.Sprintf("Search data  ERROR: %v", err)
 			statement = false
 			//response to oracle
@@ -76,7 +85,7 @@ func search(event *Oracle.OracleSearch) {
 		}
 		results, err := dbC.Search(ctx, query)
 		if err != nil {
-			log.Println("[", event.DbName, "]", "Search data  ERROR: ", err)
+			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
 			info := fmt.Sprintf("Search data  ERROR: %v", err)
 			statement = false
 			//response to oracle
@@ -99,7 +108,7 @@ func search(event *Oracle.OracleSearch) {
 		}
 		results, err := dbC.Search(ctx, query)
 		if err != nil {
-			log.Println("[", event.DbName, "]", "Search data  ERROR: ", err)
+			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
 			info := fmt.Sprintf("Search data  ERROR: %v", err)
 			statement = false
 			//response to oracle
@@ -122,7 +131,7 @@ func search(event *Oracle.OracleSearch) {
 		}
 		results, err := dbC.Search(ctx, query)
 		if err != nil {
-			log.Println("[", event.DbName, "]", "Search data  ERROR: ", err)
+			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
 			info := fmt.Sprintf("Search data  ERROR: %v", err)
 			statement = false
 			//response to oracle
@@ -145,7 +154,7 @@ func search(event *Oracle.OracleSearch) {
 		}
 		results, err := dbC.Search(ctx, query)
 		if err != nil {
-			log.Println("[", event.DbName, "]", "Search data  ERROR: ", err)
+			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
 			info := fmt.Sprintf("Search data  ERROR: %v", err)
 			statement = false
 			//response to oracle
@@ -164,22 +173,10 @@ func search(event *Oracle.OracleSearch) {
 		statement = true
 	}
 	//response to oracle
-	config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
-	log.Println("[", event.DbName, "]", "Get data success")
-}
-
-func creatNode(event *Oracle.OracleSearch) (node ipld.Node) {
-	switch event.Val.DataType {
-	case "string":
-		node = basicnode.NewString(event.Val.Str)
-	case "int":
-		node = basicnode.NewInt(event.Val.Integer)
-	case "uint":
-		node = basicnode.NewUint(event.Val.Uinteger)
-	case "bytes":
-		node = basicnode.NewBytes(event.Val.Bytess)
-	case "bool":
-		node = basicnode.NewBool(event.Val.Boolean)
+	_, err = config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
+	if err != nil {
+		log.Println("Req function get an error : ", err)
+	} else {
+		log.Println("[", event.ColName, "]", "Get data success")
 	}
-	return
 }

@@ -15,11 +15,6 @@
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "dbName",
-        "type": "string"
-      },
-      {
         "internalType": "address",
         "name": "to",
         "type": "address"
@@ -47,7 +42,12 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -65,7 +65,12 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -88,7 +93,53 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      }
+    ],
+    "name": "GetCol",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      }
+    ],
+    "name": "GetIndex",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -106,7 +157,12 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
@@ -124,11 +180,21 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "dbName",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
         "type": "string"
       },
       {
         "components": [
+          {
+            "internalType": "string",
+            "name": "method",
+            "type": "string"
+          },
           {
             "internalType": "string",
             "name": "k",
@@ -176,11 +242,6 @@
       },
       {
         "internalType": "string",
-        "name": "Method",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
         "name": "callBack",
         "type": "string"
       }
@@ -188,6 +249,19 @@
     "name": "Search",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRootCid",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

@@ -12,9 +12,6 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
 	"math/big"
-	"os"
-	"os/signal"
-	"syscall"
 	"testing"
 	"time"
 )
@@ -23,7 +20,7 @@ const (
 	URL                 = "ws://127.0.0.1:8545"
 	UserPrimaryKey      = "0x9945e953c3b37004a00d238d4b20a561e263cc578fb14fde6872cf76222ff702"
 	OracleAddress       = config.ContractAddress
-	TestContractAddress = "0x5c2a450cA28C5af7E95682ca262D42D0e8103a1e"
+	TestContractAddress = "0xD33418aebe84B725589EEE592f2D229C9A2f477a"
 	ChainID             = 1337
 )
 
@@ -35,6 +32,8 @@ var (
 	toc *OracleTest.OracleTest
 
 	GasLimit uint64 = 300000
+
+	cid string //= "bafyrefdqtweoh4bt5xff77k6hz5vzvex6opq6ay"
 )
 
 func TestOracle(t *testing.T) {
@@ -48,27 +47,28 @@ func TestOracle(t *testing.T) {
 	}
 
 	dbName := "users"
-	// create memory db
-	_, err = toc.Create(tps, dbName, "name")
+
+	//create memory db
+	_, err = toc.Create(tps, cid, dbName, "name")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
 	time.Sleep(time.Second * 2)
 
 	//create index in age field
-	_, err = toc.Index(tps, dbName, "age")
+	_, err = toc.Index(tps, cid, dbName, "age")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
 
 	time.Sleep(time.Second * 2)
 
-	// put data
+	//put data
 	data := []byte(`{"name":"Alice", "age": 18}
 					{"name":"Bob", "age": 19}
 					{"name":"Albert", "age": 20}
 					{"name":"Clearance and Steve", "age":18}`)
-	_, err = toc.Put(tps, dbName, data)
+	_, err = toc.Put(tps, cid, dbName, data)
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
@@ -77,7 +77,7 @@ func TestOracle(t *testing.T) {
 
 	//get data
 	recordID := []byte{129, 99, 66, 111, 98}
-	_, err = toc.Get(tps, dbName, recordID, "CBFunc(bytes)")
+	_, err = toc.Get(tps, cid, dbName, recordID, "CBFunc(bytes)")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
@@ -85,31 +85,25 @@ func TestOracle(t *testing.T) {
 	time.Sleep(time.Second * 2)
 
 	//search data
-	val1 := OracleTest.OracleInterfaceSearchController{K: "name", Str: "Bob", DataType: "string"}
-	_, err = toc.Search(tps, dbName, val1, "equal", "CBFunc(bytes)")
+	val1 := OracleTest.OracleInterfaceSearchController{Method: "equal", K: "name", Str: "Bob", DataType: "string"}
+	_, err = toc.Search(tps, cid, dbName, val1, "CBFunc(bytes)")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
-	val2 := OracleTest.OracleInterfaceSearchController{K: "age", Integer: 20, DataType: "int"}
-	_, err = toc.Search(tps, dbName, val2, "equal", "CBFunc(bytes)")
+	val2 := OracleTest.OracleInterfaceSearchController{Method: "equal", K: "age", Integer: 20, DataType: "int"}
+	_, err = toc.Search(tps, cid, dbName, val2, "CBFunc(bytes)")
+	if err != nil {
+		log.Println("Failed to send transaction: ", err)
+	}
+
+	//allowWrite
+	ADD := "0x00C696904c0CCE30D19704A762035Eb67eC3580C"
+	_, err = toc.AllowWrite(tps, common.HexToAddress(ADD))
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
 
 	time.Sleep(time.Second * 2)
-
-	//allowWrite
-	ADD := "0x00C696904c0CCE30D19704A762035Eb67eC3580C"
-	_, err = toc.AllowWrite(tps, dbName, common.HexToAddress(ADD))
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
-
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	sig := <-sigs
-	log.Printf("Received signal %s, exiting...\n", sig)
-	os.Exit(0)
 
 }
 
@@ -134,6 +128,7 @@ func InitClient() {
 	}
 	go RspListener()
 	go CatchListener()
+	go CidListener()
 }
 
 func RspListener() {
@@ -163,6 +158,36 @@ func RspListener() {
 		}
 	}
 }
+func CidListener() {
+	cli, err := ethclient.Dial(URL)
+	if err != nil {
+		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
+	}
+
+	contractAddr := common.HexToAddress(OracleAddress)
+	OOOC, err := Oracle.NewOracle(contractAddr, cli)
+	// Create channels for logs
+	Logs := make(chan *Oracle.OracleNewCid)
+	// Subscribe to each event
+	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	eventSub, err := OOOC.WatchNewCid(opts, Logs)
+	if err != nil {
+		log.Fatal("Failed to subscribe to Create events:", err)
+	}
+	// start Listening...
+	log.Println("RspListener is Listening ...")
+	for {
+		select {
+		case err := <-eventSub.Err():
+			log.Println("[Error in Event CREAT]:", err)
+		case event := <-Logs:
+			if event.Owner.String() == TestContractAddress {
+				log.Println("[GET NEW RootCid]: ", event.Cid)
+				cid = event.Cid
+			}
+		}
+	}
+}
 
 func CatchListener() {
 	// Get channels for logs
@@ -181,6 +206,18 @@ func CatchListener() {
 			log.Println("[Error in Event CREAT]:", err)
 		case event := <-Logs:
 			log.Println("Received data: ", string(event.Data))
+			auth, err := bind.NewKeyedTransactorWithChainID(PrivateKey, big.NewInt(ChainID))
+			if err != nil {
+				log.Fatalf("Failed to create authorized transactor: %v", err)
+			}
+
+			// Set gas prices and gas limits, these can be set more intelligently through client queries
+			gasPrice, err := Client.SuggestGasPrice(context.Background())
+			if err != nil {
+				log.Fatalf("Failed to suggest gas price: %v", err)
+			}
+			auth.GasPrice = gasPrice
+			auth.GasLimit = GasLimit
 		}
 	}
 }

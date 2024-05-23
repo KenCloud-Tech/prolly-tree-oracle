@@ -31,6 +31,7 @@ var (
 
 // OracleInterfaceSearchController is an auto generated low-level Go binding around an user-defined struct.
 type OracleInterfaceSearchController struct {
+	Method   string
 	K        string
 	Str      string
 	Integer  int64
@@ -43,7 +44,7 @@ type OracleInterfaceSearchController struct {
 
 // OracleMetaData contains all meta data concerning the Oracle contract.
 var OracleMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"ReqState\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"create\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"get\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"index\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"put\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"k\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"str\",\"type\":\"string\"},{\"internalType\":\"int64\",\"name\":\"integer\",\"type\":\"int64\"},{\"internalType\":\"uint64\",\"name\":\"uinteger\",\"type\":\"uint64\"},{\"internalType\":\"bytes\",\"name\":\"bytess\",\"type\":\"bytes\"},{\"internalType\":\"bool\",\"name\":\"boolean\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"DataType\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"comOp\",\"type\":\"string\"}],\"indexed\":false,\"internalType\":\"structOracleInterface.SearchController\",\"name\":\"Val\",\"type\":\"tuple\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"Method\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"search\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"AllowWrite\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"CreatRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"}],\"name\":\"Create\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Get\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"name\":\"GetReqState\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"}],\"name\":\"Index\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"IndexRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"Put\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"PutRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"k\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"str\",\"type\":\"string\"},{\"internalType\":\"int64\",\"name\":\"integer\",\"type\":\"int64\"},{\"internalType\":\"uint64\",\"name\":\"uinteger\",\"type\":\"uint64\"},{\"internalType\":\"bytes\",\"name\":\"bytess\",\"type\":\"bytes\"},{\"internalType\":\"bool\",\"name\":\"boolean\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"DataType\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"comOp\",\"type\":\"string\"}],\"internalType\":\"structOracleInterface.SearchController\",\"name\":\"Val\",\"type\":\"tuple\"},{\"internalType\":\"string\",\"name\":\"Method\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Search\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"SearchRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"}],\"name\":\"NewCid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"ReqState\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"create\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"get\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"getCol\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"getIndex\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"index\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"put\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"method\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"k\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"str\",\"type\":\"string\"},{\"internalType\":\"int64\",\"name\":\"integer\",\"type\":\"int64\"},{\"internalType\":\"uint64\",\"name\":\"uinteger\",\"type\":\"uint64\"},{\"internalType\":\"bytes\",\"name\":\"bytess\",\"type\":\"bytes\"},{\"internalType\":\"bool\",\"name\":\"boolean\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"DataType\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"comOp\",\"type\":\"string\"}],\"indexed\":false,\"internalType\":\"structOracleInterface.SearchController\",\"name\":\"Val\",\"type\":\"tuple\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"search\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"AllowWrite\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"newcid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"oldcid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"CreatRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"}],\"name\":\"Create\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Get\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetCol\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetColRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetIndex\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetIndexRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"name\":\"GetReqState\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"}],\"name\":\"Index\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"IndexRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"Put\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"newcid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"oldcid\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"PutRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"method\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"k\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"str\",\"type\":\"string\"},{\"internalType\":\"int64\",\"name\":\"integer\",\"type\":\"int64\"},{\"internalType\":\"uint64\",\"name\":\"uinteger\",\"type\":\"uint64\"},{\"internalType\":\"bytes\",\"name\":\"bytess\",\"type\":\"bytes\"},{\"internalType\":\"bool\",\"name\":\"boolean\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"DataType\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"comOp\",\"type\":\"string\"}],\"internalType\":\"structOracleInterface.SearchController\",\"name\":\"Val\",\"type\":\"tuple\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Search\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"SearchRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getRootCid\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
 }
 
 // OracleABI is the input ABI used to generate the binding from.
@@ -223,88 +224,203 @@ func (_Oracle *OracleCallerSession) GetReqState(ReqID *big.Int) (bool, error) {
 	return _Oracle.Contract.GetReqState(&_Oracle.CallOpts, ReqID)
 }
 
-// AllowWrite is a paid mutator transaction binding the contract method 0x4f0f6f07.
+// GetRootCid is a free data retrieval call binding the contract method 0x96e8ce5c.
 //
-// Solidity: function AllowWrite(string dbName, address to) returns()
-func (_Oracle *OracleTransactor) AllowWrite(opts *bind.TransactOpts, dbName string, to common.Address) (*types.Transaction, error) {
-	return _Oracle.contract.Transact(opts, "AllowWrite", dbName, to)
+// Solidity: function getRootCid() view returns(string)
+func (_Oracle *OracleCaller) GetRootCid(opts *bind.CallOpts) (string, error) {
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "getRootCid")
+
+	if err != nil {
+		return *new(string), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(string)).(*string)
+
+	return out0, err
+
 }
 
-// AllowWrite is a paid mutator transaction binding the contract method 0x4f0f6f07.
+// GetRootCid is a free data retrieval call binding the contract method 0x96e8ce5c.
 //
-// Solidity: function AllowWrite(string dbName, address to) returns()
-func (_Oracle *OracleSession) AllowWrite(dbName string, to common.Address) (*types.Transaction, error) {
-	return _Oracle.Contract.AllowWrite(&_Oracle.TransactOpts, dbName, to)
+// Solidity: function getRootCid() view returns(string)
+func (_Oracle *OracleSession) GetRootCid() (string, error) {
+	return _Oracle.Contract.GetRootCid(&_Oracle.CallOpts)
 }
 
-// AllowWrite is a paid mutator transaction binding the contract method 0x4f0f6f07.
+// GetRootCid is a free data retrieval call binding the contract method 0x96e8ce5c.
 //
-// Solidity: function AllowWrite(string dbName, address to) returns()
-func (_Oracle *OracleTransactorSession) AllowWrite(dbName string, to common.Address) (*types.Transaction, error) {
-	return _Oracle.Contract.AllowWrite(&_Oracle.TransactOpts, dbName, to)
+// Solidity: function getRootCid() view returns(string)
+func (_Oracle *OracleCallerSession) GetRootCid() (string, error) {
+	return _Oracle.Contract.GetRootCid(&_Oracle.CallOpts)
 }
 
-// CreatRsp is a paid mutator transaction binding the contract method 0xf494c365.
+// AllowWrite is a paid mutator transaction binding the contract method 0xb89f561f.
 //
-// Solidity: function CreatRsp(uint256 reqID, bool statement, string dbName, address sender, string info) returns()
-func (_Oracle *OracleTransactor) CreatRsp(opts *bind.TransactOpts, reqID *big.Int, statement bool, dbName string, sender common.Address, info string) (*types.Transaction, error) {
-	return _Oracle.contract.Transact(opts, "CreatRsp", reqID, statement, dbName, sender, info)
+// Solidity: function AllowWrite(address to) returns()
+func (_Oracle *OracleTransactor) AllowWrite(opts *bind.TransactOpts, to common.Address) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "AllowWrite", to)
 }
 
-// CreatRsp is a paid mutator transaction binding the contract method 0xf494c365.
+// AllowWrite is a paid mutator transaction binding the contract method 0xb89f561f.
 //
-// Solidity: function CreatRsp(uint256 reqID, bool statement, string dbName, address sender, string info) returns()
-func (_Oracle *OracleSession) CreatRsp(reqID *big.Int, statement bool, dbName string, sender common.Address, info string) (*types.Transaction, error) {
-	return _Oracle.Contract.CreatRsp(&_Oracle.TransactOpts, reqID, statement, dbName, sender, info)
+// Solidity: function AllowWrite(address to) returns()
+func (_Oracle *OracleSession) AllowWrite(to common.Address) (*types.Transaction, error) {
+	return _Oracle.Contract.AllowWrite(&_Oracle.TransactOpts, to)
 }
 
-// CreatRsp is a paid mutator transaction binding the contract method 0xf494c365.
+// AllowWrite is a paid mutator transaction binding the contract method 0xb89f561f.
 //
-// Solidity: function CreatRsp(uint256 reqID, bool statement, string dbName, address sender, string info) returns()
-func (_Oracle *OracleTransactorSession) CreatRsp(reqID *big.Int, statement bool, dbName string, sender common.Address, info string) (*types.Transaction, error) {
-	return _Oracle.Contract.CreatRsp(&_Oracle.TransactOpts, reqID, statement, dbName, sender, info)
+// Solidity: function AllowWrite(address to) returns()
+func (_Oracle *OracleTransactorSession) AllowWrite(to common.Address) (*types.Transaction, error) {
+	return _Oracle.Contract.AllowWrite(&_Oracle.TransactOpts, to)
 }
 
-// Create is a paid mutator transaction binding the contract method 0x38a96ba3.
+// CreatRsp is a paid mutator transaction binding the contract method 0x9e8d2d69.
 //
-// Solidity: function Create(string dbName, string primaryKey) returns()
-func (_Oracle *OracleTransactor) Create(opts *bind.TransactOpts, dbName string, primaryKey string) (*types.Transaction, error) {
-	return _Oracle.contract.Transact(opts, "Create", dbName, primaryKey)
+// Solidity: function CreatRsp(uint256 reqID, bool statement, string newcid, string oldcid, string colName, address sender, string info) returns()
+func (_Oracle *OracleTransactor) CreatRsp(opts *bind.TransactOpts, reqID *big.Int, statement bool, newcid string, oldcid string, colName string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "CreatRsp", reqID, statement, newcid, oldcid, colName, sender, info)
 }
 
-// Create is a paid mutator transaction binding the contract method 0x38a96ba3.
+// CreatRsp is a paid mutator transaction binding the contract method 0x9e8d2d69.
 //
-// Solidity: function Create(string dbName, string primaryKey) returns()
-func (_Oracle *OracleSession) Create(dbName string, primaryKey string) (*types.Transaction, error) {
-	return _Oracle.Contract.Create(&_Oracle.TransactOpts, dbName, primaryKey)
+// Solidity: function CreatRsp(uint256 reqID, bool statement, string newcid, string oldcid, string colName, address sender, string info) returns()
+func (_Oracle *OracleSession) CreatRsp(reqID *big.Int, statement bool, newcid string, oldcid string, colName string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.CreatRsp(&_Oracle.TransactOpts, reqID, statement, newcid, oldcid, colName, sender, info)
 }
 
-// Create is a paid mutator transaction binding the contract method 0x38a96ba3.
+// CreatRsp is a paid mutator transaction binding the contract method 0x9e8d2d69.
 //
-// Solidity: function Create(string dbName, string primaryKey) returns()
-func (_Oracle *OracleTransactorSession) Create(dbName string, primaryKey string) (*types.Transaction, error) {
-	return _Oracle.Contract.Create(&_Oracle.TransactOpts, dbName, primaryKey)
+// Solidity: function CreatRsp(uint256 reqID, bool statement, string newcid, string oldcid, string colName, address sender, string info) returns()
+func (_Oracle *OracleTransactorSession) CreatRsp(reqID *big.Int, statement bool, newcid string, oldcid string, colName string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.CreatRsp(&_Oracle.TransactOpts, reqID, statement, newcid, oldcid, colName, sender, info)
 }
 
-// Get is a paid mutator transaction binding the contract method 0x7dc01df6.
+// Create is a paid mutator transaction binding the contract method 0x2e4bf45d.
 //
-// Solidity: function Get(string dbName, bytes recordID, string callBack) returns()
-func (_Oracle *OracleTransactor) Get(opts *bind.TransactOpts, dbName string, recordID []byte, callBack string) (*types.Transaction, error) {
-	return _Oracle.contract.Transact(opts, "Get", dbName, recordID, callBack)
+// Solidity: function Create(string cid, string colName, string primaryKey) returns()
+func (_Oracle *OracleTransactor) Create(opts *bind.TransactOpts, cid string, colName string, primaryKey string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "Create", cid, colName, primaryKey)
 }
 
-// Get is a paid mutator transaction binding the contract method 0x7dc01df6.
+// Create is a paid mutator transaction binding the contract method 0x2e4bf45d.
 //
-// Solidity: function Get(string dbName, bytes recordID, string callBack) returns()
-func (_Oracle *OracleSession) Get(dbName string, recordID []byte, callBack string) (*types.Transaction, error) {
-	return _Oracle.Contract.Get(&_Oracle.TransactOpts, dbName, recordID, callBack)
+// Solidity: function Create(string cid, string colName, string primaryKey) returns()
+func (_Oracle *OracleSession) Create(cid string, colName string, primaryKey string) (*types.Transaction, error) {
+	return _Oracle.Contract.Create(&_Oracle.TransactOpts, cid, colName, primaryKey)
 }
 
-// Get is a paid mutator transaction binding the contract method 0x7dc01df6.
+// Create is a paid mutator transaction binding the contract method 0x2e4bf45d.
 //
-// Solidity: function Get(string dbName, bytes recordID, string callBack) returns()
-func (_Oracle *OracleTransactorSession) Get(dbName string, recordID []byte, callBack string) (*types.Transaction, error) {
-	return _Oracle.Contract.Get(&_Oracle.TransactOpts, dbName, recordID, callBack)
+// Solidity: function Create(string cid, string colName, string primaryKey) returns()
+func (_Oracle *OracleTransactorSession) Create(cid string, colName string, primaryKey string) (*types.Transaction, error) {
+	return _Oracle.Contract.Create(&_Oracle.TransactOpts, cid, colName, primaryKey)
+}
+
+// Get is a paid mutator transaction binding the contract method 0x0405473e.
+//
+// Solidity: function Get(string cid, string colName, bytes recordID, string callBack) returns()
+func (_Oracle *OracleTransactor) Get(opts *bind.TransactOpts, cid string, colName string, recordID []byte, callBack string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "Get", cid, colName, recordID, callBack)
+}
+
+// Get is a paid mutator transaction binding the contract method 0x0405473e.
+//
+// Solidity: function Get(string cid, string colName, bytes recordID, string callBack) returns()
+func (_Oracle *OracleSession) Get(cid string, colName string, recordID []byte, callBack string) (*types.Transaction, error) {
+	return _Oracle.Contract.Get(&_Oracle.TransactOpts, cid, colName, recordID, callBack)
+}
+
+// Get is a paid mutator transaction binding the contract method 0x0405473e.
+//
+// Solidity: function Get(string cid, string colName, bytes recordID, string callBack) returns()
+func (_Oracle *OracleTransactorSession) Get(cid string, colName string, recordID []byte, callBack string) (*types.Transaction, error) {
+	return _Oracle.Contract.Get(&_Oracle.TransactOpts, cid, colName, recordID, callBack)
+}
+
+// GetCol is a paid mutator transaction binding the contract method 0xe722d92e.
+//
+// Solidity: function GetCol(string cid, string callBack) returns()
+func (_Oracle *OracleTransactor) GetCol(opts *bind.TransactOpts, cid string, callBack string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "GetCol", cid, callBack)
+}
+
+// GetCol is a paid mutator transaction binding the contract method 0xe722d92e.
+//
+// Solidity: function GetCol(string cid, string callBack) returns()
+func (_Oracle *OracleSession) GetCol(cid string, callBack string) (*types.Transaction, error) {
+	return _Oracle.Contract.GetCol(&_Oracle.TransactOpts, cid, callBack)
+}
+
+// GetCol is a paid mutator transaction binding the contract method 0xe722d92e.
+//
+// Solidity: function GetCol(string cid, string callBack) returns()
+func (_Oracle *OracleTransactorSession) GetCol(cid string, callBack string) (*types.Transaction, error) {
+	return _Oracle.Contract.GetCol(&_Oracle.TransactOpts, cid, callBack)
+}
+
+// GetColRsp is a paid mutator transaction binding the contract method 0x604cd7d7.
+//
+// Solidity: function GetColRsp(uint256 reqID, bool statement, bytes data, string callBack, address sender, string info) returns()
+func (_Oracle *OracleTransactor) GetColRsp(opts *bind.TransactOpts, reqID *big.Int, statement bool, data []byte, callBack string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "GetColRsp", reqID, statement, data, callBack, sender, info)
+}
+
+// GetColRsp is a paid mutator transaction binding the contract method 0x604cd7d7.
+//
+// Solidity: function GetColRsp(uint256 reqID, bool statement, bytes data, string callBack, address sender, string info) returns()
+func (_Oracle *OracleSession) GetColRsp(reqID *big.Int, statement bool, data []byte, callBack string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.GetColRsp(&_Oracle.TransactOpts, reqID, statement, data, callBack, sender, info)
+}
+
+// GetColRsp is a paid mutator transaction binding the contract method 0x604cd7d7.
+//
+// Solidity: function GetColRsp(uint256 reqID, bool statement, bytes data, string callBack, address sender, string info) returns()
+func (_Oracle *OracleTransactorSession) GetColRsp(reqID *big.Int, statement bool, data []byte, callBack string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.GetColRsp(&_Oracle.TransactOpts, reqID, statement, data, callBack, sender, info)
+}
+
+// GetIndex is a paid mutator transaction binding the contract method 0x0a362255.
+//
+// Solidity: function GetIndex(string cid, string colName, string callBack) returns()
+func (_Oracle *OracleTransactor) GetIndex(opts *bind.TransactOpts, cid string, colName string, callBack string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "GetIndex", cid, colName, callBack)
+}
+
+// GetIndex is a paid mutator transaction binding the contract method 0x0a362255.
+//
+// Solidity: function GetIndex(string cid, string colName, string callBack) returns()
+func (_Oracle *OracleSession) GetIndex(cid string, colName string, callBack string) (*types.Transaction, error) {
+	return _Oracle.Contract.GetIndex(&_Oracle.TransactOpts, cid, colName, callBack)
+}
+
+// GetIndex is a paid mutator transaction binding the contract method 0x0a362255.
+//
+// Solidity: function GetIndex(string cid, string colName, string callBack) returns()
+func (_Oracle *OracleTransactorSession) GetIndex(cid string, colName string, callBack string) (*types.Transaction, error) {
+	return _Oracle.Contract.GetIndex(&_Oracle.TransactOpts, cid, colName, callBack)
+}
+
+// GetIndexRsp is a paid mutator transaction binding the contract method 0xe97ec78b.
+//
+// Solidity: function GetIndexRsp(uint256 reqID, bool statement, bytes data, string callBack, address sender, string info) returns()
+func (_Oracle *OracleTransactor) GetIndexRsp(opts *bind.TransactOpts, reqID *big.Int, statement bool, data []byte, callBack string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "GetIndexRsp", reqID, statement, data, callBack, sender, info)
+}
+
+// GetIndexRsp is a paid mutator transaction binding the contract method 0xe97ec78b.
+//
+// Solidity: function GetIndexRsp(uint256 reqID, bool statement, bytes data, string callBack, address sender, string info) returns()
+func (_Oracle *OracleSession) GetIndexRsp(reqID *big.Int, statement bool, data []byte, callBack string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.GetIndexRsp(&_Oracle.TransactOpts, reqID, statement, data, callBack, sender, info)
+}
+
+// GetIndexRsp is a paid mutator transaction binding the contract method 0xe97ec78b.
+//
+// Solidity: function GetIndexRsp(uint256 reqID, bool statement, bytes data, string callBack, address sender, string info) returns()
+func (_Oracle *OracleTransactorSession) GetIndexRsp(reqID *big.Int, statement bool, data []byte, callBack string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.GetIndexRsp(&_Oracle.TransactOpts, reqID, statement, data, callBack, sender, info)
 }
 
 // GetRsp is a paid mutator transaction binding the contract method 0x7f96591d.
@@ -328,25 +444,25 @@ func (_Oracle *OracleTransactorSession) GetRsp(reqID *big.Int, statement bool, d
 	return _Oracle.Contract.GetRsp(&_Oracle.TransactOpts, reqID, statement, data, callBack, sender, info)
 }
 
-// Index is a paid mutator transaction binding the contract method 0x7abc4b4c.
+// Index is a paid mutator transaction binding the contract method 0x38e4fc73.
 //
-// Solidity: function Index(string dbName, string Key) returns()
-func (_Oracle *OracleTransactor) Index(opts *bind.TransactOpts, dbName string, Key string) (*types.Transaction, error) {
-	return _Oracle.contract.Transact(opts, "Index", dbName, Key)
+// Solidity: function Index(string cid, string colName, string Key) returns()
+func (_Oracle *OracleTransactor) Index(opts *bind.TransactOpts, cid string, colName string, Key string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "Index", cid, colName, Key)
 }
 
-// Index is a paid mutator transaction binding the contract method 0x7abc4b4c.
+// Index is a paid mutator transaction binding the contract method 0x38e4fc73.
 //
-// Solidity: function Index(string dbName, string Key) returns()
-func (_Oracle *OracleSession) Index(dbName string, Key string) (*types.Transaction, error) {
-	return _Oracle.Contract.Index(&_Oracle.TransactOpts, dbName, Key)
+// Solidity: function Index(string cid, string colName, string Key) returns()
+func (_Oracle *OracleSession) Index(cid string, colName string, Key string) (*types.Transaction, error) {
+	return _Oracle.Contract.Index(&_Oracle.TransactOpts, cid, colName, Key)
 }
 
-// Index is a paid mutator transaction binding the contract method 0x7abc4b4c.
+// Index is a paid mutator transaction binding the contract method 0x38e4fc73.
 //
-// Solidity: function Index(string dbName, string Key) returns()
-func (_Oracle *OracleTransactorSession) Index(dbName string, Key string) (*types.Transaction, error) {
-	return _Oracle.Contract.Index(&_Oracle.TransactOpts, dbName, Key)
+// Solidity: function Index(string cid, string colName, string Key) returns()
+func (_Oracle *OracleTransactorSession) Index(cid string, colName string, Key string) (*types.Transaction, error) {
+	return _Oracle.Contract.Index(&_Oracle.TransactOpts, cid, colName, Key)
 }
 
 // IndexRsp is a paid mutator transaction binding the contract method 0xd82ae8b8.
@@ -370,67 +486,67 @@ func (_Oracle *OracleTransactorSession) IndexRsp(reqID *big.Int, statement bool,
 	return _Oracle.Contract.IndexRsp(&_Oracle.TransactOpts, reqID, statement, sender, info)
 }
 
-// Put is a paid mutator transaction binding the contract method 0x36acab85.
+// Put is a paid mutator transaction binding the contract method 0x717a9408.
 //
-// Solidity: function Put(string dbName, bytes data) returns()
-func (_Oracle *OracleTransactor) Put(opts *bind.TransactOpts, dbName string, data []byte) (*types.Transaction, error) {
-	return _Oracle.contract.Transact(opts, "Put", dbName, data)
+// Solidity: function Put(string cid, string colName, bytes data) returns()
+func (_Oracle *OracleTransactor) Put(opts *bind.TransactOpts, cid string, colName string, data []byte) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "Put", cid, colName, data)
 }
 
-// Put is a paid mutator transaction binding the contract method 0x36acab85.
+// Put is a paid mutator transaction binding the contract method 0x717a9408.
 //
-// Solidity: function Put(string dbName, bytes data) returns()
-func (_Oracle *OracleSession) Put(dbName string, data []byte) (*types.Transaction, error) {
-	return _Oracle.Contract.Put(&_Oracle.TransactOpts, dbName, data)
+// Solidity: function Put(string cid, string colName, bytes data) returns()
+func (_Oracle *OracleSession) Put(cid string, colName string, data []byte) (*types.Transaction, error) {
+	return _Oracle.Contract.Put(&_Oracle.TransactOpts, cid, colName, data)
 }
 
-// Put is a paid mutator transaction binding the contract method 0x36acab85.
+// Put is a paid mutator transaction binding the contract method 0x717a9408.
 //
-// Solidity: function Put(string dbName, bytes data) returns()
-func (_Oracle *OracleTransactorSession) Put(dbName string, data []byte) (*types.Transaction, error) {
-	return _Oracle.Contract.Put(&_Oracle.TransactOpts, dbName, data)
+// Solidity: function Put(string cid, string colName, bytes data) returns()
+func (_Oracle *OracleTransactorSession) Put(cid string, colName string, data []byte) (*types.Transaction, error) {
+	return _Oracle.Contract.Put(&_Oracle.TransactOpts, cid, colName, data)
 }
 
-// PutRsp is a paid mutator transaction binding the contract method 0xa244d08d.
+// PutRsp is a paid mutator transaction binding the contract method 0xca5fff10.
 //
-// Solidity: function PutRsp(uint256 reqID, bool statement, address sender, string info) returns()
-func (_Oracle *OracleTransactor) PutRsp(opts *bind.TransactOpts, reqID *big.Int, statement bool, sender common.Address, info string) (*types.Transaction, error) {
-	return _Oracle.contract.Transact(opts, "PutRsp", reqID, statement, sender, info)
+// Solidity: function PutRsp(uint256 reqID, bool statement, string newcid, string oldcid, address sender, string info) returns()
+func (_Oracle *OracleTransactor) PutRsp(opts *bind.TransactOpts, reqID *big.Int, statement bool, newcid string, oldcid string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "PutRsp", reqID, statement, newcid, oldcid, sender, info)
 }
 
-// PutRsp is a paid mutator transaction binding the contract method 0xa244d08d.
+// PutRsp is a paid mutator transaction binding the contract method 0xca5fff10.
 //
-// Solidity: function PutRsp(uint256 reqID, bool statement, address sender, string info) returns()
-func (_Oracle *OracleSession) PutRsp(reqID *big.Int, statement bool, sender common.Address, info string) (*types.Transaction, error) {
-	return _Oracle.Contract.PutRsp(&_Oracle.TransactOpts, reqID, statement, sender, info)
+// Solidity: function PutRsp(uint256 reqID, bool statement, string newcid, string oldcid, address sender, string info) returns()
+func (_Oracle *OracleSession) PutRsp(reqID *big.Int, statement bool, newcid string, oldcid string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.PutRsp(&_Oracle.TransactOpts, reqID, statement, newcid, oldcid, sender, info)
 }
 
-// PutRsp is a paid mutator transaction binding the contract method 0xa244d08d.
+// PutRsp is a paid mutator transaction binding the contract method 0xca5fff10.
 //
-// Solidity: function PutRsp(uint256 reqID, bool statement, address sender, string info) returns()
-func (_Oracle *OracleTransactorSession) PutRsp(reqID *big.Int, statement bool, sender common.Address, info string) (*types.Transaction, error) {
-	return _Oracle.Contract.PutRsp(&_Oracle.TransactOpts, reqID, statement, sender, info)
+// Solidity: function PutRsp(uint256 reqID, bool statement, string newcid, string oldcid, address sender, string info) returns()
+func (_Oracle *OracleTransactorSession) PutRsp(reqID *big.Int, statement bool, newcid string, oldcid string, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.PutRsp(&_Oracle.TransactOpts, reqID, statement, newcid, oldcid, sender, info)
 }
 
-// Search is a paid mutator transaction binding the contract method 0xffa6088a.
+// Search is a paid mutator transaction binding the contract method 0x45558ad1.
 //
-// Solidity: function Search(string dbName, (string,string,int64,uint64,bytes,bool,string,string) Val, string Method, string callBack) returns()
-func (_Oracle *OracleTransactor) Search(opts *bind.TransactOpts, dbName string, Val OracleInterfaceSearchController, Method string, callBack string) (*types.Transaction, error) {
-	return _Oracle.contract.Transact(opts, "Search", dbName, Val, Method, callBack)
+// Solidity: function Search(string cid, string colName, (string,string,string,int64,uint64,bytes,bool,string,string) Val, string callBack) returns()
+func (_Oracle *OracleTransactor) Search(opts *bind.TransactOpts, cid string, colName string, Val OracleInterfaceSearchController, callBack string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "Search", cid, colName, Val, callBack)
 }
 
-// Search is a paid mutator transaction binding the contract method 0xffa6088a.
+// Search is a paid mutator transaction binding the contract method 0x45558ad1.
 //
-// Solidity: function Search(string dbName, (string,string,int64,uint64,bytes,bool,string,string) Val, string Method, string callBack) returns()
-func (_Oracle *OracleSession) Search(dbName string, Val OracleInterfaceSearchController, Method string, callBack string) (*types.Transaction, error) {
-	return _Oracle.Contract.Search(&_Oracle.TransactOpts, dbName, Val, Method, callBack)
+// Solidity: function Search(string cid, string colName, (string,string,string,int64,uint64,bytes,bool,string,string) Val, string callBack) returns()
+func (_Oracle *OracleSession) Search(cid string, colName string, Val OracleInterfaceSearchController, callBack string) (*types.Transaction, error) {
+	return _Oracle.Contract.Search(&_Oracle.TransactOpts, cid, colName, Val, callBack)
 }
 
-// Search is a paid mutator transaction binding the contract method 0xffa6088a.
+// Search is a paid mutator transaction binding the contract method 0x45558ad1.
 //
-// Solidity: function Search(string dbName, (string,string,int64,uint64,bytes,bool,string,string) Val, string Method, string callBack) returns()
-func (_Oracle *OracleTransactorSession) Search(dbName string, Val OracleInterfaceSearchController, Method string, callBack string) (*types.Transaction, error) {
-	return _Oracle.Contract.Search(&_Oracle.TransactOpts, dbName, Val, Method, callBack)
+// Solidity: function Search(string cid, string colName, (string,string,string,int64,uint64,bytes,bool,string,string) Val, string callBack) returns()
+func (_Oracle *OracleTransactorSession) Search(cid string, colName string, Val OracleInterfaceSearchController, callBack string) (*types.Transaction, error) {
+	return _Oracle.Contract.Search(&_Oracle.TransactOpts, cid, colName, Val, callBack)
 }
 
 // SearchRsp is a paid mutator transaction binding the contract method 0xbcbdd19b.
@@ -452,6 +568,141 @@ func (_Oracle *OracleSession) SearchRsp(reqID *big.Int, statement bool, data []b
 // Solidity: function SearchRsp(uint256 reqID, bool statement, bytes data, string callBack, address sender, string info) returns()
 func (_Oracle *OracleTransactorSession) SearchRsp(reqID *big.Int, statement bool, data []byte, callBack string, sender common.Address, info string) (*types.Transaction, error) {
 	return _Oracle.Contract.SearchRsp(&_Oracle.TransactOpts, reqID, statement, data, callBack, sender, info)
+}
+
+// OracleNewCidIterator is returned from FilterNewCid and is used to iterate over the raw logs and unpacked data for NewCid events raised by the Oracle contract.
+type OracleNewCidIterator struct {
+	Event *OracleNewCid // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *OracleNewCidIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(OracleNewCid)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(OracleNewCid)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *OracleNewCidIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *OracleNewCidIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// OracleNewCid represents a NewCid event raised by the Oracle contract.
+type OracleNewCid struct {
+	Owner common.Address
+	Cid   string
+	Raw   types.Log // Blockchain specific contextual infos
+}
+
+// FilterNewCid is a free log retrieval operation binding the contract event 0x2e11eaaf61d70b4ff2628bc8eb340c3d125e4937d655b9c0e0f4abe8ba1af13b.
+//
+// Solidity: event NewCid(address owner, string cid)
+func (_Oracle *OracleFilterer) FilterNewCid(opts *bind.FilterOpts) (*OracleNewCidIterator, error) {
+
+	logs, sub, err := _Oracle.contract.FilterLogs(opts, "NewCid")
+	if err != nil {
+		return nil, err
+	}
+	return &OracleNewCidIterator{contract: _Oracle.contract, event: "NewCid", logs: logs, sub: sub}, nil
+}
+
+// WatchNewCid is a free log subscription operation binding the contract event 0x2e11eaaf61d70b4ff2628bc8eb340c3d125e4937d655b9c0e0f4abe8ba1af13b.
+//
+// Solidity: event NewCid(address owner, string cid)
+func (_Oracle *OracleFilterer) WatchNewCid(opts *bind.WatchOpts, sink chan<- *OracleNewCid) (event.Subscription, error) {
+
+	logs, sub, err := _Oracle.contract.WatchLogs(opts, "NewCid")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(OracleNewCid)
+				if err := _Oracle.contract.UnpackLog(event, "NewCid", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseNewCid is a log parse operation binding the contract event 0x2e11eaaf61d70b4ff2628bc8eb340c3d125e4937d655b9c0e0f4abe8ba1af13b.
+//
+// Solidity: event NewCid(address owner, string cid)
+func (_Oracle *OracleFilterer) ParseNewCid(log types.Log) (*OracleNewCid, error) {
+	event := new(OracleNewCid)
+	if err := _Oracle.contract.UnpackLog(event, "NewCid", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
 }
 
 // OracleReqStateIterator is returned from FilterReqState and is used to iterate over the raw logs and unpacked data for ReqState events raised by the Oracle contract.
@@ -661,15 +912,16 @@ func (it *OracleCreateIterator) Close() error {
 // OracleCreate represents a Create event raised by the Oracle contract.
 type OracleCreate struct {
 	ReqID      *big.Int
-	DbName     string
+	Cid        string
+	ColName    string
 	PrimaryKey string
 	Owner      common.Address
 	Raw        types.Log // Blockchain specific contextual infos
 }
 
-// FilterCreate is a free log retrieval operation binding the contract event 0x5e08f3373543c9fa1a22411d63cfcba03baf04918709ad2be36cb7904c71f0ab.
+// FilterCreate is a free log retrieval operation binding the contract event 0xae273ad1c3c01ee1ad66d33c1c243a8e3a3b065b780eb2aceb3931c27732eb32.
 //
-// Solidity: event create(uint256 reqID, string dbName, string primaryKey, address owner)
+// Solidity: event create(uint256 reqID, string cid, string colName, string primaryKey, address owner)
 func (_Oracle *OracleFilterer) FilterCreate(opts *bind.FilterOpts) (*OracleCreateIterator, error) {
 
 	logs, sub, err := _Oracle.contract.FilterLogs(opts, "create")
@@ -679,9 +931,9 @@ func (_Oracle *OracleFilterer) FilterCreate(opts *bind.FilterOpts) (*OracleCreat
 	return &OracleCreateIterator{contract: _Oracle.contract, event: "create", logs: logs, sub: sub}, nil
 }
 
-// WatchCreate is a free log subscription operation binding the contract event 0x5e08f3373543c9fa1a22411d63cfcba03baf04918709ad2be36cb7904c71f0ab.
+// WatchCreate is a free log subscription operation binding the contract event 0xae273ad1c3c01ee1ad66d33c1c243a8e3a3b065b780eb2aceb3931c27732eb32.
 //
-// Solidity: event create(uint256 reqID, string dbName, string primaryKey, address owner)
+// Solidity: event create(uint256 reqID, string cid, string colName, string primaryKey, address owner)
 func (_Oracle *OracleFilterer) WatchCreate(opts *bind.WatchOpts, sink chan<- *OracleCreate) (event.Subscription, error) {
 
 	logs, sub, err := _Oracle.contract.WatchLogs(opts, "create")
@@ -716,9 +968,9 @@ func (_Oracle *OracleFilterer) WatchCreate(opts *bind.WatchOpts, sink chan<- *Or
 	}), nil
 }
 
-// ParseCreate is a log parse operation binding the contract event 0x5e08f3373543c9fa1a22411d63cfcba03baf04918709ad2be36cb7904c71f0ab.
+// ParseCreate is a log parse operation binding the contract event 0xae273ad1c3c01ee1ad66d33c1c243a8e3a3b065b780eb2aceb3931c27732eb32.
 //
-// Solidity: event create(uint256 reqID, string dbName, string primaryKey, address owner)
+// Solidity: event create(uint256 reqID, string cid, string colName, string primaryKey, address owner)
 func (_Oracle *OracleFilterer) ParseCreate(log types.Log) (*OracleCreate, error) {
 	event := new(OracleCreate)
 	if err := _Oracle.contract.UnpackLog(event, "create", log); err != nil {
@@ -798,16 +1050,17 @@ func (it *OracleGetIterator) Close() error {
 // OracleGet represents a Get event raised by the Oracle contract.
 type OracleGet struct {
 	ReqID    *big.Int
-	DbName   string
+	Cid      string
+	ColName  string
 	RecordID []byte
 	CallBack string
 	Sender   common.Address
 	Raw      types.Log // Blockchain specific contextual infos
 }
 
-// FilterGet is a free log retrieval operation binding the contract event 0xfe70653024070c74b0b5ce929af70fa0d271b96e202611d801e4db2e3b1b1e08.
+// FilterGet is a free log retrieval operation binding the contract event 0xf95ce09bbae71e94492156b11ac31168e7b11ec7a264b71db25038ce94877d26.
 //
-// Solidity: event get(uint256 reqID, string dbName, bytes recordID, string callBack, address sender)
+// Solidity: event get(uint256 reqID, string cid, string colName, bytes recordID, string callBack, address sender)
 func (_Oracle *OracleFilterer) FilterGet(opts *bind.FilterOpts) (*OracleGetIterator, error) {
 
 	logs, sub, err := _Oracle.contract.FilterLogs(opts, "get")
@@ -817,9 +1070,9 @@ func (_Oracle *OracleFilterer) FilterGet(opts *bind.FilterOpts) (*OracleGetItera
 	return &OracleGetIterator{contract: _Oracle.contract, event: "get", logs: logs, sub: sub}, nil
 }
 
-// WatchGet is a free log subscription operation binding the contract event 0xfe70653024070c74b0b5ce929af70fa0d271b96e202611d801e4db2e3b1b1e08.
+// WatchGet is a free log subscription operation binding the contract event 0xf95ce09bbae71e94492156b11ac31168e7b11ec7a264b71db25038ce94877d26.
 //
-// Solidity: event get(uint256 reqID, string dbName, bytes recordID, string callBack, address sender)
+// Solidity: event get(uint256 reqID, string cid, string colName, bytes recordID, string callBack, address sender)
 func (_Oracle *OracleFilterer) WatchGet(opts *bind.WatchOpts, sink chan<- *OracleGet) (event.Subscription, error) {
 
 	logs, sub, err := _Oracle.contract.WatchLogs(opts, "get")
@@ -854,12 +1107,287 @@ func (_Oracle *OracleFilterer) WatchGet(opts *bind.WatchOpts, sink chan<- *Oracl
 	}), nil
 }
 
-// ParseGet is a log parse operation binding the contract event 0xfe70653024070c74b0b5ce929af70fa0d271b96e202611d801e4db2e3b1b1e08.
+// ParseGet is a log parse operation binding the contract event 0xf95ce09bbae71e94492156b11ac31168e7b11ec7a264b71db25038ce94877d26.
 //
-// Solidity: event get(uint256 reqID, string dbName, bytes recordID, string callBack, address sender)
+// Solidity: event get(uint256 reqID, string cid, string colName, bytes recordID, string callBack, address sender)
 func (_Oracle *OracleFilterer) ParseGet(log types.Log) (*OracleGet, error) {
 	event := new(OracleGet)
 	if err := _Oracle.contract.UnpackLog(event, "get", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// OracleGetColIterator is returned from FilterGetCol and is used to iterate over the raw logs and unpacked data for GetCol events raised by the Oracle contract.
+type OracleGetColIterator struct {
+	Event *OracleGetCol // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *OracleGetColIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(OracleGetCol)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(OracleGetCol)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *OracleGetColIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *OracleGetColIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// OracleGetCol represents a GetCol event raised by the Oracle contract.
+type OracleGetCol struct {
+	ReqID    *big.Int
+	Cid      string
+	CallBack string
+	Sender   common.Address
+	Raw      types.Log // Blockchain specific contextual infos
+}
+
+// FilterGetCol is a free log retrieval operation binding the contract event 0xd583b378be23e9954c91371fcd0b84a56ccd2789fb45f90c191308682c92a5a9.
+//
+// Solidity: event getCol(uint256 reqID, string cid, string callBack, address sender)
+func (_Oracle *OracleFilterer) FilterGetCol(opts *bind.FilterOpts) (*OracleGetColIterator, error) {
+
+	logs, sub, err := _Oracle.contract.FilterLogs(opts, "getCol")
+	if err != nil {
+		return nil, err
+	}
+	return &OracleGetColIterator{contract: _Oracle.contract, event: "getCol", logs: logs, sub: sub}, nil
+}
+
+// WatchGetCol is a free log subscription operation binding the contract event 0xd583b378be23e9954c91371fcd0b84a56ccd2789fb45f90c191308682c92a5a9.
+//
+// Solidity: event getCol(uint256 reqID, string cid, string callBack, address sender)
+func (_Oracle *OracleFilterer) WatchGetCol(opts *bind.WatchOpts, sink chan<- *OracleGetCol) (event.Subscription, error) {
+
+	logs, sub, err := _Oracle.contract.WatchLogs(opts, "getCol")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(OracleGetCol)
+				if err := _Oracle.contract.UnpackLog(event, "getCol", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseGetCol is a log parse operation binding the contract event 0xd583b378be23e9954c91371fcd0b84a56ccd2789fb45f90c191308682c92a5a9.
+//
+// Solidity: event getCol(uint256 reqID, string cid, string callBack, address sender)
+func (_Oracle *OracleFilterer) ParseGetCol(log types.Log) (*OracleGetCol, error) {
+	event := new(OracleGetCol)
+	if err := _Oracle.contract.UnpackLog(event, "getCol", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// OracleGetIndexIterator is returned from FilterGetIndex and is used to iterate over the raw logs and unpacked data for GetIndex events raised by the Oracle contract.
+type OracleGetIndexIterator struct {
+	Event *OracleGetIndex // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *OracleGetIndexIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(OracleGetIndex)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(OracleGetIndex)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *OracleGetIndexIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *OracleGetIndexIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// OracleGetIndex represents a GetIndex event raised by the Oracle contract.
+type OracleGetIndex struct {
+	ReqID    *big.Int
+	Cid      string
+	ColName  string
+	CallBack string
+	Sender   common.Address
+	Raw      types.Log // Blockchain specific contextual infos
+}
+
+// FilterGetIndex is a free log retrieval operation binding the contract event 0x212fbb17e3c8775a57cc5fe569eeaecbbecb483a46a1d1cdf955d6e06f1c00fb.
+//
+// Solidity: event getIndex(uint256 reqID, string cid, string colName, string callBack, address sender)
+func (_Oracle *OracleFilterer) FilterGetIndex(opts *bind.FilterOpts) (*OracleGetIndexIterator, error) {
+
+	logs, sub, err := _Oracle.contract.FilterLogs(opts, "getIndex")
+	if err != nil {
+		return nil, err
+	}
+	return &OracleGetIndexIterator{contract: _Oracle.contract, event: "getIndex", logs: logs, sub: sub}, nil
+}
+
+// WatchGetIndex is a free log subscription operation binding the contract event 0x212fbb17e3c8775a57cc5fe569eeaecbbecb483a46a1d1cdf955d6e06f1c00fb.
+//
+// Solidity: event getIndex(uint256 reqID, string cid, string colName, string callBack, address sender)
+func (_Oracle *OracleFilterer) WatchGetIndex(opts *bind.WatchOpts, sink chan<- *OracleGetIndex) (event.Subscription, error) {
+
+	logs, sub, err := _Oracle.contract.WatchLogs(opts, "getIndex")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(OracleGetIndex)
+				if err := _Oracle.contract.UnpackLog(event, "getIndex", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseGetIndex is a log parse operation binding the contract event 0x212fbb17e3c8775a57cc5fe569eeaecbbecb483a46a1d1cdf955d6e06f1c00fb.
+//
+// Solidity: event getIndex(uint256 reqID, string cid, string colName, string callBack, address sender)
+func (_Oracle *OracleFilterer) ParseGetIndex(log types.Log) (*OracleGetIndex, error) {
+	event := new(OracleGetIndex)
+	if err := _Oracle.contract.UnpackLog(event, "getIndex", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
@@ -935,16 +1463,17 @@ func (it *OracleIndexIterator) Close() error {
 
 // OracleIndex represents a Index event raised by the Oracle contract.
 type OracleIndex struct {
-	ReqID  *big.Int
-	DbName string
-	Key    string
-	Sender common.Address
-	Raw    types.Log // Blockchain specific contextual infos
+	ReqID   *big.Int
+	Cid     string
+	ColName string
+	Key     string
+	Sender  common.Address
+	Raw     types.Log // Blockchain specific contextual infos
 }
 
-// FilterIndex is a free log retrieval operation binding the contract event 0x58cecaf12df100766a069bfb8c8fe6d73d6c8c353da65657f97b03da9e9def6c.
+// FilterIndex is a free log retrieval operation binding the contract event 0x5d687c727a6613fa6c66be3985b0d845711a1361f747c3509bf4c758f7187e14.
 //
-// Solidity: event index(uint256 reqID, string dbName, string Key, address sender)
+// Solidity: event index(uint256 reqID, string cid, string colName, string Key, address sender)
 func (_Oracle *OracleFilterer) FilterIndex(opts *bind.FilterOpts) (*OracleIndexIterator, error) {
 
 	logs, sub, err := _Oracle.contract.FilterLogs(opts, "index")
@@ -954,9 +1483,9 @@ func (_Oracle *OracleFilterer) FilterIndex(opts *bind.FilterOpts) (*OracleIndexI
 	return &OracleIndexIterator{contract: _Oracle.contract, event: "index", logs: logs, sub: sub}, nil
 }
 
-// WatchIndex is a free log subscription operation binding the contract event 0x58cecaf12df100766a069bfb8c8fe6d73d6c8c353da65657f97b03da9e9def6c.
+// WatchIndex is a free log subscription operation binding the contract event 0x5d687c727a6613fa6c66be3985b0d845711a1361f747c3509bf4c758f7187e14.
 //
-// Solidity: event index(uint256 reqID, string dbName, string Key, address sender)
+// Solidity: event index(uint256 reqID, string cid, string colName, string Key, address sender)
 func (_Oracle *OracleFilterer) WatchIndex(opts *bind.WatchOpts, sink chan<- *OracleIndex) (event.Subscription, error) {
 
 	logs, sub, err := _Oracle.contract.WatchLogs(opts, "index")
@@ -991,9 +1520,9 @@ func (_Oracle *OracleFilterer) WatchIndex(opts *bind.WatchOpts, sink chan<- *Ora
 	}), nil
 }
 
-// ParseIndex is a log parse operation binding the contract event 0x58cecaf12df100766a069bfb8c8fe6d73d6c8c353da65657f97b03da9e9def6c.
+// ParseIndex is a log parse operation binding the contract event 0x5d687c727a6613fa6c66be3985b0d845711a1361f747c3509bf4c758f7187e14.
 //
-// Solidity: event index(uint256 reqID, string dbName, string Key, address sender)
+// Solidity: event index(uint256 reqID, string cid, string colName, string Key, address sender)
 func (_Oracle *OracleFilterer) ParseIndex(log types.Log) (*OracleIndex, error) {
 	event := new(OracleIndex)
 	if err := _Oracle.contract.UnpackLog(event, "index", log); err != nil {
@@ -1072,16 +1601,17 @@ func (it *OraclePutIterator) Close() error {
 
 // OraclePut represents a Put event raised by the Oracle contract.
 type OraclePut struct {
-	ReqID  *big.Int
-	DbName string
-	Data   []byte
-	Sender common.Address
-	Raw    types.Log // Blockchain specific contextual infos
+	ReqID   *big.Int
+	Cid     string
+	ColName string
+	Data    []byte
+	Sender  common.Address
+	Raw     types.Log // Blockchain specific contextual infos
 }
 
-// FilterPut is a free log retrieval operation binding the contract event 0xd229ece7f92194d85c5405f897fa56a4f5cbfbee1f872ba130b491006fc58738.
+// FilterPut is a free log retrieval operation binding the contract event 0x946f3555fdbe19f5d6d0ed7b13cd52d57a314514c5654f993d96f9fe49fd6651.
 //
-// Solidity: event put(uint256 reqID, string dbName, bytes data, address sender)
+// Solidity: event put(uint256 reqID, string cid, string colName, bytes data, address sender)
 func (_Oracle *OracleFilterer) FilterPut(opts *bind.FilterOpts) (*OraclePutIterator, error) {
 
 	logs, sub, err := _Oracle.contract.FilterLogs(opts, "put")
@@ -1091,9 +1621,9 @@ func (_Oracle *OracleFilterer) FilterPut(opts *bind.FilterOpts) (*OraclePutItera
 	return &OraclePutIterator{contract: _Oracle.contract, event: "put", logs: logs, sub: sub}, nil
 }
 
-// WatchPut is a free log subscription operation binding the contract event 0xd229ece7f92194d85c5405f897fa56a4f5cbfbee1f872ba130b491006fc58738.
+// WatchPut is a free log subscription operation binding the contract event 0x946f3555fdbe19f5d6d0ed7b13cd52d57a314514c5654f993d96f9fe49fd6651.
 //
-// Solidity: event put(uint256 reqID, string dbName, bytes data, address sender)
+// Solidity: event put(uint256 reqID, string cid, string colName, bytes data, address sender)
 func (_Oracle *OracleFilterer) WatchPut(opts *bind.WatchOpts, sink chan<- *OraclePut) (event.Subscription, error) {
 
 	logs, sub, err := _Oracle.contract.WatchLogs(opts, "put")
@@ -1128,9 +1658,9 @@ func (_Oracle *OracleFilterer) WatchPut(opts *bind.WatchOpts, sink chan<- *Oracl
 	}), nil
 }
 
-// ParsePut is a log parse operation binding the contract event 0xd229ece7f92194d85c5405f897fa56a4f5cbfbee1f872ba130b491006fc58738.
+// ParsePut is a log parse operation binding the contract event 0x946f3555fdbe19f5d6d0ed7b13cd52d57a314514c5654f993d96f9fe49fd6651.
 //
-// Solidity: event put(uint256 reqID, string dbName, bytes data, address sender)
+// Solidity: event put(uint256 reqID, string cid, string colName, bytes data, address sender)
 func (_Oracle *OracleFilterer) ParsePut(log types.Log) (*OraclePut, error) {
 	event := new(OraclePut)
 	if err := _Oracle.contract.UnpackLog(event, "put", log); err != nil {
@@ -1210,17 +1740,17 @@ func (it *OracleSearchIterator) Close() error {
 // OracleSearch represents a Search event raised by the Oracle contract.
 type OracleSearch struct {
 	ReqID    *big.Int
-	DbName   string
+	Cid      string
+	ColName  string
 	Val      OracleInterfaceSearchController
-	Method   string
 	CallBack string
 	Sender   common.Address
 	Raw      types.Log // Blockchain specific contextual infos
 }
 
-// FilterSearch is a free log retrieval operation binding the contract event 0x76f9515172f1a04750c773a85f31c777a6f8559257acadddf00953ffaaf0c2c4.
+// FilterSearch is a free log retrieval operation binding the contract event 0x53cb81f085604506a0bd15f9505fbba1c92c5cf365660f686d13cc846f31d0de.
 //
-// Solidity: event search(uint256 reqID, string dbName, (string,string,int64,uint64,bytes,bool,string,string) Val, string Method, string callBack, address sender)
+// Solidity: event search(uint256 reqID, string cid, string colName, (string,string,string,int64,uint64,bytes,bool,string,string) Val, string callBack, address sender)
 func (_Oracle *OracleFilterer) FilterSearch(opts *bind.FilterOpts) (*OracleSearchIterator, error) {
 
 	logs, sub, err := _Oracle.contract.FilterLogs(opts, "search")
@@ -1230,9 +1760,9 @@ func (_Oracle *OracleFilterer) FilterSearch(opts *bind.FilterOpts) (*OracleSearc
 	return &OracleSearchIterator{contract: _Oracle.contract, event: "search", logs: logs, sub: sub}, nil
 }
 
-// WatchSearch is a free log subscription operation binding the contract event 0x76f9515172f1a04750c773a85f31c777a6f8559257acadddf00953ffaaf0c2c4.
+// WatchSearch is a free log subscription operation binding the contract event 0x53cb81f085604506a0bd15f9505fbba1c92c5cf365660f686d13cc846f31d0de.
 //
-// Solidity: event search(uint256 reqID, string dbName, (string,string,int64,uint64,bytes,bool,string,string) Val, string Method, string callBack, address sender)
+// Solidity: event search(uint256 reqID, string cid, string colName, (string,string,string,int64,uint64,bytes,bool,string,string) Val, string callBack, address sender)
 func (_Oracle *OracleFilterer) WatchSearch(opts *bind.WatchOpts, sink chan<- *OracleSearch) (event.Subscription, error) {
 
 	logs, sub, err := _Oracle.contract.WatchLogs(opts, "search")
@@ -1267,9 +1797,9 @@ func (_Oracle *OracleFilterer) WatchSearch(opts *bind.WatchOpts, sink chan<- *Or
 	}), nil
 }
 
-// ParseSearch is a log parse operation binding the contract event 0x76f9515172f1a04750c773a85f31c777a6f8559257acadddf00953ffaaf0c2c4.
+// ParseSearch is a log parse operation binding the contract event 0x53cb81f085604506a0bd15f9505fbba1c92c5cf365660f686d13cc846f31d0de.
 //
-// Solidity: event search(uint256 reqID, string dbName, (string,string,int64,uint64,bytes,bool,string,string) Val, string Method, string callBack, address sender)
+// Solidity: event search(uint256 reqID, string cid, string colName, (string,string,string,int64,uint64,bytes,bool,string,string) Val, string callBack, address sender)
 func (_Oracle *OracleFilterer) ParseSearch(log types.Log) (*OracleSearch, error) {
 	event := new(OracleSearch)
 	if err := _Oracle.contract.UnpackLog(event, "search", log); err != nil {

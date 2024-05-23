@@ -37,10 +37,20 @@ func index(event *Oracle.OracleIndex) {
 	var statement bool
 	tps := GenTransactOpts(config.GasLimit)
 
-	dbName := event.DbName
-	ctx, dbC := config.Dbs[dbName].Ctx, config.Dbs[dbName].Db
+	colName := event.ColName
+	ctx := context.Background()
+	db := config.Dbs[event.Cid]
+	dbC, err := db.Collection(colName, "")
+	if err != nil {
+		log.Println("Get collection ERROR: ", err)
+		info := fmt.Sprintf("Get collection ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.IndexRsp(tps, event.ReqID, statement, event.Sender, info)
+		return
+	}
 	pK := strings.Split(event.Key, ",")
-	_, err := dbC.CreateIndex(ctx, pK...)
+	_, err = dbC.CreateIndex(ctx, pK...)
 	if err != nil {
 		log.Println("Create Index ERROR: ", err)
 		info := fmt.Sprintf("Create Index ERROR: %v", err)
@@ -51,6 +61,10 @@ func index(event *Oracle.OracleIndex) {
 	}
 
 	statement = true
-	config.OracleContract.IndexRsp(tps, event.ReqID, statement, event.Sender, "")
-	log.Println("[", event.DbName, "]", "Create index success")
+	_, err = config.OracleContract.IndexRsp(tps, event.ReqID, statement, event.Sender, "")
+	if err != nil {
+		log.Println("Req function get an error : ", err)
+	} else {
+		log.Println("[", event.ColName, "]", "Create index success")
+	}
 }

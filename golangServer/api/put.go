@@ -37,24 +37,40 @@ func put(event *Oracle.OraclePut) {
 	var statement bool
 	tps := GenTransactOpts(config.GasLimit)
 
-	dbName := event.DbName
-	ctx, dbC := config.Dbs[dbName].Ctx, config.Dbs[dbName].Db
-
+	colName := event.ColName
+	ctx := context.Background()
+	db := config.Dbs[event.Cid]
+	dbC, err := db.Collection(colName, "")
+	if err != nil {
+		log.Println("Get collection ERROR: ", err)
+		info := fmt.Sprintf("Get collection ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.PutRsp(tps, event.ReqID, statement, "", "", event.Sender, info)
+		return
+	}
+	cid := event.Cid
 	strData := string(event.Data)
 	reader := strings.NewReader(strData)
 	// insert data
-	err := dbC.IndexNDJSON(ctx, reader)
+	err = dbC.IndexNDJSON(ctx, reader)
 	if err != nil {
 		log.Println("Put data ERROR: ", err)
 		info := fmt.Sprintf("Put data ERROR: %v", err)
 		statement = false
 		//response to oracle
-		config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, info)
+		config.OracleContract.PutRsp(tps, event.ReqID, statement, "", "", event.Sender, info)
 		return
 	} else {
 		statement = true
 	}
+	delete(config.Dbs, cid)
+	config.Dbs[db.RootCid().String()] = db
 	//response to oracle
-	config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, "")
-	log.Println("[", event.DbName, "]", "Put data success")
+	_, err = config.OracleContract.PutRsp(tps, event.ReqID, statement, db.RootCid().String(), cid, event.Sender, "")
+	if err != nil {
+		log.Println("Req function get an error : ", err)
+	} else {
+		log.Println("[", event.ColName, "]", "Put data success")
+	}
 }
