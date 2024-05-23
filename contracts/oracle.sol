@@ -4,30 +4,44 @@ pragma solidity ^0.8.0;
 import {OracleInterface} from "./interfaces/interface.sol";
 import {IOracle} from "./I_oracle.sol";
 import {Permission} from "./interfaces/permission.sol";
+import {util} from "./utils.sol";
 
-contract Oracle is IOracle, OracleInterface {
+contract Oracle is IOracle, OracleInterface, util {
     //allow a address write
-    function AllowWrite(string calldata dbName, address to) external override dbIsExsist(dbName) onlyDbOwner(dbName) {
+    function AllowWrite(address to) external override{
+        require( !isEmptyString(getcid[msg.sender]), "You has not create a db.");
+        string memory cid = getcid[msg.sender];
+        require(msg.sender == dbOwner[cid], "Only the db owner can call this function");
         uint reqID = CurrentReqID;
         CurrentReqID++;
-        permission[to][dbName] = Permission(true, true, true);
+        permission[to][msg.sender] = Permission(true, true, true);
         emit ReqState(reqID, msg.sender, true, "Permission granted successfully");
         reqStatement[reqID] = true;
     }
 
-    //creat a new db
-    function Create(string calldata dbName, string calldata primaryKey) external override {
-        require(dbOwner[dbName] == address(0), "This db had been created.");
+    //creat a new collection
+    function Create(string calldata cid, string calldata colName, string calldata primaryKey) allowWrite(cid) external override {
+        require(cols[dbOwner[cid]][colName] == false, "This collection had been created.");
         uint reqID = CurrentReqID;
         CurrentReqID++;
-        emit create(reqID, dbName, primaryKey, msg.sender);
+        emit create(reqID, cid, colName, primaryKey, msg.sender);
     }
 
-    function CreatRsp(uint reqID, bool statement, string calldata dbName, address sender, string calldata info) onlyOracleOwner external {
+    function CreatRsp(uint reqID, bool statement, string calldata newcid, string calldata oldcid, string calldata colName, address sender, string calldata info) onlyOracleOwner external {
         if (statement == true) {
-            dbOwner[dbName] = sender;
-            permission[sender][dbName] = Permission(true, true, true);
+            address owner;
+            if (isEmptyString(oldcid)){
+                owner = sender;
+            } else{
+                owner = dbOwner[oldcid];
+            }
+            dbOwner[newcid] = owner;
+            getcid[owner] = newcid;
+            cols[owner][colName] = true;
+            permission[owner][owner] = Permission(true, true, true); //dbOwner
+            permission[sender][owner] = Permission(true, true, true); //clollection creater
             emit ReqState(reqID, sender, true, "Db creat success.");
+            emit NewCid(sender,newcid);
             reqStatement[reqID] = true;
         } else {
             emit ReqState(reqID, sender, false, info);
@@ -35,16 +49,20 @@ contract Oracle is IOracle, OracleInterface {
         }
     }
 
-    // put data to db
-    function Put(string calldata dbName, bytes calldata data) external override dbIsExsist(dbName) allowWrite(dbName) {
+    // put data to collection
+    function Put(string calldata cid, string calldata colName, bytes calldata data) external override colIsExsist(cid, colName) allowWrite(cid) {
         uint reqID = CurrentReqID;
         CurrentReqID++;
-        emit put(reqID, dbName, data, msg.sender);
+        emit put(reqID, cid, colName, data, msg.sender);
     }
 
-    function PutRsp(uint reqID, bool statement, address sender, string calldata info) onlyOracleOwner external {
+    function PutRsp(uint reqID, bool statement, string calldata newcid, string calldata oldcid, address sender, string calldata info) onlyOracleOwner external {
         if (statement == true) {
+            address owner = dbOwner[oldcid];
+            dbOwner[newcid] = owner;
+            getcid[owner] = newcid;
             emit ReqState(reqID, sender, true, "Put data success.");
+            emit NewCid(sender,newcid);
             reqStatement[reqID] = true;
         } else {
             emit ReqState(reqID, sender, false, info);
@@ -52,11 +70,9 @@ contract Oracle is IOracle, OracleInterface {
         }
     }
 
-    //get data from db
-    function Get(string calldata dbName, bytes calldata recordID, string calldata callBack) external override dbIsExsist(dbName) allowQuery(dbName) {
-        uint reqID = CurrentReqID;
-        CurrentReqID++;
-        emit get(reqID, dbName, recordID, callBack, msg.sender);
+    //get data from collection
+    function Get(string calldata cid, string calldata colName, bytes calldata recordID, string calldata callBack) external override colIsExsist(cid, colName) allowQuery(cid) {
+        emit get(CurrentReqID++, cid, colName, recordID, callBack, msg.sender);
     }
 
     function GetRsp(uint reqID, bool statement, bytes calldata data, string calldata callBack, address sender, string calldata info) onlyOracleOwner external {
@@ -75,10 +91,10 @@ contract Oracle is IOracle, OracleInterface {
 
 
     //creat index
-    function Index(string calldata dbName, string calldata Key) external dbIsExsist(dbName) allowWrite(dbName) override {
+    function Index(string calldata cid, string calldata colName, string calldata Key) external colIsExsist(cid, colName) allowWrite(cid) override {
         uint reqID = CurrentReqID;
         CurrentReqID++;
-        emit index(reqID, dbName, Key, msg.sender);
+        emit index(reqID, cid, colName, Key, msg.sender);
     }
 
     function IndexRsp(uint reqID, bool statement, address sender, string calldata info) onlyOracleOwner external {
@@ -94,12 +110,10 @@ contract Oracle is IOracle, OracleInterface {
 
 
     //query by {equals, compare, sort, limit, skip}
-    function Search(string calldata dbName, SearchController calldata Val, string calldata Method, string calldata callBack) external dbIsExsist(dbName) allowQuery(dbName) override {
-        bytes32 method = keccak256(abi.encodePacked(Method));
+    function Search(string calldata cid, string calldata colName, SearchController calldata Val, string calldata callBack) external colIsExsist(cid, colName) allowQuery(cid) override {
+        bytes32 method = keccak256(abi.encodePacked(Val.method));
         require(method == equal || method == compare || method == sort || method == limit || method == skip, "The search method is wrong, only supports: equal,compare,sort,limit and skip.");
-        uint reqID = CurrentReqID;
-        CurrentReqID++;
-        emit search(reqID, dbName, Val, Method, callBack, msg.sender);
+        emit search(CurrentReqID++, cid, colName, Val, callBack, msg.sender);
     }
 
     function SearchRsp(uint reqID, bool statement, bytes calldata data, string calldata callBack, address sender, string calldata info) onlyOracleOwner external {

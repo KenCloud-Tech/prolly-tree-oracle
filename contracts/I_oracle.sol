@@ -15,13 +15,18 @@ contract IOracle {
     uint internal CurrentReqID;
 
     event ReqState(uint reqID, address user, bool statement, string info);
+    event NewCid(address owner,string cid);
 
     //contract owner
     address private owner;
-    // A mapping of db ids to db owner`s addresses.
+    // A mapping of cid to db owner`s addresses. cid=>dbOwner address
     mapping(string => address) internal dbOwner;
-    // A mapping of user address to db control permission.
-    mapping(address => mapping(string => Permission)) internal permission;
+    // A mapping of db owner`s addresses to cid. dbOwner address=>cid
+    mapping(address=>string) getcid;
+    // Mapping from cid to whether collection exists   dbOwner`s address=>collection=>isExist
+    mapping(address => mapping(string => bool)) cols;
+    // A mapping of user address to db control permission.  address=>dbOwner`s address=>permission
+    mapping(address => mapping(address => Permission)) internal permission;
     // A mapping of user address to request statement
     mapping(uint => bool) internal reqStatement;
 
@@ -35,35 +40,40 @@ contract IOracle {
     }
 
     modifier onlyOracleOwner() {
-        require(msg.sender == owner, "Only the owner can call this function");
+        require(msg.sender == owner, "Only the oracle owner can call this function");
         _;
     }
-    modifier onlyDbOwner(string calldata dbName) {
-        require(msg.sender == dbOwner[dbName], "Only the db owner can call this function");
+    modifier onlyDbOwner() {
+        require(msg.sender == dbOwner[getcid[msg.sender]], "Only the db owner can call this function");
         _;
     }
-    modifier dbIsExsist(string calldata dbName) {
-        require(dbOwner[dbName] != address(0), "This db has not been created yet");
+    modifier dbIsExsist(string calldata cid) {
+        require(dbOwner[cid] != address(0), "Db is not exist");
         _;
     }
-    // modifier allowInsert(string calldata dbName){
-    //     require(permission[msg.sender][dbName].allowInsert == true,"You do not have permission to insert");
+    modifier colIsExsist(string calldata cid, string calldata colName) {
+        require(cols[dbOwner[cid]][colName] != false, "This collection has not been created yet");
+        _;
+    }
+    // modifier allowInsert(string calldata cid){
+    //     require(permission[msg.sender][cid].allowInsert == true,"You do not have permission to insert");
     //     _;
     // }
-    // modifier allowUpdate(string calldata dbName){
-    //     require(permission[msg.sender][dbName].allowUpdate == true,"You do not have permission to update");
+    // modifier allowUpdate(string calldata cid){
+    //     require(permission[msg.sender][cid].allowUpdate == true,"You do not have permission to update");
     //     _;
     // }
-    modifier allowWrite(string calldata dbName){
-        require(permission[msg.sender][dbName].allowWrite == true, "You do not have permission to write");
+    modifier allowWrite(string calldata cid){
+        require(bytes(cid).length == 0 || permission[msg.sender][dbOwner[cid]].allowWrite == true, "You do not have permission to write");
         _;
     }
-    modifier allowQuery(string calldata dbName){
-        require(permission[msg.sender][dbName].allowQuery == true, "You do not have permission to query");
+    modifier allowQuery(string calldata cid){
+        require(permission[msg.sender][dbOwner[cid]].allowQuery == true, "You do not have permission to query");
         _;
     }
-    modifier allowDelete(string calldata dbName){
-        require(permission[msg.sender][dbName].allowDelete == true, "You do not have permission to delete");
+    modifier allowDelete(string calldata cid){
+        require(permission[msg.sender][dbOwner[cid]].allowDelete == true, "You do not have permission to delete");
         _;
     }
+
 }
