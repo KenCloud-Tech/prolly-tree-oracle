@@ -34,8 +34,8 @@ contract OracleTest{
     }
     
     //query by {equals, compare, sort, limit, skip}
-    function Search(string calldata cid, string calldata colName, Oracle.SearchController calldata Val, string calldata callBack) external{
-        or.Search(cid, colName,Val,callBack);
+    function Search(string calldata cid, string calldata colName,bytes calldata querys, string calldata callBack) external{
+        or.Search(cid, colName,querys,callBack);
     }
 
     function GetCol(string calldata cid, string calldata callBack) external {

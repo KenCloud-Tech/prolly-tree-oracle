@@ -110,10 +110,8 @@ contract Oracle is IOracle, OracleInterface, util {
 
 
     //query by {equals, compare, sort, limit, skip}
-    function Search(string calldata cid, string calldata colName, SearchController calldata Val, string calldata callBack) external colIsExsist(cid, colName) allowQuery(cid) override {
-        bytes32 method = keccak256(abi.encodePacked(Val.method));
-        require(method == equal || method == compare || method == sort || method == limit || method == skip, "The search method is wrong, only supports: equal,compare,sort,limit and skip.");
-        emit search(CurrentReqID++, cid, colName, Val, callBack, msg.sender);
+    function Search(string calldata cid, string calldata colName, bytes calldata querys, string calldata callBack) external colIsExsist(cid, colName) allowQuery(cid) override {
+        emit search(CurrentReqID++, cid, colName, querys, callBack, msg.sender);
     }
 
     function SearchRsp(uint reqID, bool statement, bytes calldata data, string calldata callBack, address sender, string calldata info) onlyOracleOwner external {

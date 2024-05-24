@@ -5,12 +5,6 @@ import {Permission} from "./interfaces/permission.sol";
 
 contract IOracle {
 
-    // search methods
-    bytes32 equal = keccak256(abi.encodePacked("equal"));
-    bytes32 compare = keccak256(abi.encodePacked("compare"));
-    bytes32 sort = keccak256(abi.encodePacked("sort"));
-    bytes32 limit = keccak256(abi.encodePacked("limit"));
-    bytes32 skip = keccak256(abi.encodePacked("skip"));
 
     uint internal CurrentReqID;
 
