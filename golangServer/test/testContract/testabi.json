@@ -189,56 +189,9 @@
         "type": "string"
       },
       {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "method",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "k",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "str",
-            "type": "string"
-          },
-          {
-            "internalType": "int64",
-            "name": "integer",
-            "type": "int64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "uinteger",
-            "type": "uint64"
-          },
-          {
-            "internalType": "bytes",
-            "name": "bytess",
-            "type": "bytes"
-          },
-          {
-            "internalType": "bool",
-            "name": "boolean",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "DataType",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "comOp",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct OracleInterface.SearchController",
-        "name": "Val",
-        "type": "tuple"
+        "internalType": "bytes",
+        "name": "querys",
+        "type": "bytes"
       },
       {
         "internalType": "string",

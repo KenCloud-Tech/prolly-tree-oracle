@@ -6,10 +6,14 @@ import (
 	OracleTest "Oracle.com/golangServer/test/testContract"
 	"context"
 	"crypto/ecdsa"
+	"encoding/json"
+	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/ipld/go-ipld-prime"
+	"github.com/ipld/go-ipld-prime/node/basicnode"
 	"log"
 	"math/big"
 	"testing"
@@ -20,7 +24,7 @@ const (
 	URL                 = "ws://127.0.0.1:8545"
 	UserPrimaryKey      = "0x9945e953c3b37004a00d238d4b20a561e263cc578fb14fde6872cf76222ff702"
 	OracleAddress       = config.ContractAddress
-	TestContractAddress = "0xD33418aebe84B725589EEE592f2D229C9A2f477a"
+	TestContractAddress = "0x051Ac03156C57C2f4E94C4753811fAf6ef551B6f"
 	ChainID             = 1337
 )
 
@@ -46,55 +50,64 @@ func TestOracle(t *testing.T) {
 		log.Println("Failed to send transaction: ", err)
 	}
 
-	dbName := "users"
+	colName := "users"
+	callBack := "CBFunc(bytes)"
 
 	//create memory db
-	_, err = toc.Create(tps, cid, dbName, "name")
+	_, err = toc.Create(tps, cid, colName, "name")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
-	time.Sleep(time.Second * 2)
+	time.Sleep(time.Second)
 
 	//create index in age field
-	_, err = toc.Index(tps, cid, dbName, "age")
+	_, err = toc.Index(tps, cid, colName, "age")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
 
-	time.Sleep(time.Second * 2)
+	time.Sleep(time.Second)
 
 	//put data
 	data := []byte(`{"name":"Alice", "age": 18}
 					{"name":"Bob", "age": 19}
 					{"name":"Albert", "age": 20}
 					{"name":"Clearance and Steve", "age":18}`)
-	_, err = toc.Put(tps, cid, dbName, data)
+	_, err = toc.Put(tps, cid, colName, data)
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
 
-	time.Sleep(time.Second * 2)
+	time.Sleep(time.Second)
 
 	//get data
 	recordID := []byte{129, 99, 66, 111, 98}
-	_, err = toc.Get(tps, cid, dbName, recordID, "CBFunc(bytes)")
+	_, err = toc.Get(tps, cid, colName, recordID, callBack)
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
 
-	time.Sleep(time.Second * 2)
+	time.Sleep(time.Second)
 
 	//search data
-	val1 := OracleTest.OracleInterfaceSearchController{Method: "equal", K: "name", Str: "Bob", DataType: "string"}
-	_, err = toc.Search(tps, cid, dbName, val1, "CBFunc(bytes)")
+	quserys := []indexer.Query{
+		indexer.Query{
+			Equal: map[string]ipld.Node{"name": basicnode.NewString("Bob")},
+		},
+		indexer.Query{
+			Compare: &indexer.CompareCondition{
+				Cmp:       indexer.GreaterThan,
+				IndexName: "age",
+				IndexVal:  basicnode.NewInt(18),
+			},
+		},
+	}
+	mq, _ := json.Marshal(quserys)
+	_, err = toc.Search(tps, cid, colName, mq, callBack)
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
-	val2 := OracleTest.OracleInterfaceSearchController{Method: "equal", K: "age", Integer: 20, DataType: "int"}
-	_, err = toc.Search(tps, cid, dbName, val2, "CBFunc(bytes)")
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	time.Sleep(time.Second)
 
 	//allowWrite
 	ADD := "0x00C696904c0CCE30D19704A762035Eb67eC3580C"
@@ -102,8 +115,19 @@ func TestOracle(t *testing.T) {
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
+	time.Sleep(time.Second)
 
-	time.Sleep(time.Second * 2)
+	_, err = toc.GetCol(tps, cid, callBack)
+	if err != nil {
+		log.Println("Failed to send transaction: ", err)
+	}
+	time.Sleep(time.Second)
+
+	_, err = toc.GetIndex(tps, cid, colName, callBack)
+	if err != nil {
+		log.Println("Failed to send transaction: ", err)
+	}
+	time.Sleep(time.Second)
 
 }
 
@@ -205,19 +229,14 @@ func CatchListener() {
 		case err := <-eventSub.Err():
 			log.Println("[Error in Event CREAT]:", err)
 		case event := <-Logs:
-			log.Println("Received data: ", string(event.Data))
-			auth, err := bind.NewKeyedTransactorWithChainID(PrivateKey, big.NewInt(ChainID))
-			if err != nil {
-				log.Fatalf("Failed to create authorized transactor: %v", err)
+			log.Println("Received data: ")
+			data := make([][]byte, 1)
+			json.Unmarshal(event.Data, &data)
+			var i any
+			for k, v := range data {
+				json.Unmarshal(v, &i)
+				log.Printf("data%v: %v", k, i)
 			}
-
-			// Set gas prices and gas limits, these can be set more intelligently through client queries
-			gasPrice, err := Client.SuggestGasPrice(context.Background())
-			if err != nil {
-				log.Fatalf("Failed to suggest gas price: %v", err)
-			}
-			auth.GasPrice = gasPrice
-			auth.GasLimit = GasLimit
 		}
 	}
 }

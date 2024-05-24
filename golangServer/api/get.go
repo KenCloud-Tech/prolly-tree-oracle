@@ -4,6 +4,7 @@ import (
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"log"
@@ -63,10 +64,18 @@ func get(event *Oracle.OracleGet) {
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
 		return
 	}
-	data := nodeTobyte(node)
+	result, err := json.Marshal([][]byte{nodeTobyte(node)})
+	if err != nil {
+		log.Println("Marshal Results ERROR: ", err)
+		info := fmt.Sprintf("Marshal Results ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		return
+	}
 	statement = true
 	//response to oracle
-	_, err = config.OracleContract.GetRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
+	_, err = config.OracleContract.GetRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 	if err != nil {
 		log.Println("Req function get an error : ", err)
 	} else {

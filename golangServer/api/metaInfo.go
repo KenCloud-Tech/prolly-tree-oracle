@@ -40,11 +40,18 @@ func GetCollections() {
 				//response to oracle
 				config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
 			}
-			str := string(jsonBytes)
-			data := []byte(str)
+			result, err := json.Marshal([][]byte{jsonBytes})
+			if err != nil {
+				log.Println("Marshal Results ERROR: ", err)
+				info := fmt.Sprintf("Marshal Results ERROR: %v", err)
+				statement = false
+				//response to oracle
+				config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+				return
+			}
 			statement = true
 			//response to oracle
-			_, err = config.OracleContract.GetColRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
+			_, err = config.OracleContract.GetColRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 			if err != nil {
 				log.Println("Req function get an error : ", err)
 			} else {
@@ -107,11 +114,19 @@ func GetIndexes() {
 				//response to oracle
 				config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
 			}
-			str := string(jsonBytes)
-			data := []byte(str)
+
+			result, err := json.Marshal([][]byte{jsonBytes})
+			if err != nil {
+				log.Println("Marshal Results ERROR: ", err)
+				info := fmt.Sprintf("Marshal Results ERROR: %v", err)
+				statement = false
+				//response to oracle
+				config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+				return
+			}
 			statement = true
 			//response to oracle
-			_, err = config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
+			_, err = config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 			if err != nil {
 				log.Println("Req function get an error : ", err)
 			} else {

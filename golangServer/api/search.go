@@ -4,10 +4,10 @@ import (
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ipld/go-ipld-prime"
 	"log"
 )
 
@@ -37,10 +37,9 @@ func SearchEventListener() {
 func search(event *Oracle.OracleSearch) {
 	var statement bool
 	tps := GenTransactOpts(config.GasLimit)
-	var data []byte
+	var data [][]byte
 
 	colName := event.ColName
-	ctx := context.Background()
 	db := config.Dbs[event.Cid]
 	dbC, err := db.Collection(colName, "")
 	if err != nil {
@@ -51,129 +50,44 @@ func search(event *Oracle.OracleSearch) {
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
 		return
 	}
-	method := event.Val.Method
-
-	switch method {
-	case "equal":
-		query := indexer.Query{
-			Equal: map[string]ipld.Node{
-				event.Val.K: creatNode(event),
-			},
-		}
-		results, err := dbC.Search(ctx, query)
-		if err != nil {
-			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
-			info := fmt.Sprintf("Search data  ERROR: %v", err)
-			statement = false
-			//response to oracle
-			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
-			return
-		}
-		record := <-results
-		node := record.Data
-		if node == nil {
-			statement = false
-			//response to oracle
-			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
-			return
-		}
-		data = nodeTobyte(node)
-		statement = true
-	case "compare":
-		query := indexer.Query{
-			Compare: &indexer.CompareCondition{Cmp: indexer.Op(event.Val.ComOp), IndexName: event.Val.K, IndexVal: creatNode(event)},
-		}
-		results, err := dbC.Search(ctx, query)
-		if err != nil {
-			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
-			info := fmt.Sprintf("Search data  ERROR: %v", err)
-			statement = false
-			//response to oracle
-			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
-			return
-		}
-		record := <-results
-		node := record.Data
-		if node == nil {
-			statement = false
-			//response to oracle
-			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
-			return
-		}
-		data = nodeTobyte(node)
-		statement = true
-	case "sort":
-		query := indexer.Query{
-			Sort: event.Val.Str,
-		}
-		results, err := dbC.Search(ctx, query)
-		if err != nil {
-			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
-			info := fmt.Sprintf("Search data  ERROR: %v", err)
-			statement = false
-			//response to oracle
-			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
-			return
-		}
-		record := <-results
-		node := record.Data
-		if node == nil {
-			statement = false
-			//response to oracle
-			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
-			return
-		}
-		data = nodeTobyte(node)
-		statement = true
-	case "limit":
-		query := indexer.Query{
-			Limit: int(event.Val.Integer),
-		}
-		results, err := dbC.Search(ctx, query)
-		if err != nil {
-			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
-			info := fmt.Sprintf("Search data  ERROR: %v", err)
-			statement = false
-			//response to oracle
-			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
-			return
-		}
-		record := <-results
-		node := record.Data
-		if node == nil {
-			statement = false
-			//response to oracle
-			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
-			return
-		}
-		data = nodeTobyte(node)
-		statement = true
-	case "skip":
-		query := indexer.Query{
-			Skip: int(event.Val.Integer),
-		}
-		results, err := dbC.Search(ctx, query)
-		if err != nil {
-			log.Println("[", event.ColName, "]", "Search data  ERROR: ", err)
-			info := fmt.Sprintf("Search data  ERROR: %v", err)
-			statement = false
-			//response to oracle
-			config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, info)
-			return
-		}
-		record := <-results
-		node := record.Data
-		if node == nil {
-			statement = false
-			//response to oracle
-			config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Data is not exist")
-			return
-		}
-		data = nodeTobyte(node)
-		statement = true
+	querys := make([]indexer.Query, 1)
+	err = json.Unmarshal(event.Querys, &querys)
+	if err != nil {
+		log.Println("Unmarshal ERROR: ", err)
+		info := fmt.Sprintf("Unmarshal ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		return
 	}
+	for _, q := range querys {
+		results, err := dbC.Search(context.Background(), q)
+		if err != nil {
+			v, _ := json.Marshal("Search fail.")
+			data = append(data, v)
+			continue
+		}
+		record := <-results
+		node := record.Data
+		if node == nil {
+			v, _ := json.Marshal("Data is not exist")
+			data = append(data, v)
+			continue
+		}
+		data = append(data, nodeTobyte(node))
+	}
+	result, err := json.Marshal(data)
+	if err != nil {
+		log.Println("Marshal Results ERROR: ", err)
+		info := fmt.Sprintf("Marshal Results ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		return
+	}
+	statement = true
 	//response to oracle
-	_, err = config.OracleContract.SearchRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
+	_, err = config.OracleContract.SearchRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 	if err != nil {
 		log.Println("Req function get an error : ", err)
 	} else {
