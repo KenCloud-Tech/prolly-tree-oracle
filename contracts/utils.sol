@@ -10,9 +10,9 @@ contract util is IOracle {
     }
 
     //get collections
-    event getCol(uint reqID, string cid, string callBack, address sender);
-    function GetCol(string calldata cid, string calldata callBack) external allowQuery(cid) {
-        emit getCol(CurrentReqID++, cid, callBack, msg.sender);
+    event getCol(uint reqID, string dbName, string callBack, address sender);
+    function GetCol(string calldata dbName, string calldata callBack) external allowQuery(dbName) {
+        emit getCol(CurrentReqID++, dbName, callBack, msg.sender);
     }
     function GetColRsp(uint reqID, bool statement, bytes calldata data, string calldata callBack, address sender, string calldata info) onlyOracleOwner external {
         if (statement == true) {
@@ -29,9 +29,9 @@ contract util is IOracle {
     }
 
     //get indexes
-    event getIndex(uint reqID, string cid, string colName, string callBack, address sender);
-    function GetIndex(string calldata cid, string calldata colName, string calldata callBack) external colIsExsist(cid, colName) allowQuery(cid) {
-        emit getIndex(CurrentReqID++, cid, colName, callBack, msg.sender);
+    event getIndex(uint reqID, string dbName, string colName, string callBack, address sender);
+    function GetIndex(string calldata dbName, string calldata colName, string calldata callBack) external colIsExsist(dbName, colName) allowQuery(dbName) {
+        emit getIndex(CurrentReqID++, dbName, colName, callBack, msg.sender);
     }
 
     function GetIndexRsp(uint reqID, bool statement, bytes calldata data, string calldata callBack, address sender, string calldata info) onlyOracleOwner external {
@@ -48,8 +48,25 @@ contract util is IOracle {
         reqStatement[reqID] = false;
     }
 
-    // get rootcid
-    function GetRootCid() view public returns(string memory){
-        return getcid[msg.sender];
+    //get RootCid
+    event getRootCid(uint reqID, string dbName, string callBack, address sender);
+    function GetRootCid(string calldata dbName, string calldata callBack) external {
+        require(dbOwner[dbName]!=address(0),"This db is not exist.");
+        emit getRootCid(CurrentReqID++, dbName, callBack, msg.sender);
     }
+
+    function GetRootCidRsp(uint reqID, bool statement, bytes calldata data, string calldata callBack, address sender, string calldata info) onlyOracleOwner external {
+        if (statement == true) {
+            (bool OK,) = sender.call(abi.encodeWithSignature(callBack, data));
+            if (OK) {
+                emit ReqState(reqID, sender, true, "Get RootCid success.");
+                reqStatement[reqID] = true;
+                return;
+            }
+        }
+
+        emit ReqState(reqID, sender, false, info);
+        reqStatement[reqID] = false;
+    }
+
 }

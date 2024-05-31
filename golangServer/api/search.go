@@ -40,7 +40,7 @@ func search(event *Oracle.OracleSearch) {
 	var data [][]byte
 
 	colName := event.ColName
-	db := config.Dbs[event.Cid]
+	db := config.Dbs[event.DbName]
 	dbC, err := db.Collection(colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)

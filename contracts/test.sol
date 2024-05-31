@@ -14,40 +14,40 @@ contract OracleTest{
     }
 
     //creat a new db
-    function Create(string calldata cid, string calldata colName, string calldata primaryKey) external{
-        or.Create(cid, colName,primaryKey);
+    function Create(string calldata dbName, string calldata colName, string calldata primaryKey) external{
+        or.Create(dbName, colName,primaryKey);
     }
 
     // put data to db
-    function Put(string calldata cid, string calldata colName, bytes calldata data) external{
-        or.Put(cid, colName,data);
+    function Put(string calldata dbName, string calldata colName, bytes calldata data) external{
+        or.Put(dbName, colName,data);
     }
 
     //get data from db
-    function Get(string calldata cid, string calldata colName, bytes calldata recordID, string calldata callBack) external{
-        or.Get(cid, colName,recordID,callBack);
+    function Get(string calldata dbName, string calldata colName, bytes calldata recordID, string calldata callBack) external{
+        or.Get(dbName, colName,recordID,callBack);
     }
 
     //creat index
-    function Index(string calldata cid, string calldata colName, string calldata Key) external{
-        or.Index(cid, colName,Key);
+    function Index(string calldata dbName, string calldata colName, string calldata Key) external{
+        or.Index(dbName, colName,Key);
     }
     
     //query by {equals, compare, sort, limit, skip}
-    function Search(string calldata cid, string calldata colName,bytes calldata querys, string calldata callBack) external{
-        or.Search(cid, colName,querys,callBack);
+    function Search(string calldata dbName, string calldata colName,bytes calldata querys, string calldata callBack) external{
+        or.Search(dbName, colName,querys,callBack);
     }
 
     function GetCol(string calldata cid, string calldata callBack) external {
         or.GetCol(cid,callBack);
     }
 
-    function GetIndex(string calldata cid, string calldata colName, string calldata callBack) external {
-        or.GetIndex(cid,colName,callBack);
+    function GetIndex(string calldata dbName, string calldata colName, string calldata callBack) external {
+        or.GetIndex(dbName,colName,callBack);
     }
 
-    function getRootCid() view public returns(string memory){
-        return or.getRootCid();
+    function getRootCid(string calldata dbName, string calldata callBack) public{
+        or.GetRootCid(dbName,callBack);
     }
 
     // catch data and emit event

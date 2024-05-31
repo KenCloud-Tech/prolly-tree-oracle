@@ -39,7 +39,7 @@ func index(event *Oracle.OracleIndex) {
 
 	colName := event.ColName
 	ctx := context.Background()
-	db := config.Dbs[event.Cid]
+	db := config.Dbs[event.DbName]
 	dbC, err := db.Collection(colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)

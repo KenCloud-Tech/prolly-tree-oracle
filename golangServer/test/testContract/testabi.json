@@ -1,18 +1,5 @@
 [
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "CatchData",
-    "type": "event"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -24,6 +11,19 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "CatchData",
+    "type": "event"
   },
   {
     "inputs": [
@@ -42,7 +42,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -65,7 +65,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -111,7 +111,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -134,7 +134,25 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      }
+    ],
+    "name": "getRootCid",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -157,7 +175,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -180,7 +198,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -205,16 +223,16 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getRootCid",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
+        "internalType": "address",
+        "name": "add",
+        "type": "address"
       }
     ],
-    "stateMutability": "view",
+    "name": "setOracle",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -228,19 +246,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "add",
-        "type": "address"
-      }
-    ],
-    "name": "setOracle",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

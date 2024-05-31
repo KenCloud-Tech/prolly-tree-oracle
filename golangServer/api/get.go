@@ -39,7 +39,7 @@ func get(event *Oracle.OracleGet) {
 
 	colName := event.ColName
 	ctx := context.Background()
-	db := config.Dbs[event.Cid]
+	db := config.Dbs[event.DbName]
 	col, err := db.Collection(colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)

@@ -24,7 +24,7 @@ const (
 	URL                 = "ws://127.0.0.1:8545"
 	UserPrimaryKey      = "0x9945e953c3b37004a00d238d4b20a561e263cc578fb14fde6872cf76222ff702"
 	OracleAddress       = config.ContractAddress
-	TestContractAddress = "0x051Ac03156C57C2f4E94C4753811fAf6ef551B6f"
+	TestContractAddress = "0xd3efC76d8371F618210315b7DaAA37261DeaC4C5"
 	ChainID             = 1337
 )
 
@@ -37,7 +37,9 @@ var (
 
 	GasLimit uint64 = 300000
 
-	cid string //= "bafyrefdqtweoh4bt5xff77k6hz5vzvex6opq6ay"
+	dbName   = "MyDb"
+	colName  = "users"
+	callBack = "CBFunc(bytes)"
 )
 
 func TestOracle(t *testing.T) {
@@ -50,18 +52,15 @@ func TestOracle(t *testing.T) {
 		log.Println("Failed to send transaction: ", err)
 	}
 
-	colName := "users"
-	callBack := "CBFunc(bytes)"
-
 	//create memory db
-	_, err = toc.Create(tps, cid, colName, "name")
+	_, err = toc.Create(tps, dbName, colName, "name")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
 	time.Sleep(time.Second)
 
 	//create index in age field
-	_, err = toc.Index(tps, cid, colName, "age")
+	_, err = toc.Index(tps, dbName, colName, "age")
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
@@ -73,7 +72,7 @@ func TestOracle(t *testing.T) {
 					{"name":"Bob", "age": 19}
 					{"name":"Albert", "age": 20}
 					{"name":"Clearance and Steve", "age":18}`)
-	_, err = toc.Put(tps, cid, colName, data)
+	_, err = toc.Put(tps, dbName, colName, data)
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
@@ -82,7 +81,7 @@ func TestOracle(t *testing.T) {
 
 	//get data
 	recordID := []byte{129, 99, 66, 111, 98}
-	_, err = toc.Get(tps, cid, colName, recordID, callBack)
+	_, err = toc.Get(tps, dbName, colName, recordID, callBack)
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
@@ -103,7 +102,7 @@ func TestOracle(t *testing.T) {
 		},
 	}
 	mq, _ := json.Marshal(quserys)
-	_, err = toc.Search(tps, cid, colName, mq, callBack)
+	_, err = toc.Search(tps, dbName, colName, mq, callBack)
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
@@ -117,18 +116,25 @@ func TestOracle(t *testing.T) {
 	}
 	time.Sleep(time.Second)
 
-	_, err = toc.GetCol(tps, cid, callBack)
+	// get collections
+	_, err = toc.GetCol(tps, dbName, callBack)
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
 	time.Sleep(time.Second)
 
-	_, err = toc.GetIndex(tps, cid, colName, callBack)
+	//get indexes
+	_, err = toc.GetIndex(tps, dbName, colName, callBack)
 	if err != nil {
 		log.Println("Failed to send transaction: ", err)
 	}
 	time.Sleep(time.Second)
 
+	_, err = toc.GetRootCid(tps, dbName, callBack)
+	if err != nil {
+		log.Println("Failed to send transaction: ", err)
+	}
+	time.Sleep(time.Second)
 }
 
 func InitClient() {
@@ -152,7 +158,6 @@ func InitClient() {
 	}
 	go RspListener()
 	go CatchListener()
-	go CidListener()
 }
 
 func RspListener() {
@@ -169,46 +174,16 @@ func RspListener() {
 	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
 	eventSub, err := OOOC.WatchReqState(opts, Logs)
 	if err != nil {
-		log.Fatal("Failed to subscribe to Create events:", err)
+		log.Fatal("Failed to subscribe events:", err)
 	}
 	// start Listening...
 	log.Println("RspListener is Listening ...")
 	for {
 		select {
 		case err := <-eventSub.Err():
-			log.Println("[Error in Event CREAT]:", err)
+			log.Println("[Error]:", err)
 		case event := <-Logs:
 			log.Printf("[Rsp: %v]  state: %v  info: %v", event.ReqID, event.Statement, event.Info)
-		}
-	}
-}
-func CidListener() {
-	cli, err := ethclient.Dial(URL)
-	if err != nil {
-		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
-	}
-
-	contractAddr := common.HexToAddress(OracleAddress)
-	OOOC, err := Oracle.NewOracle(contractAddr, cli)
-	// Create channels for logs
-	Logs := make(chan *Oracle.OracleNewCid)
-	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
-	eventSub, err := OOOC.WatchNewCid(opts, Logs)
-	if err != nil {
-		log.Fatal("Failed to subscribe to Create events:", err)
-	}
-	// start Listening...
-	log.Println("RspListener is Listening ...")
-	for {
-		select {
-		case err := <-eventSub.Err():
-			log.Println("[Error in Event CREAT]:", err)
-		case event := <-Logs:
-			if event.Owner.String() == TestContractAddress {
-				log.Println("[GET NEW RootCid]: ", event.Cid)
-				cid = event.Cid
-			}
 		}
 	}
 }

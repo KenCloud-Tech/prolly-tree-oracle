@@ -39,17 +39,17 @@ func put(event *Oracle.OraclePut) {
 
 	colName := event.ColName
 	ctx := context.Background()
-	db := config.Dbs[event.Cid]
+	dbName := event.DbName
+	db := config.Dbs[dbName]
 	dbC, err := db.Collection(colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)
 		statement = false
 		//response to oracle
-		config.OracleContract.PutRsp(tps, event.ReqID, statement, "", "", event.Sender, info)
+		config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, info)
 		return
 	}
-	cid := event.Cid
 	strData := string(event.Data)
 	reader := strings.NewReader(strData)
 	// insert data
@@ -59,15 +59,13 @@ func put(event *Oracle.OraclePut) {
 		info := fmt.Sprintf("Put data ERROR: %v", err)
 		statement = false
 		//response to oracle
-		config.OracleContract.PutRsp(tps, event.ReqID, statement, "", "", event.Sender, info)
+		config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, info)
 		return
 	} else {
 		statement = true
 	}
-	delete(config.Dbs, cid)
-	config.Dbs[db.RootCid().String()] = db
 	//response to oracle
-	_, err = config.OracleContract.PutRsp(tps, event.ReqID, statement, db.RootCid().String(), cid, event.Sender, "")
+	_, err = config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, "")
 	if err != nil {
 		log.Println("Req function get an error : ", err)
 	} else {

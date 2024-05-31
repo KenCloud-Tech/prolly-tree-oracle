@@ -4,25 +4,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "cid",
-        "type": "string"
-      }
-    ],
-    "name": "NewCid",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "reqID",
         "type": "uint256"
@@ -61,7 +42,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -98,7 +79,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -141,7 +122,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -172,7 +153,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -209,7 +190,38 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "getRootCid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -246,7 +258,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -283,7 +295,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -341,12 +353,7 @@
       },
       {
         "internalType": "string",
-        "name": "newcid",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "oldcid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -374,7 +381,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -397,7 +404,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -425,7 +432,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -481,7 +488,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -560,6 +567,62 @@
   {
     "inputs": [
       {
+        "internalType": "string",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      }
+    ],
+    "name": "GetRootCid",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "statement",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
+      }
+    ],
+    "name": "GetRootCidRsp",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "reqID",
         "type": "uint256"
@@ -599,7 +662,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -609,7 +672,7 @@
       },
       {
         "internalType": "string",
-        "name": "Key",
+        "name": "idx",
         "type": "string"
       }
     ],
@@ -650,7 +713,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -682,16 +745,6 @@
         "type": "bool"
       },
       {
-        "internalType": "string",
-        "name": "newcid",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "oldcid",
-        "type": "string"
-      },
-      {
         "internalType": "address",
         "name": "sender",
         "type": "address"
@@ -711,7 +764,7 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "cid",
+        "name": "dbName",
         "type": "string"
       },
       {
@@ -771,19 +824,6 @@
     "name": "SearchRsp",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getRootCid",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]

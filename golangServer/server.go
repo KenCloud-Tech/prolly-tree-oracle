@@ -71,9 +71,10 @@ func init() {
 }
 
 func main() {
-	// M eta info listener
+	// Meta info listener
 	go api.GetCollections()
 	go api.GetIndexes()
+	go api.GetRootCid()
 	// Service listener
 	go api.CreatEventListener()
 	go api.PutEventListener()
