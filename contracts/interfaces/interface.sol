@@ -29,7 +29,7 @@ interface OracleInterface{
     event get(uint reqID, string cid, string colName, bytes recordID, string callBack, address sender);
 
 
-    function Index(string calldata cid, string calldata colName, string calldata Key) external;
+    function Index(string calldata cid, string calldata colName, string calldata idx) external;
     event index(uint reqID, string cid, string colName, string Key, address sender);
 
 

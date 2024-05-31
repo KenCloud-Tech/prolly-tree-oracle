@@ -49,7 +49,7 @@ contract util is IOracle {
     }
 
     // get rootcid
-    function getRootCid() view public returns(string memory){
+    function GetRootCid() view public returns(string memory){
         return getcid[msg.sender];
     }
 }

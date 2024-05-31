@@ -91,10 +91,10 @@ contract Oracle is IOracle, OracleInterface, util {
 
 
     //creat index
-    function Index(string calldata cid, string calldata colName, string calldata Key) external colIsExsist(cid, colName) allowWrite(cid) override {
+    function Index(string calldata cid, string calldata colName, string calldata idx) external colIsExsist(cid, colName) allowWrite(cid) override {
         uint reqID = CurrentReqID;
         CurrentReqID++;
-        emit index(reqID, cid, colName, Key, msg.sender);
+        emit index(reqID, cid, colName, idx, msg.sender);
     }
 
     function IndexRsp(uint reqID, bool statement, address sender, string calldata info) onlyOracleOwner external {
