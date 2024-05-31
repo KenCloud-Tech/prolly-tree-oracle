@@ -38,45 +38,52 @@ Prolly Tree Oracle connects the IPLD Prolly Tree storage service to the blockcha
 
 
 ## API Implementation:
-* **function Create(string calldata cid, string calldata colName, string calldata primaryKey)**  
-Creates a new collection named `colName` in the database pointed to by the provided `cid`. When you try to create a collection in someone else's database , you need write permission. When `cid` is not provided, a new database is created by default.
-There can be multiple primary keys, separated by `,`.
+* **function Create(string calldata dbName, string calldata colName, string calldata primaryKey)**  
+Creates a new collection named `colName` in the database pointed to by the provided `dbName`.
+If two users register the same `dbName` successively, the owner of this database is the first user. 
+When the second user registers, it is necessary to determine whether it has the permission to the database.
 
 
 * **function AllowWrite(address to)**  
 Grant user `to` read and write permissions on your database.
 
 
-* **function Put(string calldata cid, string calldata colName, bytes calldata data)**  
-  Save the data `data` to the `colName` collection in the database pointed to by `cid`.
+* **function Put(string calldata dbName, string calldata colName, bytes calldata data)**  
+  Save the data `data` to the `colName` collection in the database pointed to by `dbName`.
   
-* **function Get(string calldata cid, string calldata colName, bytes calldata recordID, string calldata callBack)**  
-  Get data from the `colName` collection in the database pointed to by `cid` according to `recordID`. You need to provide a callback function to receive the data. 
+
+* **function Get(string calldata dbName, string calldata colName, bytes calldata recordID, string calldata callBack)**  
+  Get data from the `colName` collection in the database pointed to by `dbName` according to `recordID`. You need to provide a callback function to receive the data. 
   For example, the callback function I defined in the consumer contract is:`function CallBackFunc(bytes calldata data)`.  So, the callBack parameter of string type is ``CallBackFunc(bytes)``.  
 
 
-* **function Index(string calldata cid, string calldata colName, string calldata idx)**  
-  Add index `idx` to the `colName` collection in the database pointed to by `cid`
+* **function Index(string calldata dbName, string calldata colName, string calldata idx)**  
+  Add index `idx` to the `colName` collection in the database pointed to by `dbName`
 
 
-* **function Search(string calldata cid, string calldata colName, bytes calldata querys, string calldata callBack)**  
-  Use `index.Query` to query data from the `colName` collection in the database pointed to by `cid`. When using it, you can build one or more `index.Query` objects, and serialize the `index.Query` object array into `json` as the parameter `queries`. Query methods:`{equal, compare, sort, limit, skip}` 
+* **function Search(string calldata dbName, string calldata colName, bytes calldata querys, string calldata callBack)**  
+  Use `index.Query` to query data from the `colName` collection in the database pointed to by `dbName`. When using it, you can build one or more `index.Query` objects, and serialize the `index.Query` object array into `json` as the parameter `queries`. Query methods:`{equal, compare, sort, limit, skip}` 
 
   Similarly, a callback function needs to be provided to receive data  
 
-* **function GetRootCid()**
+
+* **function GetRootCid(string calldata dbName, string calldata callBack)**
 
   Get the `RootCid` of the database of the method caller
 
-* **function GetIndex(string calldata cid, string calldata colName, string calldata callBack)**
+  Similarly, a callback function needs to be provided to receive an array of collection indexes
 
-  Get the index of the `colName` collection in the database pointed to by `cid`
+
+* **function GetIndex(string calldata dbName, string calldata colName, string calldata callBack)**
+
+  Get the index of the `colName` collection in the database pointed to by `dbName`
 
   Similarly, a callback function needs to be provided to receive an array of collection indexes
 
-* **function GetCol(string calldata cid, string calldata callBack)**
 
-  Get all collections in the database pointed to by `cid`
+* **function GetCol(string calldata dbName, string calldata callBack)**
+
+  Get all collections in the database pointed to by `dbName`
   Similarly, a callback function needs to be provided to receive an array of collection names
 
 
