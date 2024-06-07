@@ -24,4 +24,6 @@ go.work
 .idea/
 contracts/artifacts/
 tool.txt
+demo.go
+golangServer/savedDatas/*
 >>>>>>> master
