@@ -9,9 +9,10 @@ contract IOracle {
     uint internal CurrentReqID;
 
     event ReqState(uint reqID, address user, bool statement, string info);
+    event CatchData(uint reqID, address user, bool statement, string info, bytes data); // if oracle get data from off-chain server
 
     //contract owner
-    address private owner;
+    address payable internal owner;
     // A mapping of dbName to db owner`s addresses. dbName=>dbOwner address
     mapping(string => address) internal dbOwner;
     // A mapping of db owner`s addresses to db`s name. dbOwner address=>db`s name
@@ -27,10 +28,11 @@ contract IOracle {
         return reqStatement[ReqID];
     }
 
-    constructor() {
-        owner = msg.sender;
-        CurrentReqID = 1;
-    }
+    
+    uint public baseGasCost = 10000;
+    uint public gasPerByte = 100;
+
+    
 
     modifier onlyOracleOwner() {
         require(msg.sender == owner, "Only the oracle owner can call this function");
@@ -44,18 +46,8 @@ contract IOracle {
         require(dbOwner[dbName] != address(0), "Db is not exist");
         _;
     }
-    modifier colIsExsist(string calldata dbName, string calldata colName) {
-        require(cols[dbName][colName] != false, "This collection has not been created yet");
-        _;
-    }
-    // modifier allowInsert(string calldata cid){
-    //     require(permission[msg.sender][cid].allowInsert == true,"You do not have permission to insert");
-    //     _;
-    // }
-    // modifier allowUpdate(string calldata cid){
-    //     require(permission[msg.sender][cid].allowUpdate == true,"You do not have permission to update");
-    //     _;
-    // }
+    
+    
     modifier allowWrite(string calldata dbName){
         require(permission[msg.sender][dbName].allowWrite == true, "You do not have permission to write");
         _;

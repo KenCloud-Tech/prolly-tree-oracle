@@ -25,6 +25,43 @@
         "internalType": "string",
         "name": "info",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "CatchData",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "reqID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "statement",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
       }
     ],
     "name": "ReqState",
@@ -335,7 +372,18 @@
       }
     ],
     "name": "AllowWrite",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -396,7 +444,13 @@
       }
     ],
     "name": "Create",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -424,7 +478,13 @@
       }
     ],
     "name": "Get",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -442,7 +502,13 @@
       }
     ],
     "name": "GetCol",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -503,7 +569,13 @@
       }
     ],
     "name": "GetIndex",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -578,7 +650,13 @@
       }
     ],
     "name": "GetRootCid",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -677,7 +755,13 @@
       }
     ],
     "name": "Index",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -728,7 +812,13 @@
       }
     ],
     "name": "Put",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -784,7 +874,13 @@
       }
     ],
     "name": "Search",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
