@@ -4,12 +4,19 @@ import (
 	"Oracle.com/golangServer/config"
 	"bytes"
 	"context"
+	"encoding/csv"
 	"encoding/json"
+	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ipld/go-ipld-prime"
 	"github.com/ipld/go-ipld-prime/codec/dagjson"
+	"github.com/ipld/go-ipld-prime/datamodel"
+	"github.com/ipld/go-ipld-prime/fluent/qp"
+	basicnode "github.com/ipld/go-ipld-prime/node/basicnode"
+	"io"
 	"log"
 	"math/big"
+	"strings"
 )
 
 func GenTransactOpts(GasLimit uint64) *bind.TransactOpts {
@@ -40,4 +47,58 @@ func nodeTobyte(node ipld.Node) []byte {
 		log.Fatalf("Format json fail: %v", err)
 	}
 	return formatted.Bytes()
+}
+
+func IngestCSV(ctx context.Context, source io.Reader, collection *indexer.Collection) error {
+	reader := csv.NewReader(source)
+
+	headers, err := reader.Read()
+
+	numFields := int64(len(headers) + 1)
+
+	if err != nil {
+		return err
+	}
+
+	index := 0
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		node, err := qp.BuildMap(basicnode.Prototype.Any, numFields, func(ma datamodel.MapAssembler) {
+			qp.MapEntry(ma, "index", qp.Int(int64(index)))
+			for fieldIndex, fieldValue := range record {
+				nb := basicnode.Prototype__Any{}.NewBuilder()
+				err := dagjson.Decode(nb, strings.NewReader(fieldValue))
+
+				// If it wasn't json, it's just a string
+				if err != nil {
+					qp.MapEntry(ma, headers[fieldIndex], qp.String(fieldValue))
+				} else {
+					value := nb.Build()
+					qp.MapEntry(ma, headers[fieldIndex], qp.Node(value))
+				}
+			}
+		})
+
+		if err != nil {
+			return err
+		}
+
+		err = collection.Insert(ctx, node)
+
+		if err != nil {
+			return err
+		}
+
+		index++
+	}
+
+	return nil
 }

@@ -15,7 +15,7 @@ contract util is IOracle {
     // Pay for service
     function pay(uint fee) internal{
         fee = fee + baseGasCost;
-        require(fee >= msg.value, "Insufficient gas fee");
+        require(msg.value >= fee, "Insufficient gas fee");
         payable(msg.sender).transfer(msg.value - fee);
     }
     // Oracle owner withdraws gas
@@ -30,6 +30,7 @@ contract util is IOracle {
     //get collections
     event getCol(uint reqID, string dbName, string callBack, address sender);
     function GetCol(string calldata dbName, string calldata callBack) external allowQuery(dbName) payable returns(uint ReqID){
+        pay(0);
         emit getCol(CurrentReqID++, dbName, callBack, msg.sender);
         return CurrentReqID;
     }
@@ -50,6 +51,7 @@ contract util is IOracle {
     //get indexes
     event getIndex(uint reqID, string dbName, string colName, string callBack, address sender);
     function GetIndex(string calldata dbName, string calldata colName, string calldata callBack) external allowQuery(dbName) payable returns(uint ReqID){
+        pay(0);
         require(cols[dbName][colName] != false, "This collection has not been created yet");
         emit getIndex(CurrentReqID++, dbName, colName, callBack, msg.sender);
         return CurrentReqID;
@@ -72,6 +74,7 @@ contract util is IOracle {
     //get RootCid
     event getRootCid(uint reqID, string dbName, string callBack, address sender);
     function GetRootCid(string calldata dbName, string calldata callBack) external payable returns(uint ReqID){
+        pay(0);
         require(dbOwner[dbName]!=address(0),"This db is not exist.");
         emit getRootCid(CurrentReqID++, dbName, callBack, msg.sender);
         return CurrentReqID;

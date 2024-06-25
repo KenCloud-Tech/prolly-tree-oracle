@@ -31,7 +31,7 @@ var (
 
 // OracleMetaData contains all meta data concerning the Oracle contract.
 var OracleMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"CatchData\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"ReqState\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"create\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"get\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"getCol\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"getIndex\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"getRootCid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"index\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"put\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"querys\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"search\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"AllowWrite\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"CreatRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"}],\"name\":\"Create\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetCol\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetColRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetIndex\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetIndexRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"name\":\"GetReqState\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetRootCid\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetRootCidRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"idx\",\"type\":\"string\"}],\"name\":\"Index\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"IndexRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"Put\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"PutRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"querys\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Search\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"SearchRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"basefee\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"bytefee\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"CatchData\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"ReqState\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"create\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"get\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"getCol\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"getIndex\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"getRootCid\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"url\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"format\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"import_from_url\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"index\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"put\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"querys\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"search\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"AllowWrite\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"CreatRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"}],\"name\":\"Create\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetCol\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetColRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetIndex\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetIndexRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"name\":\"GetReqState\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetRootCid\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetRootCidRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"GetRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"url\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"format\",\"type\":\"string\"}],\"name\":\"Import_from_url\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"Import_from_url_Rsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"idx\",\"type\":\"string\"}],\"name\":\"Index\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"IndexRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"Put\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"PutRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"querys\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Search\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reqID\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"statement\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"name\":\"SearchRsp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"baseGasCost\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"gasPerByte\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"getPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdraws\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // OracleABI is the input ABI used to generate the binding from.
@@ -211,23 +211,116 @@ func (_Oracle *OracleCallerSession) GetReqState(ReqID *big.Int) (bool, error) {
 	return _Oracle.Contract.GetReqState(&_Oracle.CallOpts, ReqID)
 }
 
+// BaseGasCost is a free data retrieval call binding the contract method 0x2a286e6f.
+//
+// Solidity: function baseGasCost() view returns(uint256)
+func (_Oracle *OracleCaller) BaseGasCost(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "baseGasCost")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// BaseGasCost is a free data retrieval call binding the contract method 0x2a286e6f.
+//
+// Solidity: function baseGasCost() view returns(uint256)
+func (_Oracle *OracleSession) BaseGasCost() (*big.Int, error) {
+	return _Oracle.Contract.BaseGasCost(&_Oracle.CallOpts)
+}
+
+// BaseGasCost is a free data retrieval call binding the contract method 0x2a286e6f.
+//
+// Solidity: function baseGasCost() view returns(uint256)
+func (_Oracle *OracleCallerSession) BaseGasCost() (*big.Int, error) {
+	return _Oracle.Contract.BaseGasCost(&_Oracle.CallOpts)
+}
+
+// GasPerByte is a free data retrieval call binding the contract method 0x0244a9fa.
+//
+// Solidity: function gasPerByte() view returns(uint256)
+func (_Oracle *OracleCaller) GasPerByte(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "gasPerByte")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// GasPerByte is a free data retrieval call binding the contract method 0x0244a9fa.
+//
+// Solidity: function gasPerByte() view returns(uint256)
+func (_Oracle *OracleSession) GasPerByte() (*big.Int, error) {
+	return _Oracle.Contract.GasPerByte(&_Oracle.CallOpts)
+}
+
+// GasPerByte is a free data retrieval call binding the contract method 0x0244a9fa.
+//
+// Solidity: function gasPerByte() view returns(uint256)
+func (_Oracle *OracleCallerSession) GasPerByte() (*big.Int, error) {
+	return _Oracle.Contract.GasPerByte(&_Oracle.CallOpts)
+}
+
+// GetPrice is a free data retrieval call binding the contract method 0x6b4dd158.
+//
+// Solidity: function getPrice(bytes data) view returns(uint256)
+func (_Oracle *OracleCaller) GetPrice(opts *bind.CallOpts, data []byte) (*big.Int, error) {
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "getPrice", data)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// GetPrice is a free data retrieval call binding the contract method 0x6b4dd158.
+//
+// Solidity: function getPrice(bytes data) view returns(uint256)
+func (_Oracle *OracleSession) GetPrice(data []byte) (*big.Int, error) {
+	return _Oracle.Contract.GetPrice(&_Oracle.CallOpts, data)
+}
+
+// GetPrice is a free data retrieval call binding the contract method 0x6b4dd158.
+//
+// Solidity: function getPrice(bytes data) view returns(uint256)
+func (_Oracle *OracleCallerSession) GetPrice(data []byte) (*big.Int, error) {
+	return _Oracle.Contract.GetPrice(&_Oracle.CallOpts, data)
+}
+
 // AllowWrite is a paid mutator transaction binding the contract method 0xb89f561f.
 //
-// Solidity: function AllowWrite(address to) returns(uint256 ReqID, string info)
+// Solidity: function AllowWrite(address to) payable returns(uint256 ReqID, string info)
 func (_Oracle *OracleTransactor) AllowWrite(opts *bind.TransactOpts, to common.Address) (*types.Transaction, error) {
 	return _Oracle.contract.Transact(opts, "AllowWrite", to)
 }
 
 // AllowWrite is a paid mutator transaction binding the contract method 0xb89f561f.
 //
-// Solidity: function AllowWrite(address to) returns(uint256 ReqID, string info)
+// Solidity: function AllowWrite(address to) payable returns(uint256 ReqID, string info)
 func (_Oracle *OracleSession) AllowWrite(to common.Address) (*types.Transaction, error) {
 	return _Oracle.Contract.AllowWrite(&_Oracle.TransactOpts, to)
 }
 
 // AllowWrite is a paid mutator transaction binding the contract method 0xb89f561f.
 //
-// Solidity: function AllowWrite(address to) returns(uint256 ReqID, string info)
+// Solidity: function AllowWrite(address to) payable returns(uint256 ReqID, string info)
 func (_Oracle *OracleTransactorSession) AllowWrite(to common.Address) (*types.Transaction, error) {
 	return _Oracle.Contract.AllowWrite(&_Oracle.TransactOpts, to)
 }
@@ -255,63 +348,63 @@ func (_Oracle *OracleTransactorSession) CreatRsp(reqID *big.Int, statement bool,
 
 // Create is a paid mutator transaction binding the contract method 0x2e4bf45d.
 //
-// Solidity: function Create(string dbName, string colName, string primaryKey) returns(uint256 ReqID)
+// Solidity: function Create(string dbName, string colName, string primaryKey) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactor) Create(opts *bind.TransactOpts, dbName string, colName string, primaryKey string) (*types.Transaction, error) {
 	return _Oracle.contract.Transact(opts, "Create", dbName, colName, primaryKey)
 }
 
 // Create is a paid mutator transaction binding the contract method 0x2e4bf45d.
 //
-// Solidity: function Create(string dbName, string colName, string primaryKey) returns(uint256 ReqID)
+// Solidity: function Create(string dbName, string colName, string primaryKey) payable returns(uint256 ReqID)
 func (_Oracle *OracleSession) Create(dbName string, colName string, primaryKey string) (*types.Transaction, error) {
 	return _Oracle.Contract.Create(&_Oracle.TransactOpts, dbName, colName, primaryKey)
 }
 
 // Create is a paid mutator transaction binding the contract method 0x2e4bf45d.
 //
-// Solidity: function Create(string dbName, string colName, string primaryKey) returns(uint256 ReqID)
+// Solidity: function Create(string dbName, string colName, string primaryKey) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactorSession) Create(dbName string, colName string, primaryKey string) (*types.Transaction, error) {
 	return _Oracle.Contract.Create(&_Oracle.TransactOpts, dbName, colName, primaryKey)
 }
 
 // Get is a paid mutator transaction binding the contract method 0x0405473e.
 //
-// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack) returns(uint256 ReqID)
+// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactor) Get(opts *bind.TransactOpts, dbName string, colName string, recordID []byte, callBack string) (*types.Transaction, error) {
 	return _Oracle.contract.Transact(opts, "Get", dbName, colName, recordID, callBack)
 }
 
 // Get is a paid mutator transaction binding the contract method 0x0405473e.
 //
-// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack) returns(uint256 ReqID)
+// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleSession) Get(dbName string, colName string, recordID []byte, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.Get(&_Oracle.TransactOpts, dbName, colName, recordID, callBack)
 }
 
 // Get is a paid mutator transaction binding the contract method 0x0405473e.
 //
-// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack) returns(uint256 ReqID)
+// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactorSession) Get(dbName string, colName string, recordID []byte, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.Get(&_Oracle.TransactOpts, dbName, colName, recordID, callBack)
 }
 
 // GetCol is a paid mutator transaction binding the contract method 0xe722d92e.
 //
-// Solidity: function GetCol(string dbName, string callBack) returns(uint256 ReqID)
+// Solidity: function GetCol(string dbName, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactor) GetCol(opts *bind.TransactOpts, dbName string, callBack string) (*types.Transaction, error) {
 	return _Oracle.contract.Transact(opts, "GetCol", dbName, callBack)
 }
 
 // GetCol is a paid mutator transaction binding the contract method 0xe722d92e.
 //
-// Solidity: function GetCol(string dbName, string callBack) returns(uint256 ReqID)
+// Solidity: function GetCol(string dbName, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleSession) GetCol(dbName string, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.GetCol(&_Oracle.TransactOpts, dbName, callBack)
 }
 
 // GetCol is a paid mutator transaction binding the contract method 0xe722d92e.
 //
-// Solidity: function GetCol(string dbName, string callBack) returns(uint256 ReqID)
+// Solidity: function GetCol(string dbName, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactorSession) GetCol(dbName string, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.GetCol(&_Oracle.TransactOpts, dbName, callBack)
 }
@@ -339,21 +432,21 @@ func (_Oracle *OracleTransactorSession) GetColRsp(reqID *big.Int, statement bool
 
 // GetIndex is a paid mutator transaction binding the contract method 0x0a362255.
 //
-// Solidity: function GetIndex(string dbName, string colName, string callBack) returns(uint256 ReqID)
+// Solidity: function GetIndex(string dbName, string colName, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactor) GetIndex(opts *bind.TransactOpts, dbName string, colName string, callBack string) (*types.Transaction, error) {
 	return _Oracle.contract.Transact(opts, "GetIndex", dbName, colName, callBack)
 }
 
 // GetIndex is a paid mutator transaction binding the contract method 0x0a362255.
 //
-// Solidity: function GetIndex(string dbName, string colName, string callBack) returns(uint256 ReqID)
+// Solidity: function GetIndex(string dbName, string colName, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleSession) GetIndex(dbName string, colName string, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.GetIndex(&_Oracle.TransactOpts, dbName, colName, callBack)
 }
 
 // GetIndex is a paid mutator transaction binding the contract method 0x0a362255.
 //
-// Solidity: function GetIndex(string dbName, string colName, string callBack) returns(uint256 ReqID)
+// Solidity: function GetIndex(string dbName, string colName, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactorSession) GetIndex(dbName string, colName string, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.GetIndex(&_Oracle.TransactOpts, dbName, colName, callBack)
 }
@@ -381,21 +474,21 @@ func (_Oracle *OracleTransactorSession) GetIndexRsp(reqID *big.Int, statement bo
 
 // GetRootCid is a paid mutator transaction binding the contract method 0xf04c04df.
 //
-// Solidity: function GetRootCid(string dbName, string callBack) returns(uint256 ReqID)
+// Solidity: function GetRootCid(string dbName, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactor) GetRootCid(opts *bind.TransactOpts, dbName string, callBack string) (*types.Transaction, error) {
 	return _Oracle.contract.Transact(opts, "GetRootCid", dbName, callBack)
 }
 
 // GetRootCid is a paid mutator transaction binding the contract method 0xf04c04df.
 //
-// Solidity: function GetRootCid(string dbName, string callBack) returns(uint256 ReqID)
+// Solidity: function GetRootCid(string dbName, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleSession) GetRootCid(dbName string, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.GetRootCid(&_Oracle.TransactOpts, dbName, callBack)
 }
 
 // GetRootCid is a paid mutator transaction binding the contract method 0xf04c04df.
 //
-// Solidity: function GetRootCid(string dbName, string callBack) returns(uint256 ReqID)
+// Solidity: function GetRootCid(string dbName, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactorSession) GetRootCid(dbName string, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.GetRootCid(&_Oracle.TransactOpts, dbName, callBack)
 }
@@ -442,23 +535,65 @@ func (_Oracle *OracleTransactorSession) GetRsp(reqID *big.Int, statement bool, d
 	return _Oracle.Contract.GetRsp(&_Oracle.TransactOpts, reqID, statement, data, callBack, sender, info)
 }
 
+// ImportFromUrl is a paid mutator transaction binding the contract method 0x8f75bfd8.
+//
+// Solidity: function Import_from_url(string dbName, string colName, string url, string format) payable returns(uint256 ReqID)
+func (_Oracle *OracleTransactor) ImportFromUrl(opts *bind.TransactOpts, dbName string, colName string, url string, format string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "Import_from_url", dbName, colName, url, format)
+}
+
+// ImportFromUrl is a paid mutator transaction binding the contract method 0x8f75bfd8.
+//
+// Solidity: function Import_from_url(string dbName, string colName, string url, string format) payable returns(uint256 ReqID)
+func (_Oracle *OracleSession) ImportFromUrl(dbName string, colName string, url string, format string) (*types.Transaction, error) {
+	return _Oracle.Contract.ImportFromUrl(&_Oracle.TransactOpts, dbName, colName, url, format)
+}
+
+// ImportFromUrl is a paid mutator transaction binding the contract method 0x8f75bfd8.
+//
+// Solidity: function Import_from_url(string dbName, string colName, string url, string format) payable returns(uint256 ReqID)
+func (_Oracle *OracleTransactorSession) ImportFromUrl(dbName string, colName string, url string, format string) (*types.Transaction, error) {
+	return _Oracle.Contract.ImportFromUrl(&_Oracle.TransactOpts, dbName, colName, url, format)
+}
+
+// ImportFromUrlRsp is a paid mutator transaction binding the contract method 0xa71a1589.
+//
+// Solidity: function Import_from_url_Rsp(uint256 reqID, bool statement, address sender, string info) returns()
+func (_Oracle *OracleTransactor) ImportFromUrlRsp(opts *bind.TransactOpts, reqID *big.Int, statement bool, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "Import_from_url_Rsp", reqID, statement, sender, info)
+}
+
+// ImportFromUrlRsp is a paid mutator transaction binding the contract method 0xa71a1589.
+//
+// Solidity: function Import_from_url_Rsp(uint256 reqID, bool statement, address sender, string info) returns()
+func (_Oracle *OracleSession) ImportFromUrlRsp(reqID *big.Int, statement bool, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.ImportFromUrlRsp(&_Oracle.TransactOpts, reqID, statement, sender, info)
+}
+
+// ImportFromUrlRsp is a paid mutator transaction binding the contract method 0xa71a1589.
+//
+// Solidity: function Import_from_url_Rsp(uint256 reqID, bool statement, address sender, string info) returns()
+func (_Oracle *OracleTransactorSession) ImportFromUrlRsp(reqID *big.Int, statement bool, sender common.Address, info string) (*types.Transaction, error) {
+	return _Oracle.Contract.ImportFromUrlRsp(&_Oracle.TransactOpts, reqID, statement, sender, info)
+}
+
 // Index is a paid mutator transaction binding the contract method 0x38e4fc73.
 //
-// Solidity: function Index(string dbName, string colName, string idx) returns(uint256 ReqID)
+// Solidity: function Index(string dbName, string colName, string idx) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactor) Index(opts *bind.TransactOpts, dbName string, colName string, idx string) (*types.Transaction, error) {
 	return _Oracle.contract.Transact(opts, "Index", dbName, colName, idx)
 }
 
 // Index is a paid mutator transaction binding the contract method 0x38e4fc73.
 //
-// Solidity: function Index(string dbName, string colName, string idx) returns(uint256 ReqID)
+// Solidity: function Index(string dbName, string colName, string idx) payable returns(uint256 ReqID)
 func (_Oracle *OracleSession) Index(dbName string, colName string, idx string) (*types.Transaction, error) {
 	return _Oracle.Contract.Index(&_Oracle.TransactOpts, dbName, colName, idx)
 }
 
 // Index is a paid mutator transaction binding the contract method 0x38e4fc73.
 //
-// Solidity: function Index(string dbName, string colName, string idx) returns(uint256 ReqID)
+// Solidity: function Index(string dbName, string colName, string idx) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactorSession) Index(dbName string, colName string, idx string) (*types.Transaction, error) {
 	return _Oracle.Contract.Index(&_Oracle.TransactOpts, dbName, colName, idx)
 }
@@ -486,21 +621,21 @@ func (_Oracle *OracleTransactorSession) IndexRsp(reqID *big.Int, statement bool,
 
 // Put is a paid mutator transaction binding the contract method 0x717a9408.
 //
-// Solidity: function Put(string dbName, string colName, bytes data) returns(uint256 ReqID)
+// Solidity: function Put(string dbName, string colName, bytes data) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactor) Put(opts *bind.TransactOpts, dbName string, colName string, data []byte) (*types.Transaction, error) {
 	return _Oracle.contract.Transact(opts, "Put", dbName, colName, data)
 }
 
 // Put is a paid mutator transaction binding the contract method 0x717a9408.
 //
-// Solidity: function Put(string dbName, string colName, bytes data) returns(uint256 ReqID)
+// Solidity: function Put(string dbName, string colName, bytes data) payable returns(uint256 ReqID)
 func (_Oracle *OracleSession) Put(dbName string, colName string, data []byte) (*types.Transaction, error) {
 	return _Oracle.Contract.Put(&_Oracle.TransactOpts, dbName, colName, data)
 }
 
 // Put is a paid mutator transaction binding the contract method 0x717a9408.
 //
-// Solidity: function Put(string dbName, string colName, bytes data) returns(uint256 ReqID)
+// Solidity: function Put(string dbName, string colName, bytes data) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactorSession) Put(dbName string, colName string, data []byte) (*types.Transaction, error) {
 	return _Oracle.Contract.Put(&_Oracle.TransactOpts, dbName, colName, data)
 }
@@ -528,21 +663,21 @@ func (_Oracle *OracleTransactorSession) PutRsp(reqID *big.Int, statement bool, s
 
 // Search is a paid mutator transaction binding the contract method 0x38ae4ea1.
 //
-// Solidity: function Search(string dbName, string colName, bytes querys, string callBack) returns(uint256 ReqID)
+// Solidity: function Search(string dbName, string colName, bytes querys, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactor) Search(opts *bind.TransactOpts, dbName string, colName string, querys []byte, callBack string) (*types.Transaction, error) {
 	return _Oracle.contract.Transact(opts, "Search", dbName, colName, querys, callBack)
 }
 
 // Search is a paid mutator transaction binding the contract method 0x38ae4ea1.
 //
-// Solidity: function Search(string dbName, string colName, bytes querys, string callBack) returns(uint256 ReqID)
+// Solidity: function Search(string dbName, string colName, bytes querys, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleSession) Search(dbName string, colName string, querys []byte, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.Search(&_Oracle.TransactOpts, dbName, colName, querys, callBack)
 }
 
 // Search is a paid mutator transaction binding the contract method 0x38ae4ea1.
 //
-// Solidity: function Search(string dbName, string colName, bytes querys, string callBack) returns(uint256 ReqID)
+// Solidity: function Search(string dbName, string colName, bytes querys, string callBack) payable returns(uint256 ReqID)
 func (_Oracle *OracleTransactorSession) Search(dbName string, colName string, querys []byte, callBack string) (*types.Transaction, error) {
 	return _Oracle.Contract.Search(&_Oracle.TransactOpts, dbName, colName, querys, callBack)
 }
@@ -566,6 +701,27 @@ func (_Oracle *OracleSession) SearchRsp(reqID *big.Int, statement bool, data []b
 // Solidity: function SearchRsp(uint256 reqID, bool statement, bytes data, string callBack, address sender, string info) returns()
 func (_Oracle *OracleTransactorSession) SearchRsp(reqID *big.Int, statement bool, data []byte, callBack string, sender common.Address, info string) (*types.Transaction, error) {
 	return _Oracle.Contract.SearchRsp(&_Oracle.TransactOpts, reqID, statement, data, callBack, sender, info)
+}
+
+// Withdraws is a paid mutator transaction binding the contract method 0xd9510215.
+//
+// Solidity: function withdraws() returns()
+func (_Oracle *OracleTransactor) Withdraws(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _Oracle.contract.Transact(opts, "withdraws")
+}
+
+// Withdraws is a paid mutator transaction binding the contract method 0xd9510215.
+//
+// Solidity: function withdraws() returns()
+func (_Oracle *OracleSession) Withdraws() (*types.Transaction, error) {
+	return _Oracle.Contract.Withdraws(&_Oracle.TransactOpts)
+}
+
+// Withdraws is a paid mutator transaction binding the contract method 0xd9510215.
+//
+// Solidity: function withdraws() returns()
+func (_Oracle *OracleTransactorSession) Withdraws() (*types.Transaction, error) {
+	return _Oracle.Contract.Withdraws(&_Oracle.TransactOpts)
 }
 
 // OracleCatchDataIterator is returned from FilterCatchData and is used to iterate over the raw logs and unpacked data for CatchData events raised by the Oracle contract.
@@ -1526,6 +1682,145 @@ func (_Oracle *OracleFilterer) WatchGetRootCid(opts *bind.WatchOpts, sink chan<-
 func (_Oracle *OracleFilterer) ParseGetRootCid(log types.Log) (*OracleGetRootCid, error) {
 	event := new(OracleGetRootCid)
 	if err := _Oracle.contract.UnpackLog(event, "getRootCid", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// OracleImportFromUrlIterator is returned from FilterImportFromUrl and is used to iterate over the raw logs and unpacked data for ImportFromUrl events raised by the Oracle contract.
+type OracleImportFromUrlIterator struct {
+	Event *OracleImportFromUrl // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *OracleImportFromUrlIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(OracleImportFromUrl)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(OracleImportFromUrl)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *OracleImportFromUrlIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *OracleImportFromUrlIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// OracleImportFromUrl represents a ImportFromUrl event raised by the Oracle contract.
+type OracleImportFromUrl struct {
+	ReqID   *big.Int
+	DbName  string
+	ColName string
+	Url     string
+	Format  string
+	Sender  common.Address
+	Raw     types.Log // Blockchain specific contextual infos
+}
+
+// FilterImportFromUrl is a free log retrieval operation binding the contract event 0xdd048a96f887e7d13cde1bb76d77870c2ce08ba4f7664f2240b75575f1349ffb.
+//
+// Solidity: event import_from_url(uint256 reqID, string dbName, string colName, string url, string format, address sender)
+func (_Oracle *OracleFilterer) FilterImportFromUrl(opts *bind.FilterOpts) (*OracleImportFromUrlIterator, error) {
+
+	logs, sub, err := _Oracle.contract.FilterLogs(opts, "import_from_url")
+	if err != nil {
+		return nil, err
+	}
+	return &OracleImportFromUrlIterator{contract: _Oracle.contract, event: "import_from_url", logs: logs, sub: sub}, nil
+}
+
+// WatchImportFromUrl is a free log subscription operation binding the contract event 0xdd048a96f887e7d13cde1bb76d77870c2ce08ba4f7664f2240b75575f1349ffb.
+//
+// Solidity: event import_from_url(uint256 reqID, string dbName, string colName, string url, string format, address sender)
+func (_Oracle *OracleFilterer) WatchImportFromUrl(opts *bind.WatchOpts, sink chan<- *OracleImportFromUrl) (event.Subscription, error) {
+
+	logs, sub, err := _Oracle.contract.WatchLogs(opts, "import_from_url")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(OracleImportFromUrl)
+				if err := _Oracle.contract.UnpackLog(event, "import_from_url", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseImportFromUrl is a log parse operation binding the contract event 0xdd048a96f887e7d13cde1bb76d77870c2ce08ba4f7664f2240b75575f1349ffb.
+//
+// Solidity: event import_from_url(uint256 reqID, string dbName, string colName, string url, string format, address sender)
+func (_Oracle *OracleFilterer) ParseImportFromUrl(log types.Log) (*OracleImportFromUrl, error) {
+	event := new(OracleImportFromUrl)
+	if err := _Oracle.contract.UnpackLog(event, "import_from_url", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

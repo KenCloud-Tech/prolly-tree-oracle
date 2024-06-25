@@ -36,4 +36,7 @@ interface OracleInterface{
 
     function Search(string calldata dbName, string calldata colName, bytes calldata querys, string calldata callBack) external payable returns(uint ReqID);
     event search(uint reqID, string dbName, string colName, bytes querys, string callBack, address sender);
+
+    function Import_from_url(string calldata dbName, string calldata colName, string calldata url, string calldata format) external payable returns(uint ReqID); //format={ndjson or csv}
+    event import_from_url(uint reqID, string dbName, string colName, string url, string format, address sender);
 }

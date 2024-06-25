@@ -24,7 +24,7 @@ func PutEventListener() {
 	for {
 		select {
 		case err := <-eventSub.Err():
-			log.Println("[Error in Event CREAT]:", err)
+			log.Println("[Error in Event PUT]:", err)
 		case event := <-Logs:
 			log.Println("Received put event ", event.ReqID)
 			put(event)

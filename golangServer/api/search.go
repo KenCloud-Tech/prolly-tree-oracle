@@ -91,6 +91,6 @@ func search(event *Oracle.OracleSearch) {
 	if err != nil {
 		log.Println("Req function get an error : ", err)
 	} else {
-		log.Println("[", event.ColName, "]", "Get data success")
+		log.Println("[", event.ColName, "]", "Search data success")
 	}
 }

@@ -29,8 +29,8 @@ contract IOracle {
     }
 
     
-    uint public baseGasCost = 10000;
-    uint public gasPerByte = 100;
+    uint public baseGasCost ;
+    uint public gasPerByte ;
 
     
 

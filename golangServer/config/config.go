@@ -9,8 +9,8 @@ import (
 
 const (
 	URL                   = "ws://127.0.0.1:8545"
-	OracleOwnerPrivateKey = "0xa1c02aed7d70e580c62576f066ce6708aa01546a3490339aeb7193e5cede8b6d"
-	ContractAddress       = "0x56276E65381E3BcD879B1f049663C65e5bBD0769"
+	OracleOwnerPrivateKey = "0xe0c960bf16551bd3d69c54a8cfeaab6d7fe4d4ca8e404449b704945e27a06687"
+	ContractAddress       = "0x0E51070026990dedF1f63be6214f43ea7dd408c0"
 	ChainID               = 1337
 	SaveDataPath          = "golangServer/savedDatas/"
 )

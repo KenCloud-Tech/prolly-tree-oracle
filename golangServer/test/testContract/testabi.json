@@ -5,25 +5,28 @@
         "internalType": "address",
         "name": "to",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "v",
+        "type": "uint256"
       }
     ],
     "name": "AllowWrite",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+    "outputs": [
       {
-        "indexed": false,
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "info",
+        "type": "string"
       }
     ],
-    "name": "CatchData",
-    "type": "event"
+    "stateMutability": "payable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -54,12 +57,185 @@
         "internalType": "string",
         "name": "primaryKey",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "v",
+        "type": "uint256"
       }
     ],
     "name": "Create",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "GetCol",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "callBack",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "getRootCid",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "url",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "format",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "Import_from_url",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "dbName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "colName",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "Put",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "add",
+        "type": "address"
+      }
+    ],
+    "name": "setOracle",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [],
+    "stateMutability": "payable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "CatchData",
+    "type": "event"
   },
   {
     "inputs": [
@@ -82,29 +258,22 @@
         "internalType": "string",
         "name": "callBack",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
       }
     ],
     "name": "Get",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+    "outputs": [
       {
-        "internalType": "string",
-        "name": "cid",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "callBack",
-        "type": "string"
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
       }
     ],
-    "name": "GetCol",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -123,29 +292,22 @@
         "internalType": "string",
         "name": "callBack",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
       }
     ],
     "name": "GetIndex",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+    "outputs": [
       {
-        "internalType": "string",
-        "name": "dbName",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "callBack",
-        "type": "string"
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
       }
     ],
-    "name": "getRootCid",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -164,34 +326,22 @@
         "internalType": "string",
         "name": "Key",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
       }
     ],
     "name": "Index",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+    "outputs": [
       {
-        "internalType": "string",
-        "name": "dbName",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "colName",
-        "type": "string"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
       }
     ],
-    "name": "Put",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -215,32 +365,34 @@
         "internalType": "string",
         "name": "callBack",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
       }
     ],
     "name": "Search",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "ReqID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "add",
-        "type": "address"
-      }
-    ],
-    "name": "setOracle",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "payable",
+    "type": "receive"
   },
   {
     "inputs": [],
-    "name": "or",
+    "name": "oracleADD",
     "outputs": [
       {
-        "internalType": "contract Oracle",
+        "internalType": "address",
         "name": "",
         "type": "address"
       }

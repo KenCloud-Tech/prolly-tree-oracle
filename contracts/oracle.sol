@@ -6,15 +6,15 @@ import {IOracle} from "./I_oracle.sol";
 import {Permission} from "./interfaces/permission.sol";
 import {util} from "./utils.sol";
 
-contract Oracle is OracleInterface, util {
-    constructor(uint basefee, uint bytefee) {
+contract Oracle is IOracle,OracleInterface, util {
+    constructor(uint basefee, uint bytefee) payable {
         owner = payable(msg.sender);
         baseGasCost = basefee;
         gasPerByte = bytefee;
         CurrentReqID = 1;
     }
 
-    //allow a address write
+    // Allow a address write
     function AllowWrite(address to) external payable returns(uint ReqID, string memory info){
         pay(0);
         require( !isEmptyString(myDbName[msg.sender]), "You has not create a db.");
@@ -29,7 +29,7 @@ contract Oracle is OracleInterface, util {
         return (reqID, "Permission granted successfully");
     }
 
-    //creat a new collection
+    // Creat a new collection
     function Create(string calldata dbName, string calldata colName, string calldata primaryKey)external payable returns(uint ReqID){
         pay(0);
         require(dbOwner[dbName]==address(0) || dbOwner[dbName]==msg.sender || permission[msg.sender][dbName].allowWrite == true,  "You do not have permission to write");
@@ -57,7 +57,7 @@ contract Oracle is OracleInterface, util {
         }
     }
 
-    // put data to collection
+    // Put data to collection
     function Put(string calldata dbName, string calldata colName, bytes calldata data) external payable allowWrite(dbName) returns(uint ReqID){
         pay(getPrice(data));
         require(cols[dbName][colName] != false, "This collection has not been created yet");
@@ -77,10 +77,9 @@ contract Oracle is OracleInterface, util {
         }
     }
 
-    //get data from collection
+    // Get data from collection
     function Get(string calldata dbName, string calldata colName, bytes calldata recordID, string calldata callBack) external payable allowQuery(dbName) returns(uint ReqID){
         pay(0);
-        require(datas[msg.sender].length == 0, "The data requested last time has not been retrieved");
         require(cols[dbName][colName] != false, "This collection has not been created yet");
         emit get(CurrentReqID++, dbName, colName, recordID, callBack, msg.sender);
         return CurrentReqID;
@@ -107,7 +106,7 @@ contract Oracle is OracleInterface, util {
     }
 
 
-    //creat index
+    // Creat index
     function Index(string calldata dbName, string calldata colName, string calldata idx) external allowWrite(dbName) payable returns(uint ReqID){
         pay(0);
         require(cols[dbName][colName] != false, "This collection has not been created yet");
@@ -129,10 +128,9 @@ contract Oracle is OracleInterface, util {
 
 
 
-    //query by {equals, compare, sort, limit, skip}
+    // Search by {equals, compare, sort, limit, skip}
     function Search(string calldata dbName, string calldata colName, bytes calldata querys, string calldata callBack) external allowQuery(dbName) payable returns(uint ReqID){
         pay(0);
-        require(datas[msg.sender].length == 0, "The data requested last time has not been retrieved");
         require(cols[dbName][colName] != false, "This collection has not been created yet");
         emit search(CurrentReqID++, dbName, colName, querys, callBack, msg.sender);
         return CurrentReqID;
@@ -156,5 +154,27 @@ contract Oracle is OracleInterface, util {
 
         emit ReqState(reqID, sender, false, info);
         reqStatement[reqID] = false;
+    }
+    
+    // Import datas off-chain
+    function Import_from_url(string calldata dbName, string calldata colName, string calldata url, string calldata format) external payable returns(uint ReqID){
+        pay(0);
+        require(dbOwner[dbName]==address(0) || dbOwner[dbName]==msg.sender || permission[msg.sender][dbName].allowWrite == true,  "You do not have permission to write");
+        require(keccak256(bytes(format)) == keccak256(bytes("csv")) || keccak256(bytes(format)) == keccak256(bytes("ndjson")), "The 'format' must be 'csv' or 'ndjson'");
+        require(cols[dbName][colName] != false, "This collection has not been created yet");
+        uint reqID = CurrentReqID;
+        CurrentReqID++;
+        emit import_from_url(reqID, dbName, colName, url, format, msg.sender);
+        return reqID;
+    }
+
+    function Import_from_url_Rsp(uint reqID, bool statement, address sender, string calldata info) onlyOracleOwner external {
+        if (statement == true) {
+            emit ReqState(reqID, sender, true, "Import datas success.");
+            reqStatement[reqID] = true;
+        } else {
+            emit ReqState(reqID, sender, false, info);
+            reqStatement[reqID] = false;
+        }
     }
 }

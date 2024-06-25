@@ -7,6 +7,7 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"encoding/json"
+	"fmt"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -22,9 +23,9 @@ import (
 
 const (
 	URL                 = "ws://127.0.0.1:8545"
-	UserPrimaryKey      = "0x9945e953c3b37004a00d238d4b20a561e263cc578fb14fde6872cf76222ff702"
+	UserPrimaryKey      = "0x16f99b7743f83f132f858ed0aa62cd05e3f9afa3cd5838c7cb3138be6e2756cd"
 	OracleAddress       = config.ContractAddress
-	TestContractAddress = "0xd3efC76d8371F618210315b7DaAA37261DeaC4C5"
+	TestContractAddress = "0x60C3037baD781109830AC6FB48110A5db5BDC4dC"
 	ChainID             = 1337
 )
 
@@ -33,62 +34,54 @@ var (
 
 	PrivateKey *ecdsa.PrivateKey
 
-	toc *OracleTest.OracleTest
+	test_contract *OracleTest.OracleTest
 
 	GasLimit uint64 = 300000
+	Value           = big.NewInt(1000000)
 
-	dbName   = "MyDb"
-	colName  = "users"
-	callBack = "CBFunc(bytes)"
+	dbName    = "MyDb"
+	colName   = "users"
+	callBack  = "CBFunc(bytes)"
+	urlcsv    = "http://127.0.0.1:8080/data.csv"
+	urlndjson = "http://127.0.0.1:8080/ndjson"
 )
 
 func TestOracle(t *testing.T) {
 	InitClient()
-	tps := GenTransactOpts(GasLimit)
+	tps := GenTransactOpts(GasLimit, big.NewInt(0))
 	var err error
 
-	_, err = toc.SetOracle(tps, common.HexToAddress(OracleAddress))
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	_, err = test_contract.SetOracle(tps, common.HexToAddress(OracleAddress))
 
 	//create memory db
-	_, err = toc.Create(tps, dbName, colName, "name")
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	tps = GenTransactOpts(GasLimit, Value)
+	_, err = test_contract.Create(tps, dbName, colName, "name", Value)
 	time.Sleep(time.Second)
 
 	//create index in age field
-	_, err = toc.Index(tps, dbName, colName, "age")
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	tps = GenTransactOpts(GasLimit, Value)
+	_, err = test_contract.Index(tps, dbName, colName, "age", Value)
 
 	time.Sleep(time.Second)
 
 	//put data
+	tps = GenTransactOpts(GasLimit, Value)
 	data := []byte(`{"name":"Alice", "age": 18}
 					{"name":"Bob", "age": 19}
 					{"name":"Albert", "age": 20}
 					{"name":"Clearance and Steve", "age":18}`)
-	_, err = toc.Put(tps, dbName, colName, data)
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
-
+	_, err = test_contract.Put(tps, dbName, colName, data, Value)
 	time.Sleep(time.Second)
 
 	//get data
+	tps = GenTransactOpts(GasLimit, Value)
 	recordID := []byte{129, 99, 66, 111, 98}
-	_, err = toc.Get(tps, dbName, colName, recordID, callBack)
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	_, err = test_contract.Get(tps, dbName, colName, recordID, callBack, Value)
 
 	time.Sleep(time.Second)
 
 	//search data
+	tps = GenTransactOpts(GasLimit, Value)
 	quserys := []indexer.Query{
 		indexer.Query{
 			Equal: map[string]ipld.Node{"name": basicnode.NewString("Bob")},
@@ -102,39 +95,53 @@ func TestOracle(t *testing.T) {
 		},
 	}
 	mq, _ := json.Marshal(quserys)
-	_, err = toc.Search(tps, dbName, colName, mq, callBack)
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	_, err = test_contract.Search(tps, dbName, colName, mq, callBack, Value)
 	time.Sleep(time.Second)
 
 	//allowWrite
+	tps = GenTransactOpts(GasLimit, Value)
 	ADD := "0x00C696904c0CCE30D19704A762035Eb67eC3580C"
-	_, err = toc.AllowWrite(tps, common.HexToAddress(ADD))
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	_, err = test_contract.AllowWrite(tps, common.HexToAddress(ADD), Value)
 	time.Sleep(time.Second)
 
 	// get collections
-	_, err = toc.GetCol(tps, dbName, callBack)
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	tps = GenTransactOpts(GasLimit, Value)
+	_, err = test_contract.GetCol(tps, dbName, callBack, Value)
 	time.Sleep(time.Second)
 
 	//get indexes
-	_, err = toc.GetIndex(tps, dbName, colName, callBack)
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	tps = GenTransactOpts(GasLimit, Value)
+	_, err = test_contract.GetIndex(tps, dbName, colName, callBack, Value)
 	time.Sleep(time.Second)
 
-	_, err = toc.GetRootCid(tps, dbName, callBack)
-	if err != nil {
-		log.Println("Failed to send transaction: ", err)
-	}
+	//get rootCid
+	tps = GenTransactOpts(GasLimit, Value)
+	_, err = test_contract.GetRootCid(tps, dbName, callBack, Value)
 	time.Sleep(time.Second)
+
+	//create memory db
+	dbName = "demoCsv"
+	colName = "demoCol"
+	tps = GenTransactOpts(GasLimit, Value)
+	_, err = test_contract.Create(tps, dbName, colName, "Series_Title", Value)
+	time.Sleep(time.Second)
+	//put csv data by url
+	tps = GenTransactOpts(GasLimit, Value)
+	_, err = test_contract.ImportFromUrl(tps, dbName, colName, urlcsv, "csv", Value)
+	time.Sleep(time.Second)
+
+	//create memory db
+	dbName = "demoNdjson"
+	colName = "demoCol"
+	tps = GenTransactOpts(GasLimit, Value)
+	_, err = test_contract.Create(tps, dbName, colName, "name", Value)
+	time.Sleep(time.Second)
+	//put ndjson by url
+	tps = GenTransactOpts(GasLimit, Value)
+	_, err = test_contract.ImportFromUrl(tps, dbName, colName, urlndjson, "ndjson", Value)
+	time.Sleep(time.Second)
+
+	fmt.Println(err)
 }
 
 func InitClient() {
@@ -152,7 +159,7 @@ func InitClient() {
 	// Convert string address to `common.Address` type
 	contractAddr := common.HexToAddress(TestContractAddress)
 	// Create a new instance using the contract address and client
-	toc, err = OracleTest.NewOracleTest(contractAddr, Client)
+	test_contract, err = OracleTest.NewOracleTest(contractAddr, Client)
 	if err != nil {
 		log.Fatalf("Failed to instantiate a Oracle contract: %v", err)
 	}
@@ -193,7 +200,7 @@ func CatchListener() {
 	Logs := make(chan *OracleTest.OracleTestCatchData)
 	// Subscribe to each event
 	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
-	eventSub, err := toc.WatchCatchData(opts, Logs)
+	eventSub, err := test_contract.WatchCatchData(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to Get events:", err)
 	}
@@ -216,7 +223,7 @@ func CatchListener() {
 	}
 }
 
-func GenTransactOpts(GasLimit uint64) *bind.TransactOpts {
+func GenTransactOpts(GasLimit uint64, Value *big.Int) *bind.TransactOpts {
 	// Generate TransactOpts from private key
 	auth, err := bind.NewKeyedTransactorWithChainID(PrivateKey, big.NewInt(ChainID))
 	if err != nil {
@@ -230,5 +237,6 @@ func GenTransactOpts(GasLimit uint64) *bind.TransactOpts {
 	}
 	auth.GasPrice = gasPrice
 	auth.GasLimit = GasLimit
+	auth.Value = Value
 	return auth
 }

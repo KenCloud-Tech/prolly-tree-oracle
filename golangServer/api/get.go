@@ -24,7 +24,7 @@ func GetEventListener() {
 	for {
 		select {
 		case err := <-eventSub.Err():
-			log.Println("[Error in Event CREAT]:", err)
+			log.Println("[Error in Event GET]:", err)
 		case event := <-Logs:
 			log.Println("Received get event ", event.ReqID)
 			get(event)
