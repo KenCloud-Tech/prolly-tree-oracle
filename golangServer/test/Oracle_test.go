@@ -8,13 +8,10 @@ import (
 	"crypto/ecdsa"
 	"encoding/json"
 	"fmt"
-	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/ipld/go-ipld-prime"
-	"github.com/ipld/go-ipld-prime/node/basicnode"
 	"log"
 	"math/big"
 	"testing"
@@ -53,44 +50,62 @@ func TestOracle(t *testing.T) {
 
 	_, err = test_contract.SetOracle(tps, common.HexToAddress(OracleAddress))
 
-	//create memory db
-	tps = GenTransactOpts(GasLimit, Value)
-	_, err = test_contract.Create(tps, dbName, colName, "name", Value)
-	time.Sleep(time.Second)
-
-	//create index in age field
-	tps = GenTransactOpts(GasLimit, Value)
-	_, err = test_contract.Index(tps, dbName, colName, "age", Value)
-
-	time.Sleep(time.Second)
-
-	//put data
-	tps = GenTransactOpts(GasLimit, Value)
-	data := []byte(`{"name":"Alice", "age": 18}
-					{"name":"Bob", "age": 19}
-					{"name":"Albert", "age": 20}
-					{"name":"Clearance and Steve", "age":18}`)
-	_, err = test_contract.Put(tps, dbName, colName, data, Value)
-	time.Sleep(time.Second)
-
-	//get data
-	tps = GenTransactOpts(GasLimit, Value)
-	recordID := []byte{129, 99, 66, 111, 98}
-	_, err = test_contract.Get(tps, dbName, colName, recordID, callBack, Value)
-
-	time.Sleep(time.Second)
+	////create memory db
+	//tps = GenTransactOpts(GasLimit, Value)
+	//_, err = test_contract.Create(tps, dbName, colName, "name", Value)
+	//time.Sleep(time.Second)
+	//
+	////create index in age field
+	//tps = GenTransactOpts(GasLimit, Value)
+	//_, err = test_contract.Index(tps, dbName, colName, "age", Value)
+	//
+	//time.Sleep(time.Second)
+	//
+	////put data
+	//tps = GenTransactOpts(GasLimit, Value)
+	//data := []byte(`{"name":"Alice", "age": 18}
+	//				{"name":"Bob", "age": 19}
+	//				{"name":"Albert", "age": 20}
+	//				{"name":"Clearance and Steve", "age":18}`)
+	//_, err = test_contract.Put(tps, dbName, colName, data, Value)
+	//time.Sleep(time.Second)
+	//
+	////get data
+	//tps = GenTransactOpts(GasLimit, Value)
+	//recordID := []byte{129, 99, 66, 111, 98}
+	//_, err = test_contract.Get(tps, dbName, colName, recordID, callBack, Value)
+	//
+	//time.Sleep(time.Second)
 
 	//search data
 	tps = GenTransactOpts(GasLimit, Value)
-	quserys := []indexer.Query{
-		indexer.Query{
-			Equal: map[string]ipld.Node{"name": basicnode.NewString("Bob")},
+	type eq struct {
+		IndexName string
+		IndexVal  any
+	}
+	type cmp struct {
+		//	GreaterThan Op = "GreaterThan"
+		//	LessThan    Op = "LessThan"
+		Op        string
+		IndexName string
+		IndexVal  any
+	}
+	type Queryer struct {
+		Equal   eq
+		Compare cmp
+		Sort    string
+		Limit   int
+		Skip    int
+	}
+	quserys := []Queryer{
+		{
+			Equal: eq{IndexName: "name", IndexVal: "Bob"},
 		},
-		indexer.Query{
-			Compare: &indexer.CompareCondition{
-				Cmp:       indexer.GreaterThan,
+		{
+			Compare: cmp{
+				Op:        "GreaterThan",
 				IndexName: "age",
-				IndexVal:  basicnode.NewInt(18),
+				IndexVal:  "18",
 			},
 		},
 	}
