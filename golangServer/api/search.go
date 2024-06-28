@@ -6,8 +6,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ipld/go-ipld-prime/printer"
 	"log"
 )
 
@@ -37,7 +37,7 @@ func SearchEventListener() {
 func search(event *Oracle.OracleSearch) {
 	var statement bool
 	tps := GenTransactOpts(config.GasLimit)
-	var data [][]byte
+	var data string
 
 	colName := event.ColName
 	db := config.Dbs[event.DbName]
@@ -50,7 +50,7 @@ func search(event *Oracle.OracleSearch) {
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
 		return
 	}
-	querys := make([]indexer.Query, 1)
+	querys := make([]Queryer, 1)
 	err = json.Unmarshal(event.Querys, &querys)
 	if err != nil {
 		log.Println("Unmarshal ERROR: ", err)
@@ -60,21 +60,25 @@ func search(event *Oracle.OracleSearch) {
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
 		return
 	}
+	k := 1
 	for _, q := range querys {
-		results, err := dbC.Search(context.Background(), q)
+		data += "\nQuery:" + string(k) + "\n"
+		k++
+		query := q.Queryer2indexerQ()
+		results, err := dbC.Search(context.Background(), query)
 		if err != nil {
-			v, _ := json.Marshal("Search fail.")
-			data = append(data, v)
+			v := "Search fail."
+			data += v
 			continue
 		}
-		record := <-results
-		node := record.Data
-		if node == nil {
-			v, _ := json.Marshal("Data is not exist")
-			data = append(data, v)
-			continue
+		for record := range results {
+			if record.Data == nil {
+				v := "Data is not exist"
+				data += v
+				continue
+			}
+			data = data + "\n" + printer.Sprint(record.Data)
 		}
-		data = append(data, nodeTobyte(node))
 	}
 	result, err := json.Marshal(data)
 	if err != nil {

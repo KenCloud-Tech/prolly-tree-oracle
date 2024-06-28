@@ -9,7 +9,7 @@ contract IOracle {
     uint internal CurrentReqID;
 
     event ReqState(uint reqID, address user, bool statement, string info);
-    event CatchData(uint reqID, address user, bool statement, string info, bytes data); // if oracle get data from off-chain server
+    event CatchData(uint reqID, bytes data); // if oracle get data from off-chain server
 
     //contract owner
     address payable internal owner;
@@ -29,7 +29,7 @@ contract IOracle {
     }
 
     
-    uint public baseGasCost ;
+    uint public baseGasFee ;
     uint public gasPerByte ;
 
     

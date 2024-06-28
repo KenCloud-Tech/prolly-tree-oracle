@@ -14,7 +14,7 @@ contract util is IOracle {
     }
     // Pay for service
     function pay(uint fee) internal{
-        fee = fee + baseGasCost;
+        fee = fee + baseGasFee;
         require(msg.value >= fee, "Insufficient gas fee");
         payable(msg.sender).transfer(msg.value - fee);
     }
