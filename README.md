@@ -36,7 +36,17 @@ Prolly Tree Oracle connects the IPLD Prolly Tree storage service to the blockcha
 
 ![](/sources/Architecture.png)
 
-
+## Constructor:
+```
+constructor(uint basefee, uint bytefee) payable {
+        owner = payable(msg.sender);
+        baseGasFee = basefee;
+        gasPerByte = bytefee;
+        CurrentReqID = 1;
+    }
+```
+When deploying the oracle contract, you can set the basic service fee for each service and the service fee per byte of data when importing data using the `Put` method.  
+So users should make sure to carry enough fees to pay the service fee when calling the API.
 ## API Implementation:
 * **function Create(string calldata dbName, string calldata colName, string calldata primaryKey)**  
 Creates a new collection named `colName` in the database pointed to by the provided `dbName`.
@@ -45,53 +55,61 @@ When the second user registers, it is necessary to determine whether it has the 
 
 
 * **function AllowWrite(address to)**  
-Grant user `to` read and write permissions on your database.
+Grant user `to` read and write permissions on your database.  
+`service fee = baseGasFee`
 
 
 * **function Put(string calldata dbName, string calldata colName, bytes calldata data)**  
-  Save the data `data` to the `colName` collection in the database pointed to by `dbName`.
-  
+  Save the data `data` to the `colName` collection in the database pointed to by `dbName`.  
+  `service fee = baseGasFee + gasPerByte * datasize`
+
+* **Import_from_url(string calldata dbName, string calldata colName, string calldata url, string calldata format)**  
+  If you use the Put method to import a large amount of data, you will pay expensive service fees, so we provide off-chain data import services.   
+  The off-chain storage service provider will initiate a `Get` request to obtain data through the `URL` you provide.   
+  You need to specify the data format through `format`. `format = {ndjson or csv}`  
+  `service fee = baseGasFee`
 
 * **function Get(string calldata dbName, string calldata colName, bytes calldata recordID, string calldata callBack)**  
   Get data from the `colName` collection in the database pointed to by `dbName` according to `recordID`. You need to provide a callback function to receive the data. 
   For example, the callback function I defined in the consumer contract is:`function CallBackFunc(bytes calldata data)`.  So, the callBack parameter of string type is ``CallBackFunc(bytes)``.  
+  `service fee = baseGasFee`
 
 
 * **function Index(string calldata dbName, string calldata colName, string calldata idx)**  
-  Add index `idx` to the `colName` collection in the database pointed to by `dbName`
+  Add index `idx` to the `colName` collection in the database pointed to by `dbName`  
+  `service fee = baseGasFee`
 
 
 * **function Search(string calldata dbName, string calldata colName, bytes calldata querys, string calldata callBack)**  
-  Use `index.Query` to query data from the `colName` collection in the database pointed to by `dbName`. When using it, you can build one or more `index.Query` objects, and serialize the `index.Query` object array into `json` as the parameter `queries`. Query methods:`{equal, compare, sort, limit, skip}` 
-
+  Use `index.Query` to query data from the `colName` collection in the database pointed to by `dbName`. When using it, you can build one or more `index.Query` objects, and serialize the `index.Query` object array into `json` as the parameter `queries`. Query methods:`{equal, compare, sort, limit, skip}`  
   Similarly, a callback function needs to be provided to receive data  
+  `service fee = baseGasFee`
 
 
 * **function GetRootCid(string calldata dbName, string calldata callBack)**
-
-  Get the `RootCid` of the database of the method caller
-
-  Similarly, a callback function needs to be provided to receive an array of collection indexes
+  Get the `RootCid` of the database of the method caller   
+  Similarly, a callback function needs to be provided to receive an array of collection indexes  
+  `service fee = baseGasFee`
 
 
 * **function GetIndex(string calldata dbName, string calldata colName, string calldata callBack)**
 
-  Get the index of the `colName` collection in the database pointed to by `dbName`
-
-  Similarly, a callback function needs to be provided to receive an array of collection indexes
+  Get the index of the `colName` collection in the database pointed to by `dbName`  
+  Similarly, a callback function needs to be provided to receive an array of collection indexes  
+  `service fee = baseGasFee`
 
 
 * **function GetCol(string calldata dbName, string calldata callBack)**
-
   Get all collections in the database pointed to by `dbName`
-  Similarly, a callback function needs to be provided to receive an array of collection names
+  Similarly, a callback function needs to be provided to receive an array of collection names  
+  `service fee = baseGasFee`
 
 
 # Usage
 ### [Click here to learn how to start the service](https://www.youtube.com/watch?v=_T4nLVJaQ5k)
 ## Consumer Contract
 
-The **Consumer Contract** used for testing is located at `contracts/test.sol`
+The **Consumer Contract** used for testing is located at `contracts/test.sol`, and there is an example of a WebApp project that interacts directly with the oracle: `./webApp`
 
 Compile the **Consumer Contract** to obtain the ABI file, and use the ***[abigen](https://geth.ethereum.org/docs/tools/abigen)*** to generate **Golang package** corresponding to the contract:
 `abigen --abi={ Path to abi.json } --pkg={ Package name } --out={ The path to the generated .go file }`
