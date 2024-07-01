@@ -82,28 +82,6 @@ func main() {
 	go api.GetEventListener()
 	go api.SearchEventListener()
 	go api.ImportEventListener()
-	//go func() {
-	//	Logs := make(chan *Oracle.OracleCatchData)
-	//	// Subscribe to each event
-	//	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
-	//	eventSub, err := config.OracleContract.WatchCatchData(opts, Logs)
-	//	if err != nil {
-	//		log.Fatal("Failed to subscribe to Get events:", err)
-	//	}
-	//	// start Listening...
-	//	log.Println("CatchDataListener Listening ...")
-	//	for {
-	//		select {
-	//		case err := <-eventSub.Err():
-	//			log.Println("[Error in Event CREAT]:", err)
-	//		case event := <-Logs:
-	//			log.Println("Received data: ")
-	//			data := make([]byte, 1)
-	//			json.Unmarshal(event.Data, &data)
-	//
-	//		}
-	//	}
-	//}()
 
 	// Set up a channel for receiving signals
 	sigs := make(chan os.Signal, 1)
