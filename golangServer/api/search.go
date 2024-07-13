@@ -7,9 +7,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ipld/go-ipld-prime/printer"
 	"log"
 )
+
+type SearchResults struct {
+	Status bool
+	Data   string
+	Error  string
+}
+type Results struct {
+	Id           int
+	QueryResults []SearchResults
+	Error        string
+}
 
 func SearchEventListener() {
 	// Get channels for logs
@@ -33,14 +43,21 @@ func SearchEventListener() {
 	}
 }
 
-// Search data from memory db
+// Search Data from memory db
 func search(event *Oracle.OracleSearch) {
 	var statement bool
 	tps := GenTransactOpts(config.GasLimit)
-	var data string
 
 	colName := event.ColName
-	db := config.Dbs[event.DbName]
+	db, ok := config.Dbs[event.DbName]
+	if !ok {
+		log.Println("Collection does not exist")
+		info := fmt.Sprintf("Collection does not exist")
+		statement = false
+		//response to oracle
+		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		return
+	}
 	dbC, err := db.Collection(colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)
@@ -50,7 +67,7 @@ func search(event *Oracle.OracleSearch) {
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
 		return
 	}
-	querys := make([]Queryer, 1)
+	var querys []Queryer
 	err = json.Unmarshal(event.Querys, &querys)
 	if err != nil {
 		log.Println("Unmarshal ERROR: ", err)
@@ -60,27 +77,37 @@ func search(event *Oracle.OracleSearch) {
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
 		return
 	}
-	k := 1
-	for _, q := range querys {
-		data += "\nQuery:" + string(k) + "\n"
-		k++
+	var r []Results
+	for i, q := range querys {
 		query := q.Queryer2indexerQ()
-		results, err := dbC.Search(context.Background(), query)
+		resultChan, err := dbC.Search(context.Background(), query)
 		if err != nil {
-			v := "Search fail."
-			data += v
+			r = append(r, Results{
+				Id:    i,
+				Error: err.Error(),
+			})
 			continue
 		}
-		for record := range results {
+		var records []SearchResults
+		for record := range resultChan {
 			if record.Data == nil {
-				v := "Data is not exist"
-				data += v
+				records = append(records, SearchResults{
+					Status: false,
+					Error:  "record not found",
+				})
 				continue
 			}
-			data = data + "\n" + printer.Sprint(record.Data)
+			records = append(records, SearchResults{
+				Status: true,
+				Data:   string(nodeTobyte(record.Data)),
+			})
 		}
+		r = append(r, Results{
+			Id:           i,
+			QueryResults: records,
+		})
 	}
-	result, err := json.Marshal(data)
+	result, err := json.Marshal(r)
 	if err != nil {
 		log.Println("Marshal Results ERROR: ", err)
 		info := fmt.Sprintf("Marshal Results ERROR: %v", err)
@@ -93,8 +120,8 @@ func search(event *Oracle.OracleSearch) {
 	//response to oracle
 	_, err = config.OracleContract.SearchRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 	if err != nil {
-		log.Println("Req function get an error : ", err)
+		log.Println("Req function get an Error : ", err)
 	} else {
-		log.Println("[", event.ColName, "]", "Search data success")
+		log.Println("[", event.ColName, "]", "Search Data success")
 	}
 }
