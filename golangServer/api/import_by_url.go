@@ -3,7 +3,6 @@ package api
 import (
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
-	"bytes"
 	"context"
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -35,7 +34,7 @@ func ImportEventListener() {
 	}
 }
 
-// Import data to memory db
+// Import Data to memory db
 func importByUrl(event *Oracle.OracleImportFromUrl) {
 	var statement bool
 	tps := GenTransactOpts(config.GasLimit)
@@ -72,8 +71,15 @@ func importByUrl(event *Oracle.OracleImportFromUrl) {
 		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
 		return
 	}
-	if resp.Header.Get("Content-Length") == "0" {
+	if resp.ContentLength == 0 {
 		info := fmt.Sprintf("Empty content, Content-Length = 0")
+		statement = false
+		//response to oracle
+		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
+		return
+	}
+	if resp.ContentLength > config.MaxDataSizeByUrl {
+		info := fmt.Sprintf("Data is too big, maxsize = %v Mb", config.MaxDataSizeByUrl/1024/1024)
 		statement = false
 		//response to oracle
 		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
@@ -98,34 +104,12 @@ func importByUrl(event *Oracle.OracleImportFromUrl) {
 		}
 	case "ndjson":
 		body, _ := io.ReadAll(resp.Body)
-		jsonArrayStr := string(body)
-
-		cleanedStr := strings.Trim(jsonArrayStr, "[]")
-		objects := strings.Split(cleanedStr, `},{`)
-		var resultBuilder bytes.Buffer
-		for i, obj := range objects {
-			var prefix, suffix string
-			if i == 0 {
-				prefix = ""
-			} else {
-				prefix = "{"
-			}
-			if i == len(objects)-1 {
-				suffix = ""
-			} else {
-				suffix = "}"
-			}
-			// 将处理后的对象追加到结果字符串中，并在每个对象之间添加换行符
-			resultBuilder.WriteString(prefix + obj + suffix + "\n")
-		}
-		resultStr := resultBuilder.String()
-
-		reader := strings.NewReader(resultStr)
-		// insert data
+		reader := strings.NewReader(string(body))
+		// insert Data
 		err = dbC.IndexNDJSON(ctx, reader)
 		if err != nil {
-			log.Println("Import data ERROR: ", err)
-			info := fmt.Sprintf("Import data ERROR: %v", err)
+			log.Println("Import Data ERROR: ", err)
+			info := fmt.Sprintf("Import Data ERROR: %v", err)
 			statement = false
 			//response to oracle
 			config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
@@ -137,8 +121,8 @@ func importByUrl(event *Oracle.OracleImportFromUrl) {
 	//response to oracle
 	_, err = config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, "")
 	if err != nil {
-		log.Println("Req function get an error : ", err)
+		log.Println("Req function get an Error : ", err)
 	} else {
-		log.Println("[", event.ColName, "]", "Import data success")
+		log.Println("[", event.ColName, "]", "Import Data success")
 	}
 }
