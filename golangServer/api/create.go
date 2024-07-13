@@ -55,7 +55,7 @@ func create(event *Oracle.OracleCreate) {
 		//response to oracle
 		_, err = config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, "")
 		if err != nil {
-			log.Println("Req function get an error : ", err)
+			log.Println("Req function get an Error : ", err)
 			db.DeleteCol(colName)
 		} else {
 			log.Println("[", colName, "]", "Create collection success")
@@ -86,7 +86,7 @@ func create(event *Oracle.OracleCreate) {
 		//response to oracle
 		_, err = config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, "")
 		if err != nil {
-			log.Println("Req function get an error : ", err)
+			log.Println("Req function get an Error : ", err)
 			db.DeleteCol(colName)
 		} else {
 			log.Println("[", colName, "]", "Create memory db success")

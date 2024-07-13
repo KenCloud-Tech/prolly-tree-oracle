@@ -31,7 +31,7 @@ func GetEventListener() {
 	}
 }
 
-// Get data from memory db
+// Get Data from memory db
 func get(event *Oracle.OracleGet) {
 	var statement bool
 	tps := GenTransactOpts(config.GasLimit)
@@ -50,8 +50,8 @@ func get(event *Oracle.OracleGet) {
 	}
 	node, err := col.Get(ctx, event.RecordID)
 	if err != nil {
-		log.Println("[", event.ColName, "]", "Get data ERROR: ", err)
-		info := fmt.Sprintf("Get data ERROR: %v", err)
+		log.Println("[", event.ColName, "]", "Get Data ERROR: ", err)
+		info := fmt.Sprintf("Get Data ERROR: %v", err)
 		statement = false
 		//response to oracle
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
@@ -64,20 +64,12 @@ func get(event *Oracle.OracleGet) {
 		return
 	}
 	result := nodeTobyte(node)
-	if err != nil {
-		log.Println("Marshal Results ERROR: ", err)
-		info := fmt.Sprintf("Marshal Results ERROR: %v", err)
-		statement = false
-		//response to oracle
-		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-		return
-	}
 	statement = true
 	//response to oracle
 	_, err = config.OracleContract.GetRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 	if err != nil {
-		log.Println("Req function get an error : ", err)
+		log.Println("Req function get an Error : ", err)
 	} else {
-		log.Println("[", event.ColName, "]", "Get data success")
+		log.Println("[", event.ColName, "]", "Get Data success")
 	}
 }

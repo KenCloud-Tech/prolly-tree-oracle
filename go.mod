@@ -5,6 +5,8 @@ go 1.22.3
 require (
 	github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20231129153720-9f2256786715
 	github.com/ethereum/go-ethereum v1.14.3
+	github.com/gin-gonic/gin v1.10.0
+	github.com/ipfs/go-cid v0.4.1
 	github.com/ipld/go-ipld-prime v0.21.0
 )
 
@@ -26,7 +28,6 @@ require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.10.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
@@ -39,7 +40,6 @@ require (
 	github.com/holiman/uint256 v1.2.4 // indirect
 	github.com/ipfs/bbloom v0.0.4 // indirect
 	github.com/ipfs/go-block-format v0.1.2 // indirect
-	github.com/ipfs/go-cid v0.4.1 // indirect
 	github.com/ipfs/go-datastore v0.6.0 // indirect
 	github.com/ipfs/go-ipfs-blockstore v1.3.0 // indirect
 	github.com/ipfs/go-ipfs-ds-help v1.1.0 // indirect

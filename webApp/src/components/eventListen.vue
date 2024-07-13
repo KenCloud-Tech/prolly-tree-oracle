@@ -26,9 +26,17 @@ onMounted(() => {
         ReqState.value = `Request ID: ${reqID.toString()}\nUser: ${user}\nStatement: ${statement}\nInfo: ${info}`
     });
     oracle.on("CatchData", (reqID, data, event) => {
-        const uint8Array = hexToUint8Array(data).slice(1);
-        let decoder = new TextDecoder("utf-8");
-        let str = decoder.decode(uint8Array);
+
+        const byteArray = hexToUint8Array(data).slice(1);
+        const decoder1 = new TextDecoder('utf-8');
+        const stringData = decoder1.decode(byteArray);
+
+        const jsonData = JSON.parse(stringData);
+        let str = JSON.stringify(jsonData)
+        
+        str = str.replace(/\\n/g, '')
+            .replace(/\\"/g, '"')
+            .replace(/\},\{/g, '},\n{')
         CatchData.value = `Request ID: ${reqID.toString()}\nData: ${str}`
     });
 

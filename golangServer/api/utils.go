@@ -103,20 +103,22 @@ func IngestCSV(ctx context.Context, source io.Reader, collection *indexer.Collec
 	return nil
 }
 
-type eq struct {
-	IndexName string
-	IndexVal  any
+type Eq struct {
+	IndexName    string
+	IndexVal     any
+	IndexValType string
 }
-type cmp struct {
+type Cmp struct {
 	//	GreaterThan Op = "GreaterThan"
 	//	LessThan    Op = "LessThan"
-	Op        string
-	IndexName string
-	IndexVal  any
+	Op           string
+	IndexName    string
+	IndexVal     any
+	IndexValType string
 }
 type Queryer struct {
-	Equal   eq
-	Compare cmp
+	Equal   Eq
+	Compare Cmp
 	Sort    string
 	Limit   int
 	Skip    int
@@ -125,8 +127,8 @@ type Queryer struct {
 func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 	if q.Equal.IndexName != "" {
 		val := q.Equal.IndexVal
-		switch val.(type) {
-		case string:
+		switch q.Equal.IndexValType {
+		case "string":
 			nq = indexer.Query{
 				Equal: map[string]ipld.Node{q.Equal.IndexName: basicnode.NewString(val.(string))},
 				Sort:  q.Sort,
@@ -134,15 +136,15 @@ func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 				Limit: q.Limit,
 			}
 
-		case int:
+		case "int":
 			nq = indexer.Query{
-				Equal: map[string]ipld.Node{q.Equal.IndexName: basicnode.NewInt(val.(int64))},
+				Equal: map[string]ipld.Node{q.Equal.IndexName: basicnode.NewInt(int64(val.(float64)))},
 				Sort:  q.Sort,
 				Skip:  q.Skip,
 				Limit: q.Limit,
 			}
 
-		case float64:
+		case "float":
 			nq = indexer.Query{
 				Equal: map[string]ipld.Node{q.Equal.IndexName: basicnode.NewFloat(val.(float64))},
 				Sort:  q.Sort,
@@ -150,7 +152,7 @@ func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 				Limit: q.Limit,
 			}
 
-		case []byte:
+		case "byte":
 			nq = indexer.Query{
 				Equal: map[string]ipld.Node{q.Equal.IndexName: basicnode.NewBytes(val.([]byte))},
 				Sort:  q.Sort,
@@ -162,8 +164,8 @@ func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 	}
 	if q.Compare.Op != "" {
 		val := q.Compare.IndexVal
-		switch val.(type) {
-		case string:
+		switch q.Compare.IndexValType {
+		case "string":
 			nd := basicnode.NewString(val.(string))
 			nq = indexer.Query{
 				Compare: &indexer.CompareCondition{
@@ -175,8 +177,8 @@ func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 				Skip:  q.Skip,
 				Limit: q.Limit,
 			}
-		case int:
-			nd := basicnode.NewInt(val.(int64))
+		case "int":
+			nd := basicnode.NewInt(int64(val.(float64)))
 			nq = indexer.Query{
 				Compare: &indexer.CompareCondition{
 					Cmp:       indexer.Op(q.Compare.Op),
@@ -187,7 +189,7 @@ func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 				Skip:  q.Skip,
 				Limit: q.Limit,
 			}
-		case float64:
+		case "float":
 			nd := basicnode.NewFloat(val.(float64))
 			nq = indexer.Query{
 				Compare: &indexer.CompareCondition{
@@ -199,7 +201,7 @@ func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 				Skip:  q.Skip,
 				Limit: q.Limit,
 			}
-		case []byte:
+		case "byte":
 			nd := basicnode.NewBytes(val.([]byte))
 			nq = indexer.Query{
 				Compare: &indexer.CompareCondition{

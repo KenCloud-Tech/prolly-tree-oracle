@@ -37,12 +37,31 @@ query:
 {
   "Equal": {
     "IndexName": "name",
-    "IndexVal": "Bob"
+    "IndexVal": "Bob",
+    "IndexValType": "string"
   },
   "Compare": {
     "Op": "",
     "IndexName": "",
-    "IndexVal": null
+    "IndexVal": null,
+    "IndexValType": ""
+  },
+  "Sort": "",
+  "Limit": 0,
+  "Skip": 0
+},
+
+{
+  "Equal": {
+    "IndexName": "",
+    "IndexVal": "",
+    "IndexValType": ""
+  },
+  "Compare": {
+    "Op": "GreaterThan",
+    "IndexName": "age",
+    "IndexVal": 18,
+    "IndexValType": "int"
   },
   "Sort": "",
   "Limit": 0,

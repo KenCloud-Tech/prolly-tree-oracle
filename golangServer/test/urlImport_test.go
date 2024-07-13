@@ -1,7 +1,6 @@
 package test
 
 import (
-	"Oracle.com/golangServer/api"
 	"context"
 	"fmt"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
@@ -15,9 +14,9 @@ import (
 func TestImport(t *testing.T) {
 	ctx := context.Background()
 	db, _ := indexer.NewMemoryDatabase()
-	collection, _ := db.Collection("demo", "Series_Title")
+	collection, _ := db.Collection("demo", "name")
 
-	resp, err := http.Get("http://127.0.0.1:8080/data.csv")
+	resp, err := http.Get("http://127.0.0.1:8080/ndjson")
 	if err != nil {
 		fmt.Println("请求失败：", err)
 		return
@@ -25,11 +24,9 @@ func TestImport(t *testing.T) {
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	reader := strings.NewReader(string(body))
-	err = api.IngestCSV(ctx, reader, collection)
-	err = db.ApplyChanges(ctx)
-
+	err = collection.IndexNDJSON(ctx, reader)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 	records, err := collection.Iterate(ctx)
 	if err != nil {

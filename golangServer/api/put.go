@@ -32,7 +32,7 @@ func PutEventListener() {
 	}
 }
 
-// Put data to memory db
+// Put Data to memory db
 func put(event *Oracle.OraclePut) {
 	var statement bool
 	tps := GenTransactOpts(config.GasLimit)
@@ -52,11 +52,11 @@ func put(event *Oracle.OraclePut) {
 	}
 	strData := string(event.Data)
 	reader := strings.NewReader(strData)
-	// insert data
+	// insert Data
 	err = dbC.IndexNDJSON(ctx, reader)
 	if err != nil {
-		log.Println("Put data ERROR: ", err)
-		info := fmt.Sprintf("Put data ERROR: %v", err)
+		log.Println("Put Data ERROR: ", err)
+		info := fmt.Sprintf("Put Data ERROR: %v", err)
 		statement = false
 		//response to oracle
 		config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, info)
@@ -67,8 +67,8 @@ func put(event *Oracle.OraclePut) {
 	//response to oracle
 	_, err = config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, "")
 	if err != nil {
-		log.Println("Req function get an error : ", err)
+		log.Println("Req function get an Error : ", err)
 	} else {
-		log.Println("[", event.ColName, "]", "Put data success")
+		log.Println("[", event.ColName, "]", "Put Data success")
 	}
 }
