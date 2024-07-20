@@ -7,10 +7,11 @@ import {Permission} from "./interfaces/permission.sol";
 import {util} from "./utils.sol";
 
 contract Oracle is IOracle,OracleInterface, util {
-    constructor(uint basefee, uint bytefee) payable {
+    constructor(uint basefee, uint bytefee, uint urlfee) payable {
         owner = payable(msg.sender);
         baseGasFee = basefee;
         gasPerByte = bytefee;
+        gasPerByteByUrl = urlfee;
         CurrentReqID = 1;
     }
 
@@ -151,20 +152,28 @@ contract Oracle is IOracle,OracleInterface, util {
     
     // Import datas off-chain
     function Import_from_url(string calldata dbName, string calldata colName, string calldata url, string calldata format) external payable{
-        pay(0);
+        require(msg.value >= baseGasFee, "Insufficient gas fee");
         require(dbOwner[dbName]==address(0) || dbOwner[dbName]==msg.sender || permission[msg.sender][dbName].allowWrite == true,  "You do not have permission to write");
         require(keccak256(bytes(format)) == keccak256(bytes("csv")) || keccak256(bytes(format)) == keccak256(bytes("ndjson")), "The 'format' must be 'csv' or 'ndjson'");
         require(cols[dbName][colName] != false, "This collection has not been created yet");
+        urlFee[msg.sender] += msg.value;
         uint reqID = CurrentReqID;
         CurrentReqID++;
-        emit import_from_url(reqID, dbName, colName, url, format, msg.sender);
+        emit import_from_url(reqID, dbName, colName, url, msg.value, format, msg.sender);
     }
 
-    function Import_from_url_Rsp(uint reqID, bool statement, address sender, string calldata info) onlyOracleOwner external {
+    function Import_from_url_Rsp(uint reqID, bool statement, uint size, address sender, string calldata info) onlyOracleOwner external {
         if (statement == true) {
-            emit ReqState(reqID, sender, true, "Import datas success.");
-            reqStatement[reqID] = true;
+            bool payState = pay(size, sender);
+            if (payState == false){
+                emit ReqState(reqID, sender, false, "Insufficient gas fee");
+                reqStatement[reqID] = false;
+            } else {
+                emit ReqState(reqID, sender, true, "Import datas success.");
+                reqStatement[reqID] = true;
+            }
         } else {
+            pay(0, sender);
             emit ReqState(reqID, sender, false, info);
             reqStatement[reqID] = false;
         }

@@ -23,6 +23,8 @@ contract IOracle {
     mapping(address => mapping(string => Permission)) internal permission;
     // A mapping of ReqID to request statement
     mapping(uint => bool) internal reqStatement;
+    //Used to record the gas paid by the user when importing the URL
+    mapping(address => uint) internal urlFee;
 
     function GetReqState(uint ReqID) public view returns (bool){
         return reqStatement[ReqID];
@@ -31,6 +33,7 @@ contract IOracle {
     
     uint public baseGasFee ;
     uint public gasPerByte ;
+    uint public gasPerByteByUrl ;
 
     
 

@@ -13,8 +13,6 @@ const (
 	ContractAddress       = "0x7F221E7aa73Bc3BEd7f13ac3F6c74B8412ffe8aC"
 	ChainID               = 1337
 	SaveDataPath          = "golangServer/savedDatas/"
-
-	MaxDataSizeByUrl = 1024 * 1024 * 128 //128Mb
 )
 
 var (

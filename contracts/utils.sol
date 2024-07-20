@@ -18,6 +18,18 @@ contract util is IOracle {
         require(msg.value >= fee, "Insufficient gas fee");
         payable(msg.sender).transfer(msg.value - fee);
     }
+    function pay(uint dataSize, address addr) internal returns (bool){
+        uint fee = dataSize * gasPerByteByUrl + baseGasFee;
+        if (urlFee[addr] >= fee){
+            urlFee[addr] -= fee;
+            payable(addr).transfer(urlFee[addr] - fee);
+            return true;
+        } else {
+            urlFee[addr] -= baseGasFee;
+            payable(addr).transfer(urlFee[addr] - baseGasFee);
+            return false;
+        }
+    }
     // Oracle owner withdraws gas
     function withdraws() external onlyOracleOwner{
         require(address(this).balance > 0, "Balance = 0 !");

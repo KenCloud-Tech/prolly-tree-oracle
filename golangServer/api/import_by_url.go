@@ -6,11 +6,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
 	"io"
 	"log"
+	"math/big"
 	"net/http"
 	"strings"
 )
+
+var GasPerByteByUrl, _ = config.OracleContract.GasPerByteByUrl(&bind.CallOpts{From: common.HexToAddress(config.ContractAddress)})
 
 func ImportEventListener() {
 	// Import channels for logs
@@ -39,6 +43,8 @@ func importByUrl(event *Oracle.OracleImportFromUrl) {
 	var statement bool
 	tps := GenTransactOpts(config.GasLimit)
 
+	bigInt := big.Int{}
+	size := bigInt.SetInt64(0)
 	colName := event.ColName
 	ctx := context.Background()
 	dbName := event.DbName
@@ -49,18 +55,20 @@ func importByUrl(event *Oracle.OracleImportFromUrl) {
 		info := fmt.Sprintf("Get collection ERROR: %v", err)
 		statement = false
 		//response to oracle
-		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
+		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
 		return
 	}
-
 	resp, err := http.Get(event.Url)
 	defer resp.Body.Close()
+	ContentLength := resp.ContentLength
+	size = bigInt.SetInt64(ContentLength)
+
 	if err != nil {
 		log.Println("Get datas ERROR: ", err)
 		info := fmt.Sprintf("Get datas ERROR: %v", err)
 		statement = false
 		//response to oracle
-		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
+		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
 		return
 	}
 	if resp.StatusCode != 200 {
@@ -68,21 +76,22 @@ func importByUrl(event *Oracle.OracleImportFromUrl) {
 		info := fmt.Sprintf("Get datas Fail, StatusCode = %v", resp.StatusCode)
 		statement = false
 		//response to oracle
-		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
+		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
 		return
 	}
-	if resp.ContentLength == 0 {
+	if ContentLength == 0 {
 		info := fmt.Sprintf("Empty content, Content-Length = 0")
 		statement = false
 		//response to oracle
-		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
+		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
 		return
 	}
-	if resp.ContentLength > config.MaxDataSizeByUrl {
-		info := fmt.Sprintf("Data is too big, maxsize = %v Mb", config.MaxDataSizeByUrl/1024/1024)
+
+	if event.Value.Int64() > GasPerByteByUrl.Int64()*ContentLength {
+		info := fmt.Sprintf("The data is too large and the gas paid is insufficient.")
 		statement = false
 		//response to oracle
-		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
+		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
 		return
 	}
 
@@ -97,7 +106,7 @@ func importByUrl(event *Oracle.OracleImportFromUrl) {
 			info := fmt.Sprintf("Unmarshal csv ERROR: %v", err)
 			statement = false
 			//response to oracle
-			config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
+			config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
 			return
 		} else {
 			statement = true
@@ -112,14 +121,14 @@ func importByUrl(event *Oracle.OracleImportFromUrl) {
 			info := fmt.Sprintf("Import Data ERROR: %v", err)
 			statement = false
 			//response to oracle
-			config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, info)
+			config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
 			return
 		} else {
 			statement = true
 		}
 	}
 	//response to oracle
-	_, err = config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, event.Sender, "")
+	_, err = config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, "")
 	if err != nil {
 		log.Println("Req function get an Error : ", err)
 	} else {
