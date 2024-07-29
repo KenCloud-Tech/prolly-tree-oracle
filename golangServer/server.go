@@ -81,6 +81,7 @@ func main() {
 	go api.IndexEventListener()
 	go api.GetEventListener()
 	go api.SearchEventListener()
+	go api.ImportEventListener()
 
 	// Set up a channel for receiving signals
 	sigs := make(chan os.Signal, 1)

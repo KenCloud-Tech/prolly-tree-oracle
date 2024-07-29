@@ -53,7 +53,7 @@ func GetCollections() {
 			//response to oracle
 			_, err = config.OracleContract.GetColRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 			if err != nil {
-				log.Println("Req function get an error : ", err)
+				log.Println("Req function get an Error : ", err)
 			} else {
 				log.Println("[Get collections success]")
 			}
@@ -128,7 +128,7 @@ func GetIndexes() {
 			//response to oracle
 			_, err = config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 			if err != nil {
-				log.Println("Req function get an error : ", err)
+				log.Println("Req function get an Error : ", err)
 			} else {
 				log.Println("[Get indexes success]")
 			}
@@ -172,7 +172,7 @@ func GetRootCid() {
 			//response to oracle
 			_, err = config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 			if err != nil {
-				log.Println("Req function get an error : ", err)
+				log.Println("Req function get an Error : ", err)
 			} else {
 				log.Println("[Get RootCid success]")
 			}

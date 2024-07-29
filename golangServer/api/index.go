@@ -63,7 +63,7 @@ func index(event *Oracle.OracleIndex) {
 	statement = true
 	_, err = config.OracleContract.IndexRsp(tps, event.ReqID, statement, event.Sender, "")
 	if err != nil {
-		log.Println("Req function get an error : ", err)
+		log.Println("Req function get an Error : ", err)
 	} else {
 		log.Println("[", event.ColName, "]", "Create index success")
 	}

@@ -31,7 +31,7 @@ var (
 
 // OracleTestMetaData contains all meta data concerning the OracleTest contract.
 var OracleTestMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"AllowWrite\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"CatchData\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"CBFunc\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"}],\"name\":\"Create\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Get\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetCol\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"GetIndex\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"getRootCid\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"}],\"name\":\"Index\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"Put\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"querys\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"}],\"name\":\"Search\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"add\",\"type\":\"address\"}],\"name\":\"setOracle\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"or\",\"outputs\":[{\"internalType\":\"contractOracle\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"v\",\"type\":\"uint256\"}],\"name\":\"AllowWrite\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"info\",\"type\":\"string\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"CBFunc\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"primaryKey\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"v\",\"type\":\"uint256\"}],\"name\":\"Create\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"cid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"GetCol\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"getRootCid\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"url\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"format\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Import_from_url\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Put\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"add\",\"type\":\"address\"}],\"name\":\"setOracle\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"CatchData\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"recordID\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"GetIndex\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"Key\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Index\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"dbName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"colName\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"querys\",\"type\":\"bytes\"},{\"internalType\":\"string\",\"name\":\"callBack\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Search\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ReqID\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"},{\"inputs\":[],\"name\":\"oracleADD\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
 }
 
 // OracleTestABI is the input ABI used to generate the binding from.
@@ -180,12 +180,12 @@ func (_OracleTest *OracleTestTransactorRaw) Transact(opts *bind.TransactOpts, me
 	return _OracleTest.Contract.contract.Transact(opts, method, params...)
 }
 
-// Or is a free data retrieval call binding the contract method 0x2d5e74d8.
+// OracleADD is a free data retrieval call binding the contract method 0x1d630361.
 //
-// Solidity: function or() view returns(address)
-func (_OracleTest *OracleTestCaller) Or(opts *bind.CallOpts) (common.Address, error) {
+// Solidity: function oracleADD() view returns(address)
+func (_OracleTest *OracleTestCaller) OracleADD(opts *bind.CallOpts) (common.Address, error) {
 	var out []interface{}
-	err := _OracleTest.contract.Call(opts, &out, "or")
+	err := _OracleTest.contract.Call(opts, &out, "oracleADD")
 
 	if err != nil {
 		return *new(common.Address), err
@@ -197,39 +197,39 @@ func (_OracleTest *OracleTestCaller) Or(opts *bind.CallOpts) (common.Address, er
 
 }
 
-// Or is a free data retrieval call binding the contract method 0x2d5e74d8.
+// OracleADD is a free data retrieval call binding the contract method 0x1d630361.
 //
-// Solidity: function or() view returns(address)
-func (_OracleTest *OracleTestSession) Or() (common.Address, error) {
-	return _OracleTest.Contract.Or(&_OracleTest.CallOpts)
+// Solidity: function oracleADD() view returns(address)
+func (_OracleTest *OracleTestSession) OracleADD() (common.Address, error) {
+	return _OracleTest.Contract.OracleADD(&_OracleTest.CallOpts)
 }
 
-// Or is a free data retrieval call binding the contract method 0x2d5e74d8.
+// OracleADD is a free data retrieval call binding the contract method 0x1d630361.
 //
-// Solidity: function or() view returns(address)
-func (_OracleTest *OracleTestCallerSession) Or() (common.Address, error) {
-	return _OracleTest.Contract.Or(&_OracleTest.CallOpts)
+// Solidity: function oracleADD() view returns(address)
+func (_OracleTest *OracleTestCallerSession) OracleADD() (common.Address, error) {
+	return _OracleTest.Contract.OracleADD(&_OracleTest.CallOpts)
 }
 
-// AllowWrite is a paid mutator transaction binding the contract method 0xb89f561f.
+// AllowWrite is a paid mutator transaction binding the contract method 0xff32ffc7.
 //
-// Solidity: function AllowWrite(address to) returns()
-func (_OracleTest *OracleTestTransactor) AllowWrite(opts *bind.TransactOpts, to common.Address) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "AllowWrite", to)
+// Solidity: function AllowWrite(address to, uint256 v) payable returns(uint256 ReqID, string info)
+func (_OracleTest *OracleTestTransactor) AllowWrite(opts *bind.TransactOpts, to common.Address, v *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "AllowWrite", to, v)
 }
 
-// AllowWrite is a paid mutator transaction binding the contract method 0xb89f561f.
+// AllowWrite is a paid mutator transaction binding the contract method 0xff32ffc7.
 //
-// Solidity: function AllowWrite(address to) returns()
-func (_OracleTest *OracleTestSession) AllowWrite(to common.Address) (*types.Transaction, error) {
-	return _OracleTest.Contract.AllowWrite(&_OracleTest.TransactOpts, to)
+// Solidity: function AllowWrite(address to, uint256 v) payable returns(uint256 ReqID, string info)
+func (_OracleTest *OracleTestSession) AllowWrite(to common.Address, v *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.AllowWrite(&_OracleTest.TransactOpts, to, v)
 }
 
-// AllowWrite is a paid mutator transaction binding the contract method 0xb89f561f.
+// AllowWrite is a paid mutator transaction binding the contract method 0xff32ffc7.
 //
-// Solidity: function AllowWrite(address to) returns()
-func (_OracleTest *OracleTestTransactorSession) AllowWrite(to common.Address) (*types.Transaction, error) {
-	return _OracleTest.Contract.AllowWrite(&_OracleTest.TransactOpts, to)
+// Solidity: function AllowWrite(address to, uint256 v) payable returns(uint256 ReqID, string info)
+func (_OracleTest *OracleTestTransactorSession) AllowWrite(to common.Address, v *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.AllowWrite(&_OracleTest.TransactOpts, to, v)
 }
 
 // CBFunc is a paid mutator transaction binding the contract method 0xa374f08b.
@@ -253,172 +253,193 @@ func (_OracleTest *OracleTestTransactorSession) CBFunc(data []byte) (*types.Tran
 	return _OracleTest.Contract.CBFunc(&_OracleTest.TransactOpts, data)
 }
 
-// Create is a paid mutator transaction binding the contract method 0x2e4bf45d.
+// Create is a paid mutator transaction binding the contract method 0xa6d78a07.
 //
-// Solidity: function Create(string dbName, string colName, string primaryKey) returns()
-func (_OracleTest *OracleTestTransactor) Create(opts *bind.TransactOpts, dbName string, colName string, primaryKey string) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "Create", dbName, colName, primaryKey)
+// Solidity: function Create(string dbName, string colName, string primaryKey, uint256 v) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactor) Create(opts *bind.TransactOpts, dbName string, colName string, primaryKey string, v *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "Create", dbName, colName, primaryKey, v)
 }
 
-// Create is a paid mutator transaction binding the contract method 0x2e4bf45d.
+// Create is a paid mutator transaction binding the contract method 0xa6d78a07.
 //
-// Solidity: function Create(string dbName, string colName, string primaryKey) returns()
-func (_OracleTest *OracleTestSession) Create(dbName string, colName string, primaryKey string) (*types.Transaction, error) {
-	return _OracleTest.Contract.Create(&_OracleTest.TransactOpts, dbName, colName, primaryKey)
+// Solidity: function Create(string dbName, string colName, string primaryKey, uint256 v) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestSession) Create(dbName string, colName string, primaryKey string, v *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Create(&_OracleTest.TransactOpts, dbName, colName, primaryKey, v)
 }
 
-// Create is a paid mutator transaction binding the contract method 0x2e4bf45d.
+// Create is a paid mutator transaction binding the contract method 0xa6d78a07.
 //
-// Solidity: function Create(string dbName, string colName, string primaryKey) returns()
-func (_OracleTest *OracleTestTransactorSession) Create(dbName string, colName string, primaryKey string) (*types.Transaction, error) {
-	return _OracleTest.Contract.Create(&_OracleTest.TransactOpts, dbName, colName, primaryKey)
+// Solidity: function Create(string dbName, string colName, string primaryKey, uint256 v) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactorSession) Create(dbName string, colName string, primaryKey string, v *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Create(&_OracleTest.TransactOpts, dbName, colName, primaryKey, v)
 }
 
-// Get is a paid mutator transaction binding the contract method 0x0405473e.
+// Get is a paid mutator transaction binding the contract method 0x5113f643.
 //
-// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack) returns()
-func (_OracleTest *OracleTestTransactor) Get(opts *bind.TransactOpts, dbName string, colName string, recordID []byte, callBack string) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "Get", dbName, colName, recordID, callBack)
+// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactor) Get(opts *bind.TransactOpts, dbName string, colName string, recordID []byte, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "Get", dbName, colName, recordID, callBack, value)
 }
 
-// Get is a paid mutator transaction binding the contract method 0x0405473e.
+// Get is a paid mutator transaction binding the contract method 0x5113f643.
 //
-// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack) returns()
-func (_OracleTest *OracleTestSession) Get(dbName string, colName string, recordID []byte, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.Get(&_OracleTest.TransactOpts, dbName, colName, recordID, callBack)
+// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestSession) Get(dbName string, colName string, recordID []byte, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Get(&_OracleTest.TransactOpts, dbName, colName, recordID, callBack, value)
 }
 
-// Get is a paid mutator transaction binding the contract method 0x0405473e.
+// Get is a paid mutator transaction binding the contract method 0x5113f643.
 //
-// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack) returns()
-func (_OracleTest *OracleTestTransactorSession) Get(dbName string, colName string, recordID []byte, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.Get(&_OracleTest.TransactOpts, dbName, colName, recordID, callBack)
+// Solidity: function Get(string dbName, string colName, bytes recordID, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactorSession) Get(dbName string, colName string, recordID []byte, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Get(&_OracleTest.TransactOpts, dbName, colName, recordID, callBack, value)
 }
 
-// GetCol is a paid mutator transaction binding the contract method 0xe722d92e.
+// GetCol is a paid mutator transaction binding the contract method 0xf4aa7959.
 //
-// Solidity: function GetCol(string cid, string callBack) returns()
-func (_OracleTest *OracleTestTransactor) GetCol(opts *bind.TransactOpts, cid string, callBack string) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "GetCol", cid, callBack)
+// Solidity: function GetCol(string cid, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactor) GetCol(opts *bind.TransactOpts, cid string, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "GetCol", cid, callBack, value)
 }
 
-// GetCol is a paid mutator transaction binding the contract method 0xe722d92e.
+// GetCol is a paid mutator transaction binding the contract method 0xf4aa7959.
 //
-// Solidity: function GetCol(string cid, string callBack) returns()
-func (_OracleTest *OracleTestSession) GetCol(cid string, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.GetCol(&_OracleTest.TransactOpts, cid, callBack)
+// Solidity: function GetCol(string cid, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestSession) GetCol(cid string, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.GetCol(&_OracleTest.TransactOpts, cid, callBack, value)
 }
 
-// GetCol is a paid mutator transaction binding the contract method 0xe722d92e.
+// GetCol is a paid mutator transaction binding the contract method 0xf4aa7959.
 //
-// Solidity: function GetCol(string cid, string callBack) returns()
-func (_OracleTest *OracleTestTransactorSession) GetCol(cid string, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.GetCol(&_OracleTest.TransactOpts, cid, callBack)
+// Solidity: function GetCol(string cid, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactorSession) GetCol(cid string, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.GetCol(&_OracleTest.TransactOpts, cid, callBack, value)
 }
 
-// GetIndex is a paid mutator transaction binding the contract method 0x0a362255.
+// GetIndex is a paid mutator transaction binding the contract method 0xd15dc3d1.
 //
-// Solidity: function GetIndex(string dbName, string colName, string callBack) returns()
-func (_OracleTest *OracleTestTransactor) GetIndex(opts *bind.TransactOpts, dbName string, colName string, callBack string) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "GetIndex", dbName, colName, callBack)
+// Solidity: function GetIndex(string dbName, string colName, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactor) GetIndex(opts *bind.TransactOpts, dbName string, colName string, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "GetIndex", dbName, colName, callBack, value)
 }
 
-// GetIndex is a paid mutator transaction binding the contract method 0x0a362255.
+// GetIndex is a paid mutator transaction binding the contract method 0xd15dc3d1.
 //
-// Solidity: function GetIndex(string dbName, string colName, string callBack) returns()
-func (_OracleTest *OracleTestSession) GetIndex(dbName string, colName string, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.GetIndex(&_OracleTest.TransactOpts, dbName, colName, callBack)
+// Solidity: function GetIndex(string dbName, string colName, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestSession) GetIndex(dbName string, colName string, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.GetIndex(&_OracleTest.TransactOpts, dbName, colName, callBack, value)
 }
 
-// GetIndex is a paid mutator transaction binding the contract method 0x0a362255.
+// GetIndex is a paid mutator transaction binding the contract method 0xd15dc3d1.
 //
-// Solidity: function GetIndex(string dbName, string colName, string callBack) returns()
-func (_OracleTest *OracleTestTransactorSession) GetIndex(dbName string, colName string, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.GetIndex(&_OracleTest.TransactOpts, dbName, colName, callBack)
+// Solidity: function GetIndex(string dbName, string colName, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactorSession) GetIndex(dbName string, colName string, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.GetIndex(&_OracleTest.TransactOpts, dbName, colName, callBack, value)
 }
 
-// Index is a paid mutator transaction binding the contract method 0x38e4fc73.
+// ImportFromUrl is a paid mutator transaction binding the contract method 0x7477d39c.
 //
-// Solidity: function Index(string dbName, string colName, string Key) returns()
-func (_OracleTest *OracleTestTransactor) Index(opts *bind.TransactOpts, dbName string, colName string, Key string) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "Index", dbName, colName, Key)
+// Solidity: function Import_from_url(string dbName, string colName, string url, string format, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactor) ImportFromUrl(opts *bind.TransactOpts, dbName string, colName string, url string, format string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "Import_from_url", dbName, colName, url, format, value)
 }
 
-// Index is a paid mutator transaction binding the contract method 0x38e4fc73.
+// ImportFromUrl is a paid mutator transaction binding the contract method 0x7477d39c.
 //
-// Solidity: function Index(string dbName, string colName, string Key) returns()
-func (_OracleTest *OracleTestSession) Index(dbName string, colName string, Key string) (*types.Transaction, error) {
-	return _OracleTest.Contract.Index(&_OracleTest.TransactOpts, dbName, colName, Key)
+// Solidity: function Import_from_url(string dbName, string colName, string url, string format, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestSession) ImportFromUrl(dbName string, colName string, url string, format string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.ImportFromUrl(&_OracleTest.TransactOpts, dbName, colName, url, format, value)
 }
 
-// Index is a paid mutator transaction binding the contract method 0x38e4fc73.
+// ImportFromUrl is a paid mutator transaction binding the contract method 0x7477d39c.
 //
-// Solidity: function Index(string dbName, string colName, string Key) returns()
-func (_OracleTest *OracleTestTransactorSession) Index(dbName string, colName string, Key string) (*types.Transaction, error) {
-	return _OracleTest.Contract.Index(&_OracleTest.TransactOpts, dbName, colName, Key)
+// Solidity: function Import_from_url(string dbName, string colName, string url, string format, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactorSession) ImportFromUrl(dbName string, colName string, url string, format string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.ImportFromUrl(&_OracleTest.TransactOpts, dbName, colName, url, format, value)
 }
 
-// Put is a paid mutator transaction binding the contract method 0x717a9408.
+// Index is a paid mutator transaction binding the contract method 0x51ef21bd.
 //
-// Solidity: function Put(string dbName, string colName, bytes data) returns()
-func (_OracleTest *OracleTestTransactor) Put(opts *bind.TransactOpts, dbName string, colName string, data []byte) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "Put", dbName, colName, data)
+// Solidity: function Index(string dbName, string colName, string Key, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactor) Index(opts *bind.TransactOpts, dbName string, colName string, Key string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "Index", dbName, colName, Key, value)
 }
 
-// Put is a paid mutator transaction binding the contract method 0x717a9408.
+// Index is a paid mutator transaction binding the contract method 0x51ef21bd.
 //
-// Solidity: function Put(string dbName, string colName, bytes data) returns()
-func (_OracleTest *OracleTestSession) Put(dbName string, colName string, data []byte) (*types.Transaction, error) {
-	return _OracleTest.Contract.Put(&_OracleTest.TransactOpts, dbName, colName, data)
+// Solidity: function Index(string dbName, string colName, string Key, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestSession) Index(dbName string, colName string, Key string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Index(&_OracleTest.TransactOpts, dbName, colName, Key, value)
 }
 
-// Put is a paid mutator transaction binding the contract method 0x717a9408.
+// Index is a paid mutator transaction binding the contract method 0x51ef21bd.
 //
-// Solidity: function Put(string dbName, string colName, bytes data) returns()
-func (_OracleTest *OracleTestTransactorSession) Put(dbName string, colName string, data []byte) (*types.Transaction, error) {
-	return _OracleTest.Contract.Put(&_OracleTest.TransactOpts, dbName, colName, data)
+// Solidity: function Index(string dbName, string colName, string Key, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactorSession) Index(dbName string, colName string, Key string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Index(&_OracleTest.TransactOpts, dbName, colName, Key, value)
 }
 
-// Search is a paid mutator transaction binding the contract method 0x38ae4ea1.
+// Put is a paid mutator transaction binding the contract method 0x359158a4.
 //
-// Solidity: function Search(string dbName, string colName, bytes querys, string callBack) returns()
-func (_OracleTest *OracleTestTransactor) Search(opts *bind.TransactOpts, dbName string, colName string, querys []byte, callBack string) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "Search", dbName, colName, querys, callBack)
+// Solidity: function Put(string dbName, string colName, bytes data, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactor) Put(opts *bind.TransactOpts, dbName string, colName string, data []byte, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "Put", dbName, colName, data, value)
 }
 
-// Search is a paid mutator transaction binding the contract method 0x38ae4ea1.
+// Put is a paid mutator transaction binding the contract method 0x359158a4.
 //
-// Solidity: function Search(string dbName, string colName, bytes querys, string callBack) returns()
-func (_OracleTest *OracleTestSession) Search(dbName string, colName string, querys []byte, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.Search(&_OracleTest.TransactOpts, dbName, colName, querys, callBack)
+// Solidity: function Put(string dbName, string colName, bytes data, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestSession) Put(dbName string, colName string, data []byte, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Put(&_OracleTest.TransactOpts, dbName, colName, data, value)
 }
 
-// Search is a paid mutator transaction binding the contract method 0x38ae4ea1.
+// Put is a paid mutator transaction binding the contract method 0x359158a4.
 //
-// Solidity: function Search(string dbName, string colName, bytes querys, string callBack) returns()
-func (_OracleTest *OracleTestTransactorSession) Search(dbName string, colName string, querys []byte, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.Search(&_OracleTest.TransactOpts, dbName, colName, querys, callBack)
+// Solidity: function Put(string dbName, string colName, bytes data, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactorSession) Put(dbName string, colName string, data []byte, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Put(&_OracleTest.TransactOpts, dbName, colName, data, value)
 }
 
-// GetRootCid is a paid mutator transaction binding the contract method 0xc7957f27.
+// Search is a paid mutator transaction binding the contract method 0xad1f41c4.
 //
-// Solidity: function getRootCid(string dbName, string callBack) returns()
-func (_OracleTest *OracleTestTransactor) GetRootCid(opts *bind.TransactOpts, dbName string, callBack string) (*types.Transaction, error) {
-	return _OracleTest.contract.Transact(opts, "getRootCid", dbName, callBack)
+// Solidity: function Search(string dbName, string colName, bytes querys, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactor) Search(opts *bind.TransactOpts, dbName string, colName string, querys []byte, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "Search", dbName, colName, querys, callBack, value)
 }
 
-// GetRootCid is a paid mutator transaction binding the contract method 0xc7957f27.
+// Search is a paid mutator transaction binding the contract method 0xad1f41c4.
 //
-// Solidity: function getRootCid(string dbName, string callBack) returns()
-func (_OracleTest *OracleTestSession) GetRootCid(dbName string, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.GetRootCid(&_OracleTest.TransactOpts, dbName, callBack)
+// Solidity: function Search(string dbName, string colName, bytes querys, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestSession) Search(dbName string, colName string, querys []byte, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Search(&_OracleTest.TransactOpts, dbName, colName, querys, callBack, value)
 }
 
-// GetRootCid is a paid mutator transaction binding the contract method 0xc7957f27.
+// Search is a paid mutator transaction binding the contract method 0xad1f41c4.
 //
-// Solidity: function getRootCid(string dbName, string callBack) returns()
-func (_OracleTest *OracleTestTransactorSession) GetRootCid(dbName string, callBack string) (*types.Transaction, error) {
-	return _OracleTest.Contract.GetRootCid(&_OracleTest.TransactOpts, dbName, callBack)
+// Solidity: function Search(string dbName, string colName, bytes querys, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactorSession) Search(dbName string, colName string, querys []byte, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.Search(&_OracleTest.TransactOpts, dbName, colName, querys, callBack, value)
+}
+
+// GetRootCid is a paid mutator transaction binding the contract method 0x0bd4e347.
+//
+// Solidity: function getRootCid(string dbName, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactor) GetRootCid(opts *bind.TransactOpts, dbName string, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.contract.Transact(opts, "getRootCid", dbName, callBack, value)
+}
+
+// GetRootCid is a paid mutator transaction binding the contract method 0x0bd4e347.
+//
+// Solidity: function getRootCid(string dbName, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestSession) GetRootCid(dbName string, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.GetRootCid(&_OracleTest.TransactOpts, dbName, callBack, value)
+}
+
+// GetRootCid is a paid mutator transaction binding the contract method 0x0bd4e347.
+//
+// Solidity: function getRootCid(string dbName, string callBack, uint256 value) payable returns(uint256 ReqID)
+func (_OracleTest *OracleTestTransactorSession) GetRootCid(dbName string, callBack string, value *big.Int) (*types.Transaction, error) {
+	return _OracleTest.Contract.GetRootCid(&_OracleTest.TransactOpts, dbName, callBack, value)
 }
 
 // SetOracle is a paid mutator transaction binding the contract method 0x7adbf973.
@@ -440,6 +461,27 @@ func (_OracleTest *OracleTestSession) SetOracle(add common.Address) (*types.Tran
 // Solidity: function setOracle(address add) returns()
 func (_OracleTest *OracleTestTransactorSession) SetOracle(add common.Address) (*types.Transaction, error) {
 	return _OracleTest.Contract.SetOracle(&_OracleTest.TransactOpts, add)
+}
+
+// Receive is a paid mutator transaction binding the contract receive function.
+//
+// Solidity: receive() payable returns()
+func (_OracleTest *OracleTestTransactor) Receive(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _OracleTest.contract.RawTransact(opts, nil) // calldata is disallowed for receive function
+}
+
+// Receive is a paid mutator transaction binding the contract receive function.
+//
+// Solidity: receive() payable returns()
+func (_OracleTest *OracleTestSession) Receive() (*types.Transaction, error) {
+	return _OracleTest.Contract.Receive(&_OracleTest.TransactOpts)
+}
+
+// Receive is a paid mutator transaction binding the contract receive function.
+//
+// Solidity: receive() payable returns()
+func (_OracleTest *OracleTestTransactorSession) Receive() (*types.Transaction, error) {
+	return _OracleTest.Contract.Receive(&_OracleTest.TransactOpts)
 }
 
 // OracleTestCatchDataIterator is returned from FilterCatchData and is used to iterate over the raw logs and unpacked data for CatchData events raised by the OracleTest contract.
