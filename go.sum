@@ -5,6 +5,10 @@ github.com/Microsoft/go-winio v0.6.1 h1:9/kr64B9VUZrLm5YYwbGtUJnMgqWVOdUAXu6Migc
 github.com/Microsoft/go-winio v0.6.1/go.mod h1:LRdKpFKfdobln8UmuiYcKPot9D2v6svN5+sAH+4kjUM=
 github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20231129153720-9f2256786715 h1:rhdfoZ2XNbTb2ci3IqgCrKos9FG/wKg/HAN5iiGRkd8=
 github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20231129153720-9f2256786715/go.mod h1:ObqbZUmvMZDlYaHugP8Gt+jNm4RuchBNflogZ2yzTTs=
+github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20240906125746-1da79082c47b h1:SX1ilG5fJZY4UjvpyJ/d8xYd2X1+fxYQy1wkf0XQuG8=
+github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20240906125746-1da79082c47b/go.mod h1:ObqbZUmvMZDlYaHugP8Gt+jNm4RuchBNflogZ2yzTTs=
+github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20240906130420-8c1048ffab8a h1:nHWiOVwNwj4RB3kBTQv/r5a5ZkT9WJa0O+VuXjsw8u8=
+github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20240906130420-8c1048ffab8a/go.mod h1:ObqbZUmvMZDlYaHugP8Gt+jNm4RuchBNflogZ2yzTTs=
 github.com/StackExchange/wmi v1.2.1 h1:VIkavFPXSjcnS+O8yTq7NI32k0R5Aj+v39y29VYDOSA=
 github.com/StackExchange/wmi v1.2.1/go.mod h1:rcmrprowKIVzvc+NUiLncP2uuArMWLCbu9SBzvHz7e8=
 github.com/VictoriaMetrics/fastcache v1.12.1 h1:i0mICQuojGDL3KblA7wUNlY5lOK6a4bwt3uRKnkZU40=

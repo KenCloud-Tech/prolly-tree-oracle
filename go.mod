@@ -3,7 +3,7 @@ module Oracle.com
 go 1.22.3
 
 require (
-	github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20231129153720-9f2256786715
+	github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20240906130420-8c1048ffab8a
 	github.com/ethereum/go-ethereum v1.14.3
 	github.com/gin-gonic/gin v1.10.0
 	github.com/ipfs/go-cid v0.4.1

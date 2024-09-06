@@ -31,7 +31,15 @@ func GetCollections() {
 			tps := GenTransactOpts(config.GasLimit)
 
 			db := config.Dbs[event.DbName]
-			cols := db.ListCollections()
+			cols, err := db.ListCollections(context.Background())
+			if err != nil {
+				log.Println("Get collection ERROR: ", err)
+				info := fmt.Sprintf("Get collection ERROR: %v", err)
+				statement = false
+				//response to oracle
+				config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+				return
+			}
 			jsonBytes, err := json.Marshal(cols)
 			if err != nil {
 				log.Println("[", event.DbName, "]", "Trans to json ERROR: ", err)
