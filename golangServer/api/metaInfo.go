@@ -1,20 +1,21 @@
 package api
 
 import (
-	"Oracle.com/golangServer/Oracle"
-	"Oracle.com/golangServer/config"
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"log"
+
+	"Oracle.com/golangServer/Oracle"
+	"Oracle.com/golangServer/config"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 )
 
-func GetCollections() {
+func GetCollections(ctx context.Context) {
 	// Get channels for logs
 	Logs := make(chan *Oracle.OracleGetCol)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := config.OracleContract.WatchGetCol(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to GetCollections events:", err)
@@ -28,10 +29,18 @@ func GetCollections() {
 		case event := <-Logs:
 			log.Println("Received GetCollections event ", event.ReqID)
 			var statement bool
-			tps := GenTransactOpts(config.GasLimit)
+			tps := GenTransactOpts(ctx, config.GasLimit)
 
 			db := config.Dbs[event.DbName]
-			cols := db.ListCollections()
+			cols, err := db.ListCollections(ctx)
+			if err != nil {
+				log.Println("[", event.DbName, "]", "List Collections ERROR: ", err)
+				info := fmt.Sprintf("List Collections ERROR: %v", err)
+				statement = false
+				//response to oracle
+				config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+			}
+
 			jsonBytes, err := json.Marshal(cols)
 			if err != nil {
 				log.Println("[", event.DbName, "]", "Trans to json ERROR: ", err)
@@ -61,11 +70,11 @@ func GetCollections() {
 	}
 }
 
-func GetIndexes() {
+func GetIndexes(ctx context.Context) {
 	// Get channels for logs
 	Logs := make(chan *Oracle.OracleGetIndex)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := config.OracleContract.WatchGetIndex(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to GetIndexes events:", err)
@@ -79,12 +88,12 @@ func GetIndexes() {
 		case event := <-Logs:
 			log.Println("Received GetIndexes event ", event.ReqID)
 			var statement bool
-			ctx := context.Background()
-			tps := GenTransactOpts(config.GasLimit)
+			ctx := ctx
+			tps := GenTransactOpts(ctx, config.GasLimit)
 
 			db := config.Dbs[event.DbName]
 			colName := event.ColName
-			col, err := db.Collection(colName, "")
+			col, err := db.Collection(ctx, colName, "")
 			if err != nil {
 				log.Println("Get collection ERROR: ", err)
 				info := fmt.Sprintf("Get collection ERROR: %v", err)
@@ -136,11 +145,11 @@ func GetIndexes() {
 	}
 }
 
-func GetRootCid() {
+func GetRootCid(ctx context.Context) {
 	// Get channels for logs
 	Logs := make(chan *Oracle.OracleGetRootCid)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := config.OracleContract.WatchGetRootCid(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to WatchGetRootCid events:", err)
@@ -154,7 +163,7 @@ func GetRootCid() {
 		case event := <-Logs:
 			log.Println("Received WatchGetRootCid event ", event.ReqID)
 			var statement bool
-			tps := GenTransactOpts(config.GasLimit)
+			tps := GenTransactOpts(ctx, config.GasLimit)
 
 			db := config.Dbs[event.DbName]
 			rootCid := db.RootCid().String()

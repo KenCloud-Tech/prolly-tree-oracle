@@ -1,26 +1,29 @@
 package api
 
 import (
-	"Oracle.com/golangServer/Oracle"
-	"Oracle.com/golangServer/config"
 	"context"
 	"fmt"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
 	"io"
 	"log"
 	"math/big"
 	"net/http"
 	"strings"
+	"sync"
+
+	"Oracle.com/golangServer/Oracle"
+	"Oracle.com/golangServer/config"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
 )
 
-var GasPerByteByUrl, _ = config.OracleContract.GasPerByteByUrl(&bind.CallOpts{From: common.HexToAddress(config.ContractAddress)})
+var gasPerByteByUrl *big.Int
+var gasPerByteByUrlOnce sync.Once
 
-func ImportEventListener() {
+func ImportEventListener(ctx context.Context) {
 	// Import channels for logs
 	Logs := make(chan *Oracle.OracleImportFromUrl)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := config.OracleContract.WatchImportFromUrl(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to Import events:", err)
@@ -33,23 +36,22 @@ func ImportEventListener() {
 			log.Println("[Error in Event IMPORT:", err)
 		case event := <-Logs:
 			log.Println("Received put event ", event.ReqID)
-			importByUrl(event)
+			importByUrl(ctx, event)
 		}
 	}
 }
 
 // Import Data to memory db
-func importByUrl(event *Oracle.OracleImportFromUrl) {
+func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl) {
 	var statement bool
-	tps := GenTransactOpts(config.GasLimit)
+	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	bigInt := big.Int{}
 	size := bigInt.SetInt64(0)
 	colName := event.ColName
-	ctx := context.Background()
 	dbName := event.DbName
 	db := config.Dbs[dbName]
-	dbC, err := db.Collection(colName, "")
+	dbC, err := db.Collection(ctx, colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)
@@ -87,7 +89,19 @@ func importByUrl(event *Oracle.OracleImportFromUrl) {
 		return
 	}
 
-	if event.Value.Int64() > GasPerByteByUrl.Int64()*ContentLength {
+	gasPerByteByUrlOnce.Do(func() {
+		gasPerByteByUrl, err = config.OracleContract.GasPerByteByUrl(&bind.CallOpts{From: common.HexToAddress(config.ContractAddress)})
+	})
+	if err != nil {
+		log.Println("Get gas per bytes ERROR: ", err)
+		info := fmt.Sprintf("Get gas per bytes ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
+		return
+	}
+
+	if event.Value.Int64() > gasPerByteByUrl.Int64()*ContentLength {
 		info := fmt.Sprintf("The data is too large and the gas paid is insufficient.")
 		statement = false
 		//response to oracle
