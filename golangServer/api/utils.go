@@ -1,11 +1,16 @@
 package api
 
 import (
-	"Oracle.com/golangServer/config"
 	"bytes"
 	"context"
 	"encoding/csv"
 	"encoding/json"
+	"io"
+	"log"
+	"math/big"
+	"strings"
+
+	"Oracle.com/golangServer/config"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ipld/go-ipld-prime"
@@ -13,13 +18,9 @@ import (
 	"github.com/ipld/go-ipld-prime/datamodel"
 	"github.com/ipld/go-ipld-prime/fluent/qp"
 	basicnode "github.com/ipld/go-ipld-prime/node/basicnode"
-	"io"
-	"log"
-	"math/big"
-	"strings"
 )
 
-func GenTransactOpts(GasLimit uint64) *bind.TransactOpts {
+func GenTransactOpts(ctx context.Context, GasLimit uint64) *bind.TransactOpts {
 	// Generate TransactOpts from private key
 	auth, err := bind.NewKeyedTransactorWithChainID(config.PrivateKey, big.NewInt(config.ChainID))
 	if err != nil {
@@ -27,7 +28,7 @@ func GenTransactOpts(GasLimit uint64) *bind.TransactOpts {
 	}
 
 	// Set gas prices and gas limits, these can be set more intelligently through client queries
-	gasPrice, err := config.Client.SuggestGasPrice(context.Background())
+	gasPrice, err := config.Client.SuggestGasPrice(ctx)
 	if err != nil {
 		log.Fatalf("Failed to suggest gas price: %v", err)
 	}

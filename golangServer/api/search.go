@@ -1,13 +1,14 @@
 package api
 
 import (
-	"Oracle.com/golangServer/Oracle"
-	"Oracle.com/golangServer/config"
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"log"
+
+	"Oracle.com/golangServer/Oracle"
+	"Oracle.com/golangServer/config"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 )
 
 type SearchResults struct {
@@ -21,11 +22,11 @@ type Results struct {
 	Error        string
 }
 
-func SearchEventListener() {
+func SearchEventListener(ctx context.Context) {
 	// Get channels for logs
 	Logs := make(chan *Oracle.OracleSearch)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := config.OracleContract.WatchSearch(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to Search events:", err)
@@ -38,15 +39,15 @@ func SearchEventListener() {
 			log.Println("[Error in Event SEARCH]:", err)
 		case event := <-Logs:
 			log.Println("Received search event ", event.ReqID)
-			search(event)
+			search(ctx, event)
 		}
 	}
 }
 
 // Search Data from memory db
-func search(event *Oracle.OracleSearch) {
+func search(ctx context.Context, event *Oracle.OracleSearch) {
 	var statement bool
-	tps := GenTransactOpts(config.GasLimit)
+	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	colName := event.ColName
 	db, ok := config.Dbs[event.DbName]
@@ -58,7 +59,7 @@ func search(event *Oracle.OracleSearch) {
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
 		return
 	}
-	dbC, err := db.Collection(colName, "")
+	dbC, err := db.Collection(ctx, colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)
@@ -80,7 +81,7 @@ func search(event *Oracle.OracleSearch) {
 	var r []Results
 	for i, q := range querys {
 		query := q.Queryer2indexerQ()
-		resultChan, err := dbC.Search(context.Background(), query)
+		resultChan, err := dbC.Search(ctx, query)
 		if err != nil {
 			r = append(r, Results{
 				Id:    i,

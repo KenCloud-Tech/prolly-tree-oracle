@@ -1,20 +1,21 @@
 package api
 
 import (
-	"Oracle.com/golangServer/Oracle"
-	"Oracle.com/golangServer/config"
 	"context"
 	"fmt"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"log"
 	"strings"
+
+	"Oracle.com/golangServer/Oracle"
+	"Oracle.com/golangServer/config"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 )
 
-func PutEventListener() {
+func PutEventListener(ctx context.Context) {
 	// Put channels for logs
 	Logs := make(chan *Oracle.OraclePut)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := config.OracleContract.WatchPut(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to Put events:", err)
@@ -27,21 +28,20 @@ func PutEventListener() {
 			log.Println("[Error in Event PUT]:", err)
 		case event := <-Logs:
 			log.Println("Received put event ", event.ReqID)
-			put(event)
+			put(ctx, event)
 		}
 	}
 }
 
 // Put Data to memory db
-func put(event *Oracle.OraclePut) {
+func put(ctx context.Context, event *Oracle.OraclePut) {
 	var statement bool
-	tps := GenTransactOpts(config.GasLimit)
+	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	colName := event.ColName
-	ctx := context.Background()
 	dbName := event.DbName
 	db := config.Dbs[dbName]
-	dbC, err := db.Collection(colName, "")
+	dbC, err := db.Collection(ctx, colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)

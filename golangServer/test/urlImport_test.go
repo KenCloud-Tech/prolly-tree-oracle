@@ -3,18 +3,19 @@ package test
 import (
 	"context"
 	"fmt"
-	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
-	"github.com/ipld/go-ipld-prime/printer"
 	"io"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
+	"github.com/ipld/go-ipld-prime/printer"
 )
 
 func TestImport(t *testing.T) {
 	ctx := context.Background()
 	db, _ := indexer.NewMemoryDatabase()
-	collection, _ := db.Collection("demo", "name")
+	collection, _ := db.Collection(ctx, "demo", "name")
 
 	resp, err := http.Get("http://127.0.0.1:8080/ndjson")
 	if err != nil {

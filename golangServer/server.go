@@ -1,21 +1,22 @@
 package main
 
 import (
-	"Oracle.com/golangServer/Oracle"
-	"Oracle.com/golangServer/api"
-	"Oracle.com/golangServer/config"
 	"bufio"
 	"context"
 	"fmt"
-	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
+
+	"Oracle.com/golangServer/Oracle"
+	"Oracle.com/golangServer/api"
+	"Oracle.com/golangServer/config"
+	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 func init() {
@@ -71,17 +72,19 @@ func init() {
 }
 
 func main() {
+
+	ctx := context.Background()
 	// Meta info listener
-	go api.GetCollections()
-	go api.GetIndexes()
-	go api.GetRootCid()
+	go api.GetCollections(ctx)
+	go api.GetIndexes(ctx)
+	go api.GetRootCid(ctx)
 	// Service listener
-	go api.CreatEventListener()
-	go api.PutEventListener()
-	go api.IndexEventListener()
-	go api.GetEventListener()
-	go api.SearchEventListener()
-	go api.ImportEventListener()
+	go api.CreatEventListener(ctx)
+	go api.PutEventListener(ctx)
+	go api.IndexEventListener(ctx)
+	go api.GetEventListener(ctx)
+	go api.SearchEventListener(ctx)
+	go api.ImportEventListener(ctx)
 
 	// Set up a channel for receiving signals
 	sigs := make(chan os.Signal, 1)
@@ -90,12 +93,12 @@ func main() {
 	sig := <-sigs
 	log.Printf("Received signal %s, exiting...\n", sig)
 
-	saveDB() //save db
+	saveDB(ctx) //save db
 
 	os.Exit(0)
 }
 
-func saveDB() {
+func saveDB(ctx context.Context) {
 	path := fmt.Sprint(config.SaveDataPath, "paths")
 	os.Remove(path)
 	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
@@ -114,7 +117,7 @@ func saveDB() {
 			return
 		}
 		// Save db as db.car
-		db.ExportToFile(context.Background(), path)
+		db.ExportToFile(ctx, path)
 
 	}
 	log.Println("All data saved successfully. ")

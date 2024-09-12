@@ -3,12 +3,14 @@ module Oracle.com
 go 1.22.3
 
 require (
-	github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20231129153720-9f2256786715
+	github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20240908033524-ed83de72a852
 	github.com/ethereum/go-ethereum v1.14.3
 	github.com/gin-gonic/gin v1.10.0
 	github.com/ipfs/go-cid v0.4.1
 	github.com/ipld/go-ipld-prime v0.21.0
 )
+
+replace github.com/RangerMauve/ipld-prolly-indexer => github.com/hunjixin/ipld-prolly-indexer v0.0.0-20240910071929-6bc6de96d749
 
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect

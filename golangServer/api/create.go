@@ -1,21 +1,22 @@
 package api
 
 import (
-	"Oracle.com/golangServer/Oracle"
-	"Oracle.com/golangServer/config"
 	"context"
 	"fmt"
-	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"log"
 	"strings"
+
+	"Oracle.com/golangServer/Oracle"
+	"Oracle.com/golangServer/config"
+	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 )
 
-func CreatEventListener() {
+func CreatEventListener(ctx context.Context) {
 	// Create channels for logs
 	Logs := make(chan *Oracle.OracleCreate)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := config.OracleContract.WatchCreate(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to Create events:", err)
@@ -28,21 +29,21 @@ func CreatEventListener() {
 			log.Println("[Error in Event CREAT]:", err)
 		case event := <-Logs:
 			log.Println("Received creat event ", event.ReqID)
-			create(event)
+			create(ctx, event)
 		}
 	}
 }
 
 // create memory collection
-func create(event *Oracle.OracleCreate) {
+func create(ctx context.Context, event *Oracle.OracleCreate) {
 	var statement bool
-	tps := GenTransactOpts(config.GasLimit)
+	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	dbName := event.DbName
 	if db, ok := config.Dbs[dbName]; ok {
 		colName := event.ColName
 		pK := strings.Split(event.PrimaryKey, ",")
-		_, err := db.Collection(colName, pK...)
+		_, err := db.Collection(ctx, colName, pK...)
 		if err != nil {
 			log.Println("Create collection ERROR: ", err)
 			info := fmt.Sprintf("Create collection ERROR: %v", err)
@@ -73,7 +74,7 @@ func create(event *Oracle.OracleCreate) {
 		config.Dbs[dbName] = db
 		colName := event.ColName
 		pK := strings.Split(event.PrimaryKey, ",")
-		_, err = db.Collection(colName, pK...)
+		_, err = db.Collection(ctx, colName, pK...)
 		if err != nil {
 			log.Println("Create collection ERROR: ", err)
 			info := fmt.Sprintf("Create collection ERROR: %v", err)

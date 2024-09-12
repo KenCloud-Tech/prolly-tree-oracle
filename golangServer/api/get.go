@@ -1,19 +1,20 @@
 package api
 
 import (
-	"Oracle.com/golangServer/Oracle"
-	"Oracle.com/golangServer/config"
 	"context"
 	"fmt"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"log"
+
+	"Oracle.com/golangServer/Oracle"
+	"Oracle.com/golangServer/config"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 )
 
-func GetEventListener() {
+func GetEventListener(ctx context.Context) {
 	// Get channels for logs
 	Logs := make(chan *Oracle.OracleGet)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := config.OracleContract.WatchGet(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to Get events:", err)
@@ -26,20 +27,19 @@ func GetEventListener() {
 			log.Println("[Error in Event GET]:", err)
 		case event := <-Logs:
 			log.Println("Received get event ", event.ReqID)
-			get(event)
+			get(ctx, event)
 		}
 	}
 }
 
 // Get Data from memory db
-func get(event *Oracle.OracleGet) {
+func get(ctx context.Context, event *Oracle.OracleGet) {
 	var statement bool
-	tps := GenTransactOpts(config.GasLimit)
+	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	colName := event.ColName
-	ctx := context.Background()
 	db := config.Dbs[event.DbName]
-	col, err := db.Collection(colName, "")
+	col, err := db.Collection(ctx, colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)

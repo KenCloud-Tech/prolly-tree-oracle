@@ -1,21 +1,22 @@
 package test
 
 import (
-	"Oracle.com/golangServer/Oracle"
-	"Oracle.com/golangServer/config"
-	OracleTest "Oracle.com/golangServer/test/testContract"
 	"context"
 	"crypto/ecdsa"
 	"encoding/json"
 	"fmt"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
 	"math/big"
 	"testing"
 	"time"
+
+	"Oracle.com/golangServer/Oracle"
+	"Oracle.com/golangServer/config"
+	OracleTest "Oracle.com/golangServer/test/testContract"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 const (
@@ -44,25 +45,26 @@ var (
 )
 
 func TestOracle(t *testing.T) {
+	ctx := context.Background()
 	InitClient()
-	tps := GenTransactOpts(GasLimit, big.NewInt(0))
+	tps := GenTransactOpts(ctx, GasLimit, big.NewInt(0))
 	var err error
 
 	_, err = test_contract.SetOracle(tps, common.HexToAddress(OracleAddress))
 
 	////create memory db
-	//tps = GenTransactOpts(GasLimit, Value)
+	//tps = GenTransactOpts(ctx, GasLimit, Value)
 	//_, err = test_contract.Create(tps, dbName, colName, "name", Value)
 	//time.Sleep(time.Second)
 	//
 	////create index in age field
-	//tps = GenTransactOpts(GasLimit, Value)
+	//tps = GenTransactOpts(ctx, GasLimit, Value)
 	//_, err = test_contract.Index(tps, dbName, colName, "age", Value)
 	//
 	//time.Sleep(time.Second)
 	//
 	////put data
-	//tps = GenTransactOpts(GasLimit, Value)
+	//tps = GenTransactOpts(ctx, GasLimit, Value)
 	//data := []byte(`{"name":"Alice", "age": 18}
 	//				{"name":"Bob", "age": 19}
 	//				{"name":"Albert", "age": 20}
@@ -71,14 +73,14 @@ func TestOracle(t *testing.T) {
 	//time.Sleep(time.Second)
 	//
 	////get data
-	//tps = GenTransactOpts(GasLimit, Value)
+	//tps = GenTransactOpts(ctx, GasLimit, Value)
 	//recordID := []byte{129, 99, 66, 111, 98}
 	//_, err = test_contract.Get(tps, dbName, colName, recordID, callBack, Value)
 	//
 	//time.Sleep(time.Second)
 
 	//search data
-	tps = GenTransactOpts(GasLimit, Value)
+	tps = GenTransactOpts(ctx, GasLimit, Value)
 	type eq struct {
 		IndexName string
 		IndexVal  any
@@ -114,45 +116,45 @@ func TestOracle(t *testing.T) {
 	time.Sleep(time.Second)
 
 	//allowWrite
-	tps = GenTransactOpts(GasLimit, Value)
+	tps = GenTransactOpts(ctx, GasLimit, Value)
 	ADD := "0x00C696904c0CCE30D19704A762035Eb67eC3580C"
 	_, err = test_contract.AllowWrite(tps, common.HexToAddress(ADD), Value)
 	time.Sleep(time.Second)
 
 	// get collections
-	tps = GenTransactOpts(GasLimit, Value)
+	tps = GenTransactOpts(ctx, GasLimit, Value)
 	_, err = test_contract.GetCol(tps, dbName, callBack, Value)
 	time.Sleep(time.Second)
 
 	//get indexes
-	tps = GenTransactOpts(GasLimit, Value)
+	tps = GenTransactOpts(ctx, GasLimit, Value)
 	_, err = test_contract.GetIndex(tps, dbName, colName, callBack, Value)
 	time.Sleep(time.Second)
 
 	//get rootCid
-	tps = GenTransactOpts(GasLimit, Value)
+	tps = GenTransactOpts(ctx, GasLimit, Value)
 	_, err = test_contract.GetRootCid(tps, dbName, callBack, Value)
 	time.Sleep(time.Second)
 
 	//create memory db
 	dbName = "demoCsv"
 	colName = "demoCol"
-	tps = GenTransactOpts(GasLimit, Value)
+	tps = GenTransactOpts(ctx, GasLimit, Value)
 	_, err = test_contract.Create(tps, dbName, colName, "Series_Title", Value)
 	time.Sleep(time.Second)
 	//put csv data by url
-	tps = GenTransactOpts(GasLimit, Value)
+	tps = GenTransactOpts(ctx, GasLimit, Value)
 	_, err = test_contract.ImportFromUrl(tps, dbName, colName, urlcsv, "csv", Value)
 	time.Sleep(time.Second)
 
 	//create memory db
 	dbName = "demoNdjson"
 	colName = "demoCol"
-	tps = GenTransactOpts(GasLimit, Value)
+	tps = GenTransactOpts(ctx, GasLimit, Value)
 	_, err = test_contract.Create(tps, dbName, colName, "name", Value)
 	time.Sleep(time.Second)
 	//put ndjson by url
-	tps = GenTransactOpts(GasLimit, Value)
+	tps = GenTransactOpts(ctx, GasLimit, Value)
 	_, err = test_contract.ImportFromUrl(tps, dbName, colName, urlndjson, "ndjson", Value)
 	time.Sleep(time.Second)
 
@@ -183,6 +185,7 @@ func InitClient() {
 }
 
 func RspListener() {
+	ctx := context.Background()
 	cli, err := ethclient.Dial(URL)
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
@@ -193,7 +196,7 @@ func RspListener() {
 	// Create channels for logs
 	Logs := make(chan *Oracle.OracleReqState)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := OOOC.WatchReqState(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe events:", err)
@@ -211,10 +214,11 @@ func RspListener() {
 }
 
 func CatchListener() {
+	ctx := context.Background()
 	// Get channels for logs
 	Logs := make(chan *OracleTest.OracleTestCatchData)
 	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: context.Background(), Start: nil}
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 	eventSub, err := test_contract.WatchCatchData(opts, Logs)
 	if err != nil {
 		log.Fatal("Failed to subscribe to Get events:", err)
@@ -238,7 +242,7 @@ func CatchListener() {
 	}
 }
 
-func GenTransactOpts(GasLimit uint64, Value *big.Int) *bind.TransactOpts {
+func GenTransactOpts(ctx context.Context, GasLimit uint64, Value *big.Int) *bind.TransactOpts {
 	// Generate TransactOpts from private key
 	auth, err := bind.NewKeyedTransactorWithChainID(PrivateKey, big.NewInt(ChainID))
 	if err != nil {
@@ -246,7 +250,7 @@ func GenTransactOpts(GasLimit uint64, Value *big.Int) *bind.TransactOpts {
 	}
 
 	// Set gas prices and gas limits, these can be set more intelligently through client queries
-	gasPrice, err := Client.SuggestGasPrice(context.Background())
+	gasPrice, err := Client.SuggestGasPrice(ctx)
 	if err != nil {
 		log.Fatalf("Failed to suggest gas price: %v", err)
 	}
