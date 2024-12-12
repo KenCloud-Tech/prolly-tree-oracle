@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
@@ -12,23 +13,34 @@ import (
 )
 
 func PutEventListener(ctx context.Context) {
-	// Put channels for logs
-	Logs := make(chan *Oracle.OraclePut)
-	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: ctx, Start: nil}
-	eventSub, err := config.OracleContract.WatchPut(opts, Logs)
-	if err != nil {
-		log.Fatal("Failed to subscribe to Put events:", err)
-	}
-	// start Listening...
-	log.Println("PutEvent Listening ...")
+
 	for {
-		select {
-		case err := <-eventSub.Err():
-			log.Println("[Error in Event PUT]:", err)
-		case event := <-Logs:
-			log.Println("Received put event ", event.ReqID)
-			put(ctx, event)
+		// Put channels for logs
+		Logs := make(chan *Oracle.OraclePut)
+		// Subscribe to each event
+		opts := &bind.WatchOpts{Context: ctx, Start: nil}
+		eventSub, err := config.OracleContract.WatchPut(opts, Logs)
+		if err != nil {
+			log.Fatal("Failed to subscribe to Put events:", err)
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		// start Listening...
+		log.Println("PutEvent Listening ...")
+		for {
+			select {
+			case err := <-eventSub.Err():
+				log.Println("[Error in Event PUT]:", err)
+				break
+			case event := <-Logs:
+				log.Println("Received put event ", event.ReqID)
+				put(ctx, event)
+			}
+			if err != nil {
+				log.Println("[break PutEventListener for loop]:", err)
+				time.Sleep(5 * time.Second)
+				break
+			}
 		}
 	}
 }

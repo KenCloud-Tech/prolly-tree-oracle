@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
@@ -12,59 +13,70 @@ import (
 )
 
 func GetCollections(ctx context.Context) {
-	// Get channels for logs
-	Logs := make(chan *Oracle.OracleGetCol)
-	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: ctx, Start: nil}
-	eventSub, err := config.OracleContract.WatchGetCol(opts, Logs)
-	if err != nil {
-		log.Fatal("Failed to subscribe to GetCollections events:", err)
-	}
-	// start Listening...
-	log.Println("GetCollectionsEvent Listening ...")
+
 	for {
-		select {
-		case err := <-eventSub.Err():
-			log.Println("[Error in Event GetCollections]:", err)
-		case event := <-Logs:
-			log.Println("Received GetCollections event ", event.ReqID)
-			var statement bool
-			tps := GenTransactOpts(ctx, config.GasLimit)
+		// Get channels for logs
+		Logs := make(chan *Oracle.OracleGetCol)
+		// Subscribe to each event
+		opts := &bind.WatchOpts{Context: ctx, Start: nil}
+		eventSub, err := config.OracleContract.WatchGetCol(opts, Logs)
+		if err != nil {
+			log.Fatal("Failed to subscribe to GetCollections events:", err)
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		// start Listening...
+		log.Println("GetCollectionsEvent Listening ...")
+		for {
+			select {
+			case err := <-eventSub.Err():
+				log.Println("[Error in Event GetCollections]:", err)
+				break
+			case event := <-Logs:
+				log.Println("Received GetCollections event ", event.ReqID)
+				var statement bool
+				tps := GenTransactOpts(ctx, config.GasLimit)
 
-			db := config.Dbs[event.DbName]
-			cols, err := db.ListCollections(ctx)
-			if err != nil {
-				log.Println("[", event.DbName, "]", "List Collections ERROR: ", err)
-				info := fmt.Sprintf("List Collections ERROR: %v", err)
-				statement = false
-				//response to oracle
-				config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-			}
+				db := config.Dbs[event.DbName]
+				cols, err := db.ListCollections(ctx)
+				if err != nil {
+					log.Println("[", event.DbName, "]", "List Collections ERROR: ", err)
+					info := fmt.Sprintf("List Collections ERROR: %v", err)
+					statement = false
+					//response to oracle
+					config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+				}
 
-			jsonBytes, err := json.Marshal(cols)
-			if err != nil {
-				log.Println("[", event.DbName, "]", "Trans to json ERROR: ", err)
-				info := fmt.Sprintf("Trans to json ERROR: %v", err)
-				statement = false
+				jsonBytes, err := json.Marshal(cols)
+				if err != nil {
+					log.Println("[", event.DbName, "]", "Trans to json ERROR: ", err)
+					info := fmt.Sprintf("Trans to json ERROR: %v", err)
+					statement = false
+					//response to oracle
+					config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+				}
+				result, err := json.Marshal([][]byte{jsonBytes})
+				if err != nil {
+					log.Println("Marshal Results ERROR: ", err)
+					info := fmt.Sprintf("Marshal Results ERROR: %v", err)
+					statement = false
+					//response to oracle
+					config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					return
+				}
+				statement = true
 				//response to oracle
-				config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+				_, err = config.OracleContract.GetColRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
+				if err != nil {
+					log.Println("Req function get an Error : ", err)
+				} else {
+					log.Println("[Get collections success]")
+				}
 			}
-			result, err := json.Marshal([][]byte{jsonBytes})
 			if err != nil {
-				log.Println("Marshal Results ERROR: ", err)
-				info := fmt.Sprintf("Marshal Results ERROR: %v", err)
-				statement = false
-				//response to oracle
-				config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-				return
-			}
-			statement = true
-			//response to oracle
-			_, err = config.OracleContract.GetColRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
-			if err != nil {
-				log.Println("Req function get an Error : ", err)
-			} else {
-				log.Println("[Get collections success]")
+				log.Println("[break GetCollections for loop]:", err)
+				time.Sleep(5 * time.Second)
+				break
 			}
 		}
 	}

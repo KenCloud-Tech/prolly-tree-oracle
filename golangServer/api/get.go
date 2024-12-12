@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
@@ -11,23 +12,34 @@ import (
 )
 
 func GetEventListener(ctx context.Context) {
-	// Get channels for logs
-	Logs := make(chan *Oracle.OracleGet)
-	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: ctx, Start: nil}
-	eventSub, err := config.OracleContract.WatchGet(opts, Logs)
-	if err != nil {
-		log.Fatal("Failed to subscribe to Get events:", err)
-	}
-	// start Listening...
-	log.Println("GetEvent Listening ...")
+
 	for {
-		select {
-		case err := <-eventSub.Err():
-			log.Println("[Error in Event GET]:", err)
-		case event := <-Logs:
-			log.Println("Received get event ", event.ReqID)
-			get(ctx, event)
+		// Get channels for logs
+		Logs := make(chan *Oracle.OracleGet)
+		// Subscribe to each event
+		opts := &bind.WatchOpts{Context: ctx, Start: nil}
+		eventSub, err := config.OracleContract.WatchGet(opts, Logs)
+		if err != nil {
+			log.Fatal("Failed to subscribe to Get events:", err)
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		// start Listening...
+		log.Println("GetEvent Listening ...")
+		for {
+			select {
+			case err := <-eventSub.Err():
+				log.Println("[Error in Event GET]:", err)
+				break
+			case event := <-Logs:
+				log.Println("Received get event ", event.ReqID)
+				get(ctx, event)
+			}
+			if err != nil {
+				log.Println("[break GetEventListener for loop]:", err)
+				time.Sleep(5 * time.Second)
+				break
+			}
 		}
 	}
 }

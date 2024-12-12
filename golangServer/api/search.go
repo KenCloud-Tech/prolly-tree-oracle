@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
@@ -23,23 +24,34 @@ type Results struct {
 }
 
 func SearchEventListener(ctx context.Context) {
-	// Get channels for logs
-	Logs := make(chan *Oracle.OracleSearch)
-	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: ctx, Start: nil}
-	eventSub, err := config.OracleContract.WatchSearch(opts, Logs)
-	if err != nil {
-		log.Fatal("Failed to subscribe to Search events:", err)
-	}
-	// start Listening...
-	log.Println("SearchEvent Listening ...")
+
 	for {
-		select {
-		case err := <-eventSub.Err():
-			log.Println("[Error in Event SEARCH]:", err)
-		case event := <-Logs:
-			log.Println("Received search event ", event.ReqID)
-			search(ctx, event)
+		// Get channels for logs
+		Logs := make(chan *Oracle.OracleSearch)
+		// Subscribe to each event
+		opts := &bind.WatchOpts{Context: ctx, Start: nil}
+		eventSub, err := config.OracleContract.WatchSearch(opts, Logs)
+		if err != nil {
+			log.Fatal("Failed to subscribe to Search events:", err)
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		// start Listening...
+		log.Println("SearchEvent Listening ...")
+		for {
+			select {
+			case err := <-eventSub.Err():
+				log.Println("[Error in Event SEARCH]:", err)
+				break
+			case event := <-Logs:
+				log.Println("Received search event ", event.ReqID)
+				search(ctx, event)
+			}
+			if err != nil {
+				log.Println("[break SearchEventListener for loop]:", err)
+				time.Sleep(5 * time.Second)
+				break
+			}
 		}
 	}
 }

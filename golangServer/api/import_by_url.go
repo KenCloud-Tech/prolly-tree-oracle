@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strings"
 	"sync"
+	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
@@ -20,23 +21,34 @@ var gasPerByteByUrl *big.Int
 var gasPerByteByUrlOnce sync.Once
 
 func ImportEventListener(ctx context.Context) {
-	// Import channels for logs
-	Logs := make(chan *Oracle.OracleImportFromUrl)
-	// Subscribe to each event
-	opts := &bind.WatchOpts{Context: ctx, Start: nil}
-	eventSub, err := config.OracleContract.WatchImportFromUrl(opts, Logs)
-	if err != nil {
-		log.Fatal("Failed to subscribe to Import events:", err)
-	}
-	// start Listening...
-	log.Println("ImportEvent Listening ...")
+
 	for {
-		select {
-		case err := <-eventSub.Err():
-			log.Println("[Error in Event IMPORT:", err)
-		case event := <-Logs:
-			log.Println("Received put event ", event.ReqID)
-			importByUrl(ctx, event)
+		// Import channels for logs
+		Logs := make(chan *Oracle.OracleImportFromUrl)
+		// Subscribe to each event
+		opts := &bind.WatchOpts{Context: ctx, Start: nil}
+		eventSub, err := config.OracleContract.WatchImportFromUrl(opts, Logs)
+		if err != nil {
+			log.Fatal("Failed to subscribe to Import events:", err)
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		// start Listening...
+		log.Println("ImportEvent Listening ...")
+		for {
+			select {
+			case err := <-eventSub.Err():
+				log.Println("[Error in Event IMPORT:", err)
+				break
+			case event := <-Logs:
+				log.Println("Received put event ", event.ReqID)
+				importByUrl(ctx, event)
+			}
+			if err != nil {
+				log.Println("[break ImportEventListener for loop]:", err)
+				time.Sleep(5 * time.Second)
+				break
+			}
 		}
 	}
 }
