@@ -25,7 +25,7 @@ func GetRootCidEventListener(ctx context.Context) {
 		eventSub, err := config.OracleContract.WatchGetRootCid(opts, logs)
 		if err != nil {
 			log.Fatal("Failed to subscribe to Get events:", err)
-			time.Sleep(5 * 10000)
+			time.Sleep(5 * time.Second)
 			continue
 		}
 		for {
