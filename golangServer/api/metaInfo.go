@@ -33,7 +33,7 @@ func GetCollections(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event GetCollections]:", err)
-				restartflag = false
+				restartflag = true
 				break
 			case event := <-Logs:
 				log.Println("Received GetCollections event ", event.ReqID)
