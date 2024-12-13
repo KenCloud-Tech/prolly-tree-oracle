@@ -60,6 +60,7 @@ func create(ctx context.Context, event *Oracle.OracleCreate) {
 	log.Println("Create collection ColName: ", event.ColName)
 	log.Println("Create collection PrimaryKey: ", event.PrimaryKey)
 	if db, ok := config.Dbs[dbName]; ok {
+		log.Println("existed dbName: ", event.DbName)
 		colName := event.ColName
 		pK := strings.Split(event.PrimaryKey, ",")
 		_, err := db.Collection(ctx, colName, pK...)
@@ -81,6 +82,7 @@ func create(ctx context.Context, event *Oracle.OracleCreate) {
 			log.Println("[", colName, "]", "Create collection success")
 		}
 	} else {
+		log.Println("non existed dbName: ", event.DbName)
 		db, err := indexer.NewMemoryDatabase()
 		if err != nil {
 			log.Println("New Memory Database ERROR: ", err)
@@ -102,6 +104,7 @@ func create(ctx context.Context, event *Oracle.OracleCreate) {
 			config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, info)
 			return
 		}
+		log.Println("non existed dbName created success: ", event.DbName)
 		statement = true
 		//response to oracle
 		_, err = config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, "")
