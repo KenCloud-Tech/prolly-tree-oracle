@@ -14,6 +14,7 @@ import (
 
 func IndexEventListener(ctx context.Context) {
 	for {
+		restartflag := false
 		// Create channels for logs
 		Logs := make(chan *Oracle.OracleIndex)
 		// Subscribe to each event
@@ -31,20 +32,17 @@ func IndexEventListener(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event INDEX]:", err)
+				restartflag = true
 				break
 			case event := <-Logs:
 				log.Println("Received index event ", event.ReqID)
 				index(ctx, event)
 			}
-			if err != nil {
-				log.Println("[break IndexEventListener for loop]:", err)
+			if restartflag {
+				log.Println("[restart IndexEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(Logs)
 				break
-			} else {
-				log.Println("[continue IndexEvent for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}

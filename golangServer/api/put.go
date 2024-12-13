@@ -14,6 +14,7 @@ import (
 
 func PutEventListener(ctx context.Context) {
 	for {
+		restartflag := false
 		// Put channels for logs
 		Logs := make(chan *Oracle.OraclePut)
 		// Subscribe to each event
@@ -31,20 +32,17 @@ func PutEventListener(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event PUT]:", err)
+				restartflag = true
 				break
 			case event := <-Logs:
 				log.Println("Received put event ", event.ReqID)
 				put(ctx, event)
 			}
-			if err != nil {
-				log.Println("[break PutEventListener for loop]:", err)
+			if restartflag {
+				log.Println("[restart PutEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(Logs)
 				break
-			} else {
-				log.Println("[continue PutEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}
@@ -58,6 +56,9 @@ func put(ctx context.Context, event *Oracle.OraclePut) {
 	colName := event.ColName
 	dbName := event.DbName
 	db := config.Dbs[dbName]
+	if db == nil {
+		log.Println("Get DB ERROR: ", dbName)
+	}
 	dbC, err := db.Collection(ctx, colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)

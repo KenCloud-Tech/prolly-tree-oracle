@@ -15,6 +15,7 @@ import (
 func GetCollections(ctx context.Context) {
 
 	for {
+		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleGetCol)
 		// Subscribe to each event
@@ -32,6 +33,7 @@ func GetCollections(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event GetCollections]:", err)
+				restartflag = false
 				break
 			case event := <-Logs:
 				log.Println("Received GetCollections event ", event.ReqID)
@@ -74,15 +76,11 @@ func GetCollections(ctx context.Context) {
 					log.Println("[Get collections success]")
 				}
 			}
-			if err != nil {
-				log.Println("[break GetCollections for loop]:", err)
+			if restartflag {
+				log.Println("[restart GetCollections for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(Logs)
 				break
-			} else {
-				log.Println("[continue GetCollections for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}
@@ -90,6 +88,7 @@ func GetCollections(ctx context.Context) {
 
 func GetIndexes(ctx context.Context) {
 	for {
+		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleGetIndex)
 		// Subscribe to each event
@@ -107,6 +106,7 @@ func GetIndexes(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event GetIndexes]:", err)
+				restartflag = true
 				break
 			case event := <-Logs:
 				log.Println("Received GetIndexes event ", event.ReqID)
@@ -165,15 +165,11 @@ func GetIndexes(ctx context.Context) {
 					log.Println("[Get indexes success]")
 				}
 			}
-			if err != nil {
-				log.Println("[break GetIndexes for loop]:", err)
+			if restartflag {
+				log.Println("[restart GetIndexes for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(Logs)
 				break
-			} else {
-				log.Println("[continue GetIndexes for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}

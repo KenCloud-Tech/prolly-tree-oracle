@@ -13,6 +13,7 @@ import (
 
 func GetEventListener(ctx context.Context) {
 	for {
+		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleGet)
 		// Subscribe to each event
@@ -30,20 +31,17 @@ func GetEventListener(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event GET]:", err)
+				restartflag = true
 				break
 			case event := <-Logs:
 				log.Println("Received get event ", event.ReqID)
 				get(ctx, event)
 			}
-			if err != nil {
-				log.Println("[break GetEventListener for loop]:", err)
+			if restartflag {
+				log.Println("[restart GetEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(Logs)
 				break
-			} else {
-				log.Println("[continue GetEvent for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}

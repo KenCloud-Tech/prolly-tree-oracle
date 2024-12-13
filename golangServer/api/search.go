@@ -25,6 +25,7 @@ type Results struct {
 
 func SearchEventListener(ctx context.Context) {
 	for {
+		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleSearch)
 		// Subscribe to each event
@@ -42,20 +43,17 @@ func SearchEventListener(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event SEARCH]:", err)
+				restartflag = true
 				break
 			case event := <-Logs:
 				log.Println("Received search event ", event.ReqID)
 				search(ctx, event)
 			}
-			if err != nil {
-				log.Println("[break SearchEventListener for loop]:", err)
+			if restartflag {
+				log.Println("[restart SearchEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(Logs)
 				break
-			} else {
-				log.Println("[continue SearchEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}
