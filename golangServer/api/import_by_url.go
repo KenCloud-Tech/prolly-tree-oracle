@@ -21,7 +21,6 @@ var gasPerByteByUrl *big.Int
 var gasPerByteByUrlOnce sync.Once
 
 func ImportEventListener(ctx context.Context) {
-
 	for {
 		// Import channels for logs
 		Logs := make(chan *Oracle.OracleImportFromUrl)
@@ -31,6 +30,7 @@ func ImportEventListener(ctx context.Context) {
 		if err != nil {
 			log.Fatal("Failed to subscribe to Import events:", err)
 			time.Sleep(5 * time.Second)
+			close(Logs)
 			continue
 		}
 		// start Listening...
@@ -47,7 +47,12 @@ func ImportEventListener(ctx context.Context) {
 			if err != nil {
 				log.Println("[break ImportEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
+				close(Logs)
 				break
+			} else {
+				log.Println("[continue ImportEvent for loop]:", err)
+				time.Sleep(5 * time.Second)
+				continue
 			}
 		}
 	}

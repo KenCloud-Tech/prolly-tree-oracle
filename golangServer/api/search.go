@@ -24,7 +24,6 @@ type Results struct {
 }
 
 func SearchEventListener(ctx context.Context) {
-
 	for {
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleSearch)
@@ -34,6 +33,7 @@ func SearchEventListener(ctx context.Context) {
 		if err != nil {
 			log.Fatal("Failed to subscribe to Search events:", err)
 			time.Sleep(5 * time.Second)
+			close(Logs)
 			continue
 		}
 		// start Listening...
@@ -50,7 +50,12 @@ func SearchEventListener(ctx context.Context) {
 			if err != nil {
 				log.Println("[break SearchEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
+				close(Logs)
 				break
+			} else {
+				log.Println("[continue SearchEventListener for loop]:", err)
+				time.Sleep(5 * time.Second)
+				continue
 			}
 		}
 	}

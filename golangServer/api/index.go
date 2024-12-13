@@ -13,7 +13,6 @@ import (
 )
 
 func IndexEventListener(ctx context.Context) {
-
 	for {
 		// Create channels for logs
 		Logs := make(chan *Oracle.OracleIndex)
@@ -23,6 +22,7 @@ func IndexEventListener(ctx context.Context) {
 		if err != nil {
 			log.Fatal("Failed to subscribe to Index events:", err)
 			time.Sleep(5 * time.Second)
+			close(Logs)
 			continue
 		}
 		// start Listening...
@@ -39,7 +39,12 @@ func IndexEventListener(ctx context.Context) {
 			if err != nil {
 				log.Println("[break IndexEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
+				close(Logs)
 				break
+			} else {
+				log.Println("[continue IndexEvent for loop]:", err)
+				time.Sleep(5 * time.Second)
+				continue
 			}
 		}
 	}
