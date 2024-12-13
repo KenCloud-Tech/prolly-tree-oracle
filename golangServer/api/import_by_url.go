@@ -49,7 +49,7 @@ func ImportEventListener(ctx context.Context) {
 			if restartflag {
 				log.Println("[restart ImportEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
-				close(logs)
+				close(Logs)
 				break
 			}
 		}
