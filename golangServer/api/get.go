@@ -12,7 +12,6 @@ import (
 )
 
 func GetEventListener(ctx context.Context) {
-
 	for {
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleGet)
@@ -22,6 +21,7 @@ func GetEventListener(ctx context.Context) {
 		if err != nil {
 			log.Fatal("Failed to subscribe to Get events:", err)
 			time.Sleep(5 * time.Second)
+			close(Logs)
 			continue
 		}
 		// start Listening...
@@ -38,7 +38,12 @@ func GetEventListener(ctx context.Context) {
 			if err != nil {
 				log.Println("[break GetEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
+				close(Logs)
 				break
+			} else {
+				log.Println("[continue GetEvent for loop]:", err)
+				time.Sleep(5 * time.Second)
+				continue
 			}
 		}
 	}

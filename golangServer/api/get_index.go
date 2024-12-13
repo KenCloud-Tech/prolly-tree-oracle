@@ -8,11 +8,10 @@ import (
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ipfs/go-cid"
+	cid "github.com/ipfs/go-cid"
 )
 
 func GetRootCidEventListener(ctx context.Context) {
-
 	for {
 		// Create a channel for logs
 		logs := make(chan *Oracle.OracleGetRootCid)
@@ -26,6 +25,7 @@ func GetRootCidEventListener(ctx context.Context) {
 		if err != nil {
 			log.Fatal("Failed to subscribe to Get events:", err)
 			time.Sleep(5 * time.Second)
+			close(logs)
 			continue
 		}
 		for {
@@ -40,7 +40,12 @@ func GetRootCidEventListener(ctx context.Context) {
 			if err != nil {
 				log.Println("[break GetRootCidEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
+				close(logs)
 				break
+			} else {
+				log.Println("[continue GetRootCID for loop]:", err)
+				time.Sleep(5 * time.Second)
+				continue
 			}
 		}
 	}
