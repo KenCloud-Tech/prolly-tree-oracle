@@ -22,6 +22,7 @@ var gasPerByteByUrlOnce sync.Once
 
 func ImportEventListener(ctx context.Context) {
 	for {
+		restartflag := false
 		// Import channels for logs
 		Logs := make(chan *Oracle.OracleImportFromUrl)
 		// Subscribe to each event
@@ -39,20 +40,17 @@ func ImportEventListener(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event IMPORT:", err)
+				restartflag = true
 				break
 			case event := <-Logs:
 				log.Println("Received put event ", event.ReqID)
 				importByUrl(ctx, event)
 			}
-			if err != nil {
-				log.Println("[break ImportEventListener for loop]:", err)
+			if restartflag {
+				log.Println("[restart ImportEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(Logs)
 				break
-			} else {
-				log.Println("[continue ImportEvent for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}

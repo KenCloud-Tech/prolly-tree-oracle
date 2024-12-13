@@ -15,6 +15,7 @@ import (
 
 func CreatEventListener(ctx context.Context) {
 	for {
+		restartflag := false
 		// Create channels for logs
 		Logs := make(chan *Oracle.OracleCreate)
 		// Subscribe to each event
@@ -33,20 +34,17 @@ func CreatEventListener(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event CREAT]:", err)
+				restartflag = true
 				break
 			case event := <-Logs:
 				log.Println("Received creat event ", event.ReqID)
 				create(ctx, event)
 			}
-			if err != nil {
-				log.Println("[break CreatEventListener for loop]:", err)
+			if restartflag {
+				log.Println("[restart CreatEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(Logs)
 				break
-			} else {
-				log.Println("[continue CreatEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}
@@ -58,6 +56,9 @@ func create(ctx context.Context, event *Oracle.OracleCreate) {
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	dbName := event.DbName
+	log.Println("Create collection dbName: ", event.DbName)
+	log.Println("Create collection ColName: ", event.ColName)
+	log.Println("Create collection PrimaryKey: ", event.PrimaryKey)
 	if db, ok := config.Dbs[dbName]; ok {
 		colName := event.ColName
 		pK := strings.Split(event.PrimaryKey, ",")

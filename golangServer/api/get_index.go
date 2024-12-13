@@ -13,6 +13,7 @@ import (
 
 func GetRootCidEventListener(ctx context.Context) {
 	for {
+		restartflag := false
 		// Create a channel for logs
 		logs := make(chan *Oracle.OracleGetRootCid)
 
@@ -32,20 +33,17 @@ func GetRootCidEventListener(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event GETROOTCID]:", err)
+				restartflag = true
 				break
 			case event := <-logs:
 				log.Println("Received get root cid event ", event.ReqID)
 				getRootCid(ctx, event)
 			}
-			if err != nil {
-				log.Println("[break GetRootCidEventListener for loop]:", err)
+			if restartflag {
+				log.Println("[restart GetRootCidEventListener for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(logs)
 				break
-			} else {
-				log.Println("[continue GetRootCID for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}
