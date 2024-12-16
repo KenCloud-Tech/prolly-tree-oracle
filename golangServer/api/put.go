@@ -58,6 +58,10 @@ func put(ctx context.Context, event *Oracle.OraclePut) {
 	db := config.Dbs[dbName]
 	if db == nil {
 		log.Println("Get DB ERROR: ", dbName)
+		statement = false
+		//response to oracle
+		config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, "DB is not exist")
+		return
 	}
 	dbC, err := db.Collection(ctx, colName, "")
 	if err != nil {

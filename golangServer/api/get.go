@@ -55,6 +55,7 @@ func get(ctx context.Context, event *Oracle.OracleGet) {
 	colName := event.ColName
 	db := config.Dbs[event.DbName]
 	if db == nil {
+		log.Println("Get DB ERROR: ", db)
 		statement = false
 		//response to oracle
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "DB is not exist")
