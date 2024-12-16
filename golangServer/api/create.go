@@ -73,8 +73,9 @@ func create(ctx context.Context, event *Oracle.OracleCreate) {
 			return
 		}
 		statement = true
+		info := fmt.Sprintf("Create collection Success: %v", dbName)
 		//response to oracle
-		_, err = config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, "")
+		_, err = config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, info)
 		if err != nil {
 			log.Println("Req function get an Error : ", err)
 			db.DeleteCol(colName)
@@ -106,8 +107,9 @@ func create(ctx context.Context, event *Oracle.OracleCreate) {
 		}
 		log.Println("non existed dbName created success: ", event.DbName)
 		statement = true
+		info := fmt.Sprintf("Create non existed collection Success: %v", dbName)
 		//response to oracle
-		_, err = config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, "")
+		_, err = config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, info)
 		if err != nil {
 			log.Println("Req function get an Error : ", err)
 			db.DeleteCol(colName)
