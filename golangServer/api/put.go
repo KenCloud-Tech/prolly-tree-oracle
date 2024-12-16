@@ -55,6 +55,8 @@ func put(ctx context.Context, event *Oracle.OraclePut) {
 
 	colName := event.ColName
 	dbName := event.DbName
+	log.Println("put collection dbName: ", event.DbName)
+	log.Println("put collection ColName: ", event.ColName)
 	db := config.Dbs[dbName]
 	if db == nil {
 		log.Println("Get DB ERROR: ", dbName)
@@ -84,6 +86,7 @@ func put(ctx context.Context, event *Oracle.OraclePut) {
 		config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, info)
 		return
 	} else {
+		log.Println("Put Data Success")
 		statement = true
 	}
 	//response to oracle
