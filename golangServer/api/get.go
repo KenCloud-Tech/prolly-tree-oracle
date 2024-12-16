@@ -54,6 +54,12 @@ func get(ctx context.Context, event *Oracle.OracleGet) {
 
 	colName := event.ColName
 	db := config.Dbs[event.DbName]
+	if db == nil {
+		statement = false
+		//response to oracle
+		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "DB is not exist")
+		return
+	}
 	col, err := db.Collection(ctx, colName, "")
 	if err != nil {
 		log.Println("Get collection ERROR: ", err)
