@@ -20,6 +20,10 @@ import (
 	basicnode "github.com/ipld/go-ipld-prime/node/basicnode"
 )
 
+func returnpInt(test big.Int) *big.Int {
+	return &test
+}
+
 func GenTransactOpts(ctx context.Context, GasLimit uint64) *bind.TransactOpts {
 	// Generate TransactOpts from private key
 	auth, err := bind.NewKeyedTransactorWithChainID(config.PrivateKey, big.NewInt(config.ChainID))
@@ -32,7 +36,12 @@ func GenTransactOpts(ctx context.Context, GasLimit uint64) *bind.TransactOpts {
 	if err != nil {
 		log.Fatalf("Failed to suggest gas price: %v", err)
 	}
-	auth.GasPrice = gasPrice
+
+	log.Printf("gasPrice:", (gasPrice).Text(10))
+	var test big.Int
+	test.SetString("100000000", 10)
+	log.Printf("new gasPrice:", (test).Text(10))
+	auth.GasPrice = returnpInt(test)
 	auth.GasLimit = GasLimit
 	return auth
 }
