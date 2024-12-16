@@ -177,6 +177,7 @@ func GetIndexes(ctx context.Context) {
 
 func GetRootCid(ctx context.Context) {
 	for {
+		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleGetRootCid)
 		// Subscribe to each event
@@ -194,6 +195,7 @@ func GetRootCid(ctx context.Context) {
 			select {
 			case err := <-eventSub.Err():
 				log.Println("[Error in Event WatchGetRootCid]:", err)
+				restartflag = true
 				break
 			case event := <-Logs:
 				log.Println("Received WatchGetRootCid event ", event.ReqID)
@@ -221,15 +223,11 @@ func GetRootCid(ctx context.Context) {
 					log.Println("[Get RootCid success]")
 				}
 			}
-			if err != nil {
-				log.Println("[break GetRootCid for loop]:", err)
+			if restartflag {
+				log.Println("[restart GetRootCid for loop]:", err)
 				time.Sleep(5 * time.Second)
 				close(Logs)
 				break
-			} else {
-				log.Println("[continue GetRootCid for loop]:", err)
-				time.Sleep(5 * time.Second)
-				continue
 			}
 		}
 	}
