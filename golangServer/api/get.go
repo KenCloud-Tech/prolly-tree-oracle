@@ -37,6 +37,8 @@ func get(ctx context.Context, event *Oracle.OracleGet) {
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
+	log.Println("CreateEvent DbName ...", event.DbName)
+	log.Println("CreateEvent ColName ...", event.ColName)
 	colName := event.ColName
 	db := config.Dbs[event.DbName]
 	col, err := db.Collection(ctx, colName, "")

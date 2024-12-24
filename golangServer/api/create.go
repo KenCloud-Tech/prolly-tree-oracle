@@ -38,6 +38,8 @@ func CreatEventListener(ctx context.Context) {
 func create(ctx context.Context, event *Oracle.OracleCreate) {
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
+	log.Println("CreateEvent DbName ...", event.DbName)
+	log.Println("CreateEvent ColName ...", event.ColName)
 
 	dbName := event.DbName
 	if db, ok := config.Dbs[dbName]; ok {

@@ -38,6 +38,8 @@ func put(ctx context.Context, event *Oracle.OraclePut) {
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
+	log.Println("CreateEvent DbName ...", event.DbName)
+	log.Println("CreateEvent ColName ...", event.ColName)
 	colName := event.ColName
 	dbName := event.DbName
 	db := config.Dbs[dbName]
