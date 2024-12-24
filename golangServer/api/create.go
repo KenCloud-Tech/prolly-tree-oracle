@@ -1,51 +1,36 @@
 package api
 
 import (
-	"context"
-	"fmt"
-	"log"
-	"strings"
-	"time"
-
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
+	"context"
+	"fmt"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"log"
+	"strings"
 )
 
 func CreatEventListener(ctx context.Context) {
-	for {
-		restartflag := false
-		// Create channels for logs
-		Logs := make(chan *Oracle.OracleCreate)
-		// Subscribe to each event
-		opts := &bind.WatchOpts{Context: ctx, Start: nil}
+	// Create channels for logs
+	Logs := make(chan *Oracle.OracleCreate)
+	// Subscribe to each event
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 
-		// start Listening...
-		log.Println("CreateEvent Listening ...")
-		eventSub, err := config.OracleContract.WatchCreate(opts, Logs)
-		if err != nil {
-			log.Fatal("Failed to subscribe to Get events:", err)
-			time.Sleep(5 * time.Second)
-			close(Logs)
-			continue
-		}
-		for {
-			select {
-			case err := <-eventSub.Err():
-				log.Println("[Error in Event CREAT]:", err)
-				restartflag = true
-				break
-			case event := <-Logs:
-				log.Println("Received creat event ", event.ReqID)
-				create(ctx, event)
-			}
-			if restartflag {
-				log.Println("[restart CreatEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				close(Logs)
-				break
-			}
+	// start Listening...
+	log.Println("CreateEvent Listening ...")
+	eventSub, err := config.OracleContract.WatchCreate(opts, Logs)
+	if err != nil {
+		log.Fatal("Failed to subscribe to Get events:", err)
+	}
+	for {
+		select {
+		case err := <-eventSub.Err():
+			log.Println("[Error in Event CREAT]:", err)
+			break
+		case event := <-Logs:
+			log.Println("Received creat event ", event.ReqID)
+			create(ctx, event)
 		}
 	}
 }
