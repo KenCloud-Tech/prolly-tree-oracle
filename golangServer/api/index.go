@@ -1,46 +1,34 @@
 package api
 
 import (
-	"context"
-	"fmt"
-	"log"
-	"strings"
-	"time"
-
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
+	"context"
+	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"log"
+	"strings"
 )
 
 func IndexEventListener(ctx context.Context) {
-
+	// Create channels for logs
+	Logs := make(chan *Oracle.OracleIndex)
+	// Subscribe to each event
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
+	eventSub, err := config.OracleContract.WatchIndex(opts, Logs)
+	if err != nil {
+		log.Fatal("Failed to subscribe to Index events:", err)
+	}
+	// start Listening...
+	log.Println("IndexEvent Listening ...")
 	for {
-		// Create channels for logs
-		Logs := make(chan *Oracle.OracleIndex)
-		// Subscribe to each event
-		opts := &bind.WatchOpts{Context: ctx, Start: nil}
-		eventSub, err := config.OracleContract.WatchIndex(opts, Logs)
-		if err != nil {
-			log.Fatal("Failed to subscribe to Index events:", err)
-			time.Sleep(5 * time.Second)
-			continue
-		}
-		// start Listening...
-		log.Println("IndexEvent Listening ...")
-		for {
-			select {
-			case err := <-eventSub.Err():
-				log.Println("[Error in Event INDEX]:", err)
-				break
-			case event := <-Logs:
-				log.Println("Received index event ", event.ReqID)
-				index(ctx, event)
-			}
-			if err != nil {
-				log.Println("[break IndexEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				break
-			}
+		select {
+		case err := <-eventSub.Err():
+			log.Println("[Error in Event INDEX]:", err)
+			break
+		case event := <-Logs:
+			log.Println("Received index event ", event.ReqID)
+			index(ctx, event)
 		}
 	}
 }

@@ -1,48 +1,36 @@
 package api
 
 import (
-	"context"
-	"fmt"
-	"log"
-	"strings"
-	"time"
-
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
+	"context"
+	"fmt"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"log"
+	"strings"
 )
 
 func CreatEventListener(ctx context.Context) {
+	// Create channels for logs
+	Logs := make(chan *Oracle.OracleCreate)
+	// Subscribe to each event
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
 
+	// start Listening...
+	log.Println("CreateEvent Listening ...")
+	eventSub, err := config.OracleContract.WatchCreate(opts, Logs)
+	if err != nil {
+		log.Fatal("Failed to subscribe to Get events:", err)
+	}
 	for {
-		// Create channels for logs
-		Logs := make(chan *Oracle.OracleCreate)
-		// Subscribe to each event
-		opts := &bind.WatchOpts{Context: ctx, Start: nil}
-
-		// start Listening...
-		log.Println("CreateEvent Listening ...")
-		eventSub, err := config.OracleContract.WatchCreate(opts, Logs)
-		if err != nil {
-			log.Fatal("Failed to subscribe to Get events:", err)
-			time.Sleep(5 * time.Second)
-			continue
-		}
-		for {
-			select {
-			case err := <-eventSub.Err():
-				log.Println("[Error in Event CREAT]:", err)
-				break
-			case event := <-Logs:
-				log.Println("Received creat event ", event.ReqID)
-				create(ctx, event)
-			}
-			if err != nil {
-				log.Println("[break CreatEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				break
-			}
+		select {
+		case err := <-eventSub.Err():
+			log.Println("[Error in Event CREAT]:", err)
+			break
+		case event := <-Logs:
+			log.Println("Received creat event ", event.ReqID)
+			create(ctx, event)
 		}
 	}
 }
@@ -51,7 +39,8 @@ func CreatEventListener(ctx context.Context) {
 func create(ctx context.Context, event *Oracle.OracleCreate) {
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
-
+	log.Println("creat DbName: ", event.DbName)
+	log.Println("creat DbName: ", event.ColName)
 	dbName := event.DbName
 	if db, ok := config.Dbs[dbName]; ok {
 		colName := event.ColName

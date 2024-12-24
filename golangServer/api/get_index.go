@@ -1,47 +1,35 @@
 package api
 
 import (
-	"context"
-	"log"
-	"time"
-
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
+	"context"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ipfs/go-cid"
+	cid "github.com/ipfs/go-cid"
+	"log"
 )
 
 func GetRootCidEventListener(ctx context.Context) {
+	// Create a channel for logs
+	logs := make(chan *Oracle.OracleGetRootCid)
 
+	// Subscribe to each event
+	opts := &bind.WatchOpts{Context: ctx, Start: nil}
+
+	// Start Listening...
+	log.Println("GetRootCidEvent Listening ...")
+	eventSub, err := config.OracleContract.WatchGetRootCid(opts, logs)
+	if err != nil {
+		log.Fatal("Failed to subscribe to Get events:", err)
+	}
 	for {
-		// Create a channel for logs
-		logs := make(chan *Oracle.OracleGetRootCid)
-
-		// Subscribe to each event
-		opts := &bind.WatchOpts{Context: ctx, Start: nil}
-
-		// Start Listening...
-		log.Println("GetRootCidEvent Listening ...")
-		eventSub, err := config.OracleContract.WatchGetRootCid(opts, logs)
-		if err != nil {
-			log.Fatal("Failed to subscribe to Get events:", err)
-			time.Sleep(5 * time.Second)
-			continue
-		}
-		for {
-			select {
-			case err := <-eventSub.Err():
-				log.Println("[Error in Event GETROOTCID]:", err)
-				break
-			case event := <-logs:
-				log.Println("Received get root cid event ", event.ReqID)
-				getRootCid(ctx, event)
-			}
-			if err != nil {
-				log.Println("[break GetRootCidEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				break
-			}
+		select {
+		case err := <-eventSub.Err():
+			log.Println("[Error in Event GETROOTCID]:", err)
+			break
+		case event := <-logs:
+			log.Println("Received get root cid event ", event.ReqID)
+			getRootCid(ctx, event)
 		}
 	}
 }
