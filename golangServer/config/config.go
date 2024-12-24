@@ -50,7 +50,7 @@ var (
 	PrivateKey            *ecdsa.PrivateKey
 	OracleContract        *Oracle.Oracle
 	Dbs                   map[string]*indexer.Database // mapping dbName address to db
-	GasLimit              uint64                       = 23749
+	GasLimit              uint64                       = 300000
 )
 
 // SetConfig sets the configuration variables.
