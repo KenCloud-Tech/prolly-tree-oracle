@@ -1,19 +1,29 @@
 <template>
-    <h4>Put</h4>
-    <el-input v-model="dbName"  placeholder="Please input DbName" clearable/>
-    <el-input v-model="colName"  placeholder="Please input ColName" clearable/>
-    <el-input
-            v-model="data"
-            style="width: 240px"
-            :autosize="{ minRows: 1, maxRows: 100 }"
-            type="textarea"
-            placeholder="Please input Data"
-    />
-    <el-input v-model="value"  placeholder="Please input pay Value" clearable/>
-    <h4>WEI</h4>
-    <h4 v-if="reqID.valueOf()!=0" style="margin-left: 60px">ReqID: {{reqID}}</h4>
-    <el-button type="primary" round @click="callPut">Call</el-button>
-
+    <div class="title">
+        <h4>Put</h4>
+        <h4 v-if="reqID.valueOf()!=0" style="margin-left: 60px">ReqID: {{reqID}}</h4>
+        <el-button type="primary" round @click="callPut">Call</el-button>
+    </div>
+    <div class="content">
+        <li>
+            <p>Please input DbName<span>(String)</span></p>
+            <el-input v-model="dbName"  placeholder="Please input DbName" clearable/>
+        </li>
+        <li>
+            <p>Please input ColName<span>(String)</span></p>
+            <el-input v-model="colName"  placeholder="Please input ColName" clearable/>
+        </li>
+        <li>
+            <p>Please input Data<span>(String)</span></p>
+            <el-input v-model="data" @input="onShow" style="width: 240px" :autosize="{ minRows: 1, maxRows: 100 }" type="textarea" placeholder="Please input Data" />
+            <el-button v-show="isShow" type="text" style="margin-left: 10px;" @click="pushContent">Fill in with one click</el-button>
+        </li>
+        <li>
+            <p>Please input pay Value<span>(Number)</span></p>
+            <el-input v-model="value"  placeholder="Please input pay Value" clearable/>
+            <h4>WEI</h4>
+        </li>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -30,6 +40,7 @@ const baseGasFee = handel.baseGasFee
 const dbName = ref('')
 const colName = ref('')
 const data = ref('')
+const isShow = ref(true)
 /*
 data:
 [
@@ -39,7 +50,22 @@ data:
 {"name":"Clearance and Steve", "age":18}
 ]
  */
-
+onMounted(() => {
+    dbName.value = localStorage.getItem('dbName')
+    colName.value = localStorage.getItem('colName')
+    console.log('putdbName',dbName.value);
+})
+const onShow = () => {
+    if (data.value !== '') {
+        isShow.value = false;
+    } else {
+        isShow.value = true; 
+    }
+}
+const pushContent = () => {
+    data.value = '[{"name":"Alice", "age": 18},{"name":"Bob", "age": 19},{"name":"Albert", "age": 20},{"name":"Clearance and Steve", "age":18}]'
+    onShow()
+}
 
 const value = computed(()=>{
     const dataB = ethers.utils.toUtf8Bytes(data.value)
@@ -74,27 +100,47 @@ async function callPut(){
     } catch (error){
         ElMessage({
             showClose: true,
-            message: 'Error Call Put'+error.data.message,
+            message: 'Error Call Put'+error.data,
             type: 'error',
         })
     }
 }
-
-
 </script>
 
 <style scoped>
-h4{
-    margin: 5px 0;
-}
-.el-input{
-    width: 200px;
-    float: left;
-    margin: 0 10px;
-}
+
 .el-button{
     width: 100px;
-    position: absolute;
-    right: 10px;
+}
+.el-input{
+    width: 240px;
+    height: 30px;
+    border: none !important;
+}
+.title{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 8px 6px rgba(0, 0, 0, 0.1);
+}
+.content{
+    padding: 30px;
+}
+.content > li{
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap:10px;
+}
+.content > li p{
+    width: 400px;
+    white-space: pre-wrap;
+}
+.content > li p span{
+    color: #a1a1a1;
+    white-space: pre-wrap;
 }
 </style>

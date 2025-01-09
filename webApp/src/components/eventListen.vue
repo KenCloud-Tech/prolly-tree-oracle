@@ -1,15 +1,17 @@
 <template>
-<h4 style="text-align: center">EVENT LISTENING...</h4>
-  <div style="margin: 20px">
-      Received event ReqState with:
-      <div style="background-color: white; height: 180px; width: 100%; white-space: pre-wrap;">
-          {{ReqState}}
-      </div>
-  </div>
-    <div style="margin: 20px">
-        Received event CatchData with:
-        <div style="background-color: white; height: 180px; width: 100%; white-space: pre-wrap;">
-            {{CatchData}}
+    <!-- <h4 style="text-align: center">EVENT LISTENING...</h4> -->
+    <div class="eventListen-content">
+        <div style="margin: 20px; width: 40%;">
+            <p>Received event ReqState with:</p>
+            <div style="background-color: white; height: 180px; width: 100%; border-radius: 5px; white-space: pre-wrap;">
+                {{ ReqState }}
+            </div>
+        </div>
+        <div style="margin: 20px; width: 40%;">
+            <p>Received event CatchData with:</p>
+            <div style="background-color: white; height: 180px; width: 100%; border-radius: 5px; white-space: pre-wrap;">
+                {{ CatchData }}
+            </div>
         </div>
     </div>
 </template>
@@ -51,4 +53,20 @@ function hexToUint8Array(hex) {
 </script>
 
 <style scoped>
+.eventListen-content{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 80px;
+    
+}
+.eventListen-content > div{
+    display: flex;
+    text-align: center;
+    gap: 10px;
+}
+.eventListen-content > div p{
+    width: 100px;
+    height: 100%;
+}
 </style>

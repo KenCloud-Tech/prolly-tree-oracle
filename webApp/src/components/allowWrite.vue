@@ -1,11 +1,20 @@
 <template>
-    <h4>AllowWrite</h4>
-    <el-input v-model="addr"  placeholder="Please input Address" clearable/>
-    <el-input v-model="value"  placeholder="Please input pay Value" clearable/>
-    <h4>WEI</h4>
-    <h4 v-if="reqID.valueOf()!=0" style="margin-left: 60px">ReqID: {{reqID}}</h4>
-    <el-button type="primary" round @click="callAllow">Call</el-button>
-
+    <div class="title">
+        <h4>Address：Allow the user's wallet address</h4>
+        <h4 v-if="reqID.valueOf()!=0" style="margin-left: 60px">ReqID: {{reqID}}</h4>
+        <el-button type="primary" round @click="callAllow">Call</el-button>
+    </div>
+    <div class="content">
+        <li>
+            <p>Please input Address<span>(String)</span></p>
+            <el-input v-model="addr"  placeholder="Please input Address" clearable/>
+        </li>
+        <li>
+            <p>Please input pay Value<span>(Number)</span></p>
+            <el-input v-model="value"  placeholder="Please input pay Value" clearable/>
+            <h4>WEI</h4>
+        </li>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -27,6 +36,8 @@ async function callAllow(){
         const tx = await oracle.AllowWrite(addr.value, { value: amount });
         const receipt = await tx.wait();
         reqID.value=Number(receipt.events[0].args[0]._hex)
+        console.log("reqID.value",reqID.value);
+        
         ElMessage({
             showClose: true,
             message: 'Call AllowWrite Success !',
@@ -45,17 +56,39 @@ async function callAllow(){
 </script>
 
 <style scoped>
-h4{
-    margin: 5px 0;
-}
-.el-input{
-    width: 200px;
-    float: left;
-    margin: 0 10px;
-}
+
 .el-button{
     width: 100px;
-    position: absolute;
-    right: 10px;
+}
+.el-input{
+    width: 240px;
+    height: 30px;
+    border: none !important;
+}
+.title{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 8px 6px rgba(0, 0, 0, 0.1);
+}
+.content{
+    padding: 30px;
+}
+.content > li{
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap:10px;
+}
+.content > li p{
+    width: 400px;
+    white-space: pre-wrap;
+}
+.content > li p span{
+    color: #a1a1a1;
+    white-space: pre-wrap;
 }
 </style>
