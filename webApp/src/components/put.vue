@@ -57,7 +57,7 @@ async function callPut(){
         const jsonArray = JSON.parse(data.value);
         let outputStr = '';
         jsonArray.forEach((obj, index) => {
-            outputStr += JSON.stringify(obj);
+            outputStr += JSON.stringify(obj);git
             if (index < jsonArray.length - 1) {
                 outputStr += '\n';
             }
