@@ -32,16 +32,19 @@ func GenTransactOpts(ctx context.Context, GasLimit uint64) *bind.TransactOpts {
 	}
 
 	// Set gas prices and gas limits, these can be set more intelligently through client queries
-	gasPrice, err := config.Client.SuggestGasPrice(ctx)
-	if err != nil {
-		log.Fatalf("Failed to suggest gas price: %v", err)
-	}
 
-	log.Printf("gasPrice:", (gasPrice).Text(10))
-	var test big.Int
-	test.SetString("100000000", 10)
-	log.Printf("new gasPrice:", (test).Text(10))
-	auth.GasPrice = returnpInt(test)
+	/*
+		gasPrice, err := config.Client.SuggestGasPrice(ctx)
+		if err != nil {
+			log.Fatalf("Failed to suggest gas price: %v", err)
+		}
+
+			log.Printf("gasPrice:", (gasPrice).Text(10))
+			var test big.Int
+			test.SetString("100000000", 10)
+			log.Printf("new gasPrice:", (test).Text(10))
+			auth.GasPrice = returnpInt(test)
+	*/
 	auth.GasLimit = GasLimit
 	return auth
 }

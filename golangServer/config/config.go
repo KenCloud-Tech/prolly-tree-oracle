@@ -31,8 +31,9 @@
 package config
 
 import (
-	"Oracle.com/golangServer/Oracle"
 	"crypto/ecdsa"
+
+	"Oracle.com/golangServer/Oracle"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
@@ -50,7 +51,7 @@ var (
 	PrivateKey            *ecdsa.PrivateKey
 	OracleContract        *Oracle.Oracle
 	Dbs                   map[string]*indexer.Database // mapping dbName address to db
-	GasLimit              uint64                       = 23749
+	GasLimit              uint64                       = 0
 )
 
 // SetConfig sets the configuration variables.
