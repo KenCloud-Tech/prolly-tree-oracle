@@ -3,59 +3,52 @@ package api
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"go.uber.org/zap"
 )
 
-func GetEventListener(ctx context.Context) {
+func GetEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 	for {
-		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleGet)
 		// Subscribe to each event
 		opts := &bind.WatchOpts{Context: ctx, Start: nil}
 		eventSub, err := config.OracleContract.WatchGet(opts, Logs)
 		if err != nil {
-			log.Fatal("Failed to subscribe to Get events:", err)
+			logger.Error("Failed to subscribe to Get events:", err)
 			time.Sleep(5 * time.Second)
 			close(Logs)
 			continue
 		}
 		// start Listening...
-		log.Println("GetEvent Listening ...")
+		logger.Info("GetEvent Listening ...")
+	LOOP:
 		for {
 			select {
 			case err := <-eventSub.Err():
-				log.Println("[Error in Event GET]:", err)
-				restartflag = true
-				break
+				logger.Error("[Error in Event GET]:", err)
+				break LOOP
 			case event := <-Logs:
-				log.Println("Received get event ", event.ReqID)
-				get(ctx, event)
-			}
-			if restartflag {
-				log.Println("[restart GetEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				close(Logs)
-				break
+				logger.Info("Received get event ", event.ReqID)
+				get(ctx, event, logger)
 			}
 		}
 	}
 }
 
 // Get Data from memory db
-func get(ctx context.Context, event *Oracle.OracleGet) {
+func get(ctx context.Context, event *Oracle.OracleGet, logger *zap.SugaredLogger) {
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	colName := event.ColName
 	db := config.Dbs[event.DbName]
 	if db == nil {
-		log.Println("Get DB ERROR: ", db)
+		logger.Errorf("Get DB ERROR: ", db)
 		statement = false
 		//response to oracle
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "DB is not exist")
@@ -63,7 +56,7 @@ func get(ctx context.Context, event *Oracle.OracleGet) {
 	}
 	col, err := db.Collection(ctx, colName, "")
 	if err != nil {
-		log.Println("Get collection ERROR: ", err)
+		logger.Errorf("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)
 		statement = false
 		//response to oracle
@@ -72,7 +65,7 @@ func get(ctx context.Context, event *Oracle.OracleGet) {
 	}
 	node, err := col.Get(ctx, event.RecordID)
 	if err != nil {
-		log.Println("[", event.ColName, "]", "Get Data ERROR: ", err)
+		logger.Errorf("[", event.ColName, "]", "Get Data ERROR: ", err)
 		info := fmt.Sprintf("Get Data ERROR: %v", err)
 		statement = false
 		//response to oracle
@@ -90,8 +83,8 @@ func get(ctx context.Context, event *Oracle.OracleGet) {
 	//response to oracle
 	_, err = config.OracleContract.GetRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 	if err != nil {
-		log.Println("Req function get an Error : ", err)
+		logger.Errorf("Req function get an Error : ", err)
 	} else {
-		log.Println("[", event.ColName, "]", "Get Data success")
+		logger.Info("[", event.ColName, "]", "Get Data success")
 	}
 }

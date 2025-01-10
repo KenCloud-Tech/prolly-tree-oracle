@@ -3,53 +3,46 @@ package api
 import (
 	"context"
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"go.uber.org/zap"
 )
 
-func IndexEventListener(ctx context.Context) {
+func IndexEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 	for {
-		restartflag := false
 		// Create channels for logs
 		Logs := make(chan *Oracle.OracleIndex)
 		// Subscribe to each event
 		opts := &bind.WatchOpts{Context: ctx, Start: nil}
 		eventSub, err := config.OracleContract.WatchIndex(opts, Logs)
 		if err != nil {
-			log.Fatal("Failed to subscribe to Index events:", err)
+			logger.Errorf("Failed to subscribe to Index events:", err)
 			time.Sleep(5 * time.Second)
 			close(Logs)
 			continue
 		}
 		// start Listening...
-		log.Println("IndexEvent Listening ...")
+		logger.Info("IndexEvent Listening ...")
+	LOOP:
 		for {
 			select {
 			case err := <-eventSub.Err():
-				log.Println("[Error in Event INDEX]:", err)
-				restartflag = true
-				break
+				logger.Errorf("[Error in Event INDEX]:", err)
+				break LOOP
 			case event := <-Logs:
-				log.Println("Received index event ", event.ReqID)
-				index(ctx, event)
-			}
-			if restartflag {
-				log.Println("[restart IndexEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				close(Logs)
-				break
+				logger.Info("Received index event ", event.ReqID)
+				index(ctx, event, logger)
 			}
 		}
 	}
 }
 
 // Create index
-func index(ctx context.Context, event *Oracle.OracleIndex) {
+func index(ctx context.Context, event *Oracle.OracleIndex, logger *zap.SugaredLogger) {
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
@@ -57,7 +50,7 @@ func index(ctx context.Context, event *Oracle.OracleIndex) {
 	db := config.Dbs[event.DbName]
 	dbC, err := db.Collection(ctx, colName, "")
 	if err != nil {
-		log.Println("Get collection ERROR: ", err)
+		logger.Errorf("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)
 		statement = false
 		//response to oracle
@@ -67,7 +60,7 @@ func index(ctx context.Context, event *Oracle.OracleIndex) {
 	pK := strings.Split(event.Key, ",")
 	_, err = dbC.CreateIndex(ctx, pK...)
 	if err != nil {
-		log.Println("Create Index ERROR: ", err)
+		logger.Errorf("Create Index ERROR: ", err)
 		info := fmt.Sprintf("Create Index ERROR: %v", err)
 		statement = false
 		//response to oracle
@@ -78,8 +71,8 @@ func index(ctx context.Context, event *Oracle.OracleIndex) {
 	statement = true
 	_, err = config.OracleContract.IndexRsp(tps, event.ReqID, statement, event.Sender, "")
 	if err != nil {
-		log.Println("Req function get an Error : ", err)
+		logger.Errorf("Req function get an Error : ", err)
 	} else {
-		log.Println("[", event.ColName, "]", "Create index success")
+		logger.Info("[", event.ColName, "]", "Create index success")
 	}
 }

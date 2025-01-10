@@ -22,7 +22,7 @@ contract OracleTest{
         return (ReqID, info);
     }
 
-    //creat a new db
+    //create a new db
     function Create(string calldata dbName, string calldata colName, string calldata primaryKey, uint v) external payable returns(uint ReqID){
         (bool success, bytes memory result) = oracleADD.call{value: v}(abi.encodeWithSignature("Create(string,string,string)", dbName,colName,primaryKey));
     

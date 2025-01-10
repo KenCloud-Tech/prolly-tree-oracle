@@ -47,7 +47,7 @@ contract Oracle is IOracle,OracleInterface, util {
             cols[dbName][colName] = true;
             permission[dbOwner[dbName]][dbName] = Permission(true, true, true); //dbOwner
             permission[sender][dbName] = Permission(true, true, true); //clollection creater
-            emit ReqState(reqID, sender, true, "Collection creat success.");
+            emit ReqState(reqID, sender, true, "Collection create success.");
             reqStatement[reqID] = true;
         } else {
             emit ReqState(reqID, sender, false, info);

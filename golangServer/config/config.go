@@ -38,11 +38,8 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-const (
-	SaveDataPath = "golangServer/savedDatas/"
-)
-
 var (
+	SaveDataPath          string
 	URL                   string
 	OracleOwnerPrivateKey string
 	ContractAddress       string
@@ -55,7 +52,8 @@ var (
 )
 
 // SetConfig sets the configuration variables.
-func SetConfig(url, privateKey, contractAddress string, chainID int64) {
+func SetConfig(data, url, privateKey, contractAddress string, chainID int64) {
+	SaveDataPath = data
 	URL = url
 	OracleOwnerPrivateKey = privateKey
 	ContractAddress = contractAddress

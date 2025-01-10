@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"go.uber.org/zap"
 )
 
 type SearchResults struct {
@@ -23,52 +23,45 @@ type Results struct {
 	Error        string
 }
 
-func SearchEventListener(ctx context.Context) {
+func SearchEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 	for {
-		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleSearch)
 		// Subscribe to each event
 		opts := &bind.WatchOpts{Context: ctx, Start: nil}
 		eventSub, err := config.OracleContract.WatchSearch(opts, Logs)
 		if err != nil {
-			log.Fatal("Failed to subscribe to Search events:", err)
+			logger.Error("Failed to subscribe to Search events:", err)
 			time.Sleep(5 * time.Second)
 			close(Logs)
 			continue
 		}
 		// start Listening...
-		log.Println("SearchEvent Listening ...")
+		logger.Info("SearchEvent Listening ...")
+	LOOP:
 		for {
 			select {
 			case err := <-eventSub.Err():
-				log.Println("[Error in Event SEARCH]:", err)
-				restartflag = true
-				break
+				logger.Error("[Error in Event SEARCH]:", err)
+				break LOOP
 			case event := <-Logs:
-				log.Println("Received search event ", event.ReqID)
-				search(ctx, event)
-			}
-			if restartflag {
-				log.Println("[restart SearchEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				close(Logs)
-				break
+				logger.Info("Received search event ", event.ReqID)
+				search(ctx, event, logger)
 			}
 		}
 	}
 }
 
 // Search Data from memory db
-func search(ctx context.Context, event *Oracle.OracleSearch) {
+func search(ctx context.Context, event *Oracle.OracleSearch, logger *zap.SugaredLogger) {
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	colName := event.ColName
 	db, ok := config.Dbs[event.DbName]
 	if !ok {
-		log.Println("Collection does not exist")
-		info := fmt.Sprintf("Collection does not exist")
+		logger.Error("Collection does not exist")
+		info := "Collection does not exist"
 		statement = false
 		//response to oracle
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
@@ -76,7 +69,7 @@ func search(ctx context.Context, event *Oracle.OracleSearch) {
 	}
 	dbC, err := db.Collection(ctx, colName, "")
 	if err != nil {
-		log.Println("Get collection ERROR: ", err)
+		logger.Error("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)
 		statement = false
 		//response to oracle
@@ -86,7 +79,7 @@ func search(ctx context.Context, event *Oracle.OracleSearch) {
 	var querys []Queryer
 	err = json.Unmarshal(event.Querys, &querys)
 	if err != nil {
-		log.Println("Unmarshal ERROR: ", err)
+		logger.Error("Unmarshal ERROR: ", err)
 		info := fmt.Sprintf("Unmarshal ERROR: %v", err)
 		statement = false
 		//response to oracle
@@ -125,7 +118,7 @@ func search(ctx context.Context, event *Oracle.OracleSearch) {
 	}
 	result, err := json.Marshal(r)
 	if err != nil {
-		log.Println("Marshal Results ERROR: ", err)
+		logger.Error("Marshal Results ERROR: ", err)
 		info := fmt.Sprintf("Marshal Results ERROR: %v", err)
 		statement = false
 		//response to oracle
@@ -136,8 +129,8 @@ func search(ctx context.Context, event *Oracle.OracleSearch) {
 	//response to oracle
 	_, err = config.OracleContract.SearchRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 	if err != nil {
-		log.Println("Req function get an Error : ", err)
+		logger.Error("Req function get an Error : ", err)
 	} else {
-		log.Println("[", event.ColName, "]", "Search Data success")
+		logger.Info("[", event.ColName, "]", "Search Data success")
 	}
 }

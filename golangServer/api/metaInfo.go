@@ -4,112 +4,106 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"go.uber.org/zap"
 )
 
-func GetCollections(ctx context.Context) {
+func GetCollections(ctx context.Context, logger *zap.SugaredLogger) {
 
 	for {
-		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleGetCol)
 		// Subscribe to each event
 		opts := &bind.WatchOpts{Context: ctx, Start: nil}
 		eventSub, err := config.OracleContract.WatchGetCol(opts, Logs)
 		if err != nil {
-			log.Fatal("Failed to subscribe to GetCollections events:", err)
+			logger.Errorf("Failed to subscribe to GetCollections events %v", err)
 			time.Sleep(5 * time.Second)
 			close(Logs)
 			continue
 		}
 		// start Listening...
-		log.Println("GetCollectionsEvent Listening ...")
+		logger.Info("GetCollectionsEvent Listening ...")
+	LOOP:
 		for {
 			select {
 			case err := <-eventSub.Err():
-				log.Println("[Error in Event GetCollections]:", err)
-				restartflag = true
-				break
+				logger.Error("[Error in Event GetCollections]:", err)
+				break LOOP
 			case event := <-Logs:
-				log.Println("Received GetCollections event ", event.ReqID)
+				logger.Infof("Received GetCollections event ", event.ReqID)
 				var statement bool
 				tps := GenTransactOpts(ctx, config.GasLimit)
 
 				db := config.Dbs[event.DbName]
 				cols, err := db.ListCollections(ctx)
 				if err != nil {
-					log.Println("[", event.DbName, "]", "List Collections ERROR: ", err)
+					logger.Error("[", event.DbName, "]", "List Collections ERROR: ", err)
 					info := fmt.Sprintf("List Collections ERROR: %v", err)
 					statement = false
 					//response to oracle
 					config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					continue
 				}
 
 				jsonBytes, err := json.Marshal(cols)
 				if err != nil {
-					log.Println("[", event.DbName, "]", "Trans to json ERROR: ", err)
+					logger.Error("[", event.DbName, "]", "Trans to json ERROR: ", err)
 					info := fmt.Sprintf("Trans to json ERROR: %v", err)
 					statement = false
 					//response to oracle
 					config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					continue
 				}
 				result, err := json.Marshal([][]byte{jsonBytes})
 				if err != nil {
-					log.Println("Marshal Results ERROR: ", err)
+					logger.Error("Marshal Results ERROR: ", err)
 					info := fmt.Sprintf("Marshal Results ERROR: %v", err)
 					statement = false
 					//response to oracle
 					config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					return
+					continue
 				}
 				statement = true
 				//response to oracle
 				_, err = config.OracleContract.GetColRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 				if err != nil {
-					log.Println("Req function get an Error : ", err)
+					logger.Error("Req function get an Error : ", err)
 				} else {
-					log.Println("[Get collections success]")
+					logger.Info("[Get collections success]")
 				}
-			}
-			if restartflag {
-				log.Println("[restart GetCollections for loop]:", err)
-				time.Sleep(5 * time.Second)
-				close(Logs)
-				break
 			}
 		}
 	}
 }
 
-func GetIndexes(ctx context.Context) {
+func GetIndexes(ctx context.Context, logger *zap.SugaredLogger) {
 	for {
-		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleGetIndex)
 		// Subscribe to each event
 		opts := &bind.WatchOpts{Context: ctx, Start: nil}
 		eventSub, err := config.OracleContract.WatchGetIndex(opts, Logs)
 		if err != nil {
-			log.Fatal("Failed to subscribe to GetIndexes events:", err)
+			logger.Errorf("Failed to subscribe to GetIndexes events:", err)
 			time.Sleep(5 * time.Second)
 			close(Logs)
 			continue
 		}
 		// start Listening...
-		log.Println("GetIndexesEvent Listening ...")
+		logger.Info("GetIndexesEvent Listening ...")
+	LOOP:
 		for {
 			select {
 			case err := <-eventSub.Err():
-				log.Println("[Error in Event GetIndexes]:", err)
-				restartflag = true
-				break
+				logger.Error("[Error in Event GetIndexes]:", err)
+				break LOOP
 			case event := <-Logs:
-				log.Println("Received GetIndexes event ", event.ReqID)
+				logger.Info("Received GetIndexes event ", event.ReqID)
 				var statement bool
 				ctx := ctx
 				tps := GenTransactOpts(ctx, config.GasLimit)
@@ -118,21 +112,21 @@ func GetIndexes(ctx context.Context) {
 				colName := event.ColName
 				col, err := db.Collection(ctx, colName, "")
 				if err != nil {
-					log.Println("Get collection ERROR: ", err)
+					logger.Error("Get collection ERROR: ", err)
 					info := fmt.Sprintf("Get collection ERROR: %v", err)
 					statement = false
 					//response to oracle
 					config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					return
+					continue
 				}
 				indx, err := col.Indexes(ctx)
 				if err != nil {
-					log.Println("Get indexes ERROR: ", err)
+					logger.Error("Get indexes ERROR: ", err)
 					info := fmt.Sprintf("Get indexes ERROR: %v", err)
 					statement = false
 					//response to oracle
 					config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					return
+					continue
 				}
 				var indexes []string
 				for _, i := range indx {
@@ -140,65 +134,59 @@ func GetIndexes(ctx context.Context) {
 				}
 				jsonBytes, err := json.Marshal(indexes)
 				if err != nil {
-					log.Println("[", event.DbName, "]", "Trans to json ERROR: ", err)
+					logger.Error("[", event.DbName, "]", "Trans to json ERROR: ", err)
 					info := fmt.Sprintf("Trans to json ERROR: %v", err)
 					statement = false
 					//response to oracle
 					config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					continue
 				}
 
 				result, err := json.Marshal([][]byte{jsonBytes})
 				if err != nil {
-					log.Println("Marshal Results ERROR: ", err)
+					logger.Error("Marshal Results ERROR: ", err)
 					info := fmt.Sprintf("Marshal Results ERROR: %v", err)
 					statement = false
 					//response to oracle
 					config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					return
+					continue
 				}
 				statement = true
 				//response to oracle
 				_, err = config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 				if err != nil {
-					log.Println("Req function get an Error : ", err)
+					logger.Error("Req function get an Error : ", err)
 				} else {
-					log.Println("[Get indexes success]")
+					logger.Info("[Get indexes success]")
 				}
-			}
-			if restartflag {
-				log.Println("[restart GetIndexes for loop]:", err)
-				time.Sleep(5 * time.Second)
-				close(Logs)
-				break
 			}
 		}
 	}
 }
 
-func GetRootCid(ctx context.Context) {
+func GetRootCid(ctx context.Context, logger *zap.SugaredLogger) {
 	for {
-		restartflag := false
 		// Get channels for logs
 		Logs := make(chan *Oracle.OracleGetRootCid)
 		// Subscribe to each event
 		opts := &bind.WatchOpts{Context: ctx, Start: nil}
 		eventSub, err := config.OracleContract.WatchGetRootCid(opts, Logs)
 		if err != nil {
-			log.Fatal("Failed to subscribe to WatchGetRootCid events:", err)
+			logger.Errorf("Failed to subscribe to WatchGetRootCid events:", err)
 			time.Sleep(5 * time.Second)
 			close(Logs)
 			continue
 		}
 		// start Listening...
-		log.Println("WatchGetRootCid Listening ...")
+		logger.Info("WatchGetRootCid Listening ...")
+	LOOP:
 		for {
 			select {
 			case err := <-eventSub.Err():
-				log.Println("[Error in Event WatchGetRootCid]:", err)
-				restartflag = true
-				break
+				logger.Errorf("[Error in Event WatchGetRootCid]:", err)
+				break LOOP
 			case event := <-Logs:
-				log.Println("Received WatchGetRootCid event ", event.ReqID)
+				logger.Info("Received WatchGetRootCid event ", event.ReqID)
 				var statement bool
 				tps := GenTransactOpts(ctx, config.GasLimit)
 
@@ -207,7 +195,7 @@ func GetRootCid(ctx context.Context) {
 				marshal, err := json.Marshal(rootCid)
 				result, err := json.Marshal([][]byte{marshal})
 				if err != nil {
-					log.Println("Marshal Results ERROR: ", err)
+					logger.Errorf("Marshal Results ERROR: ", err)
 					info := fmt.Sprintf("Marshal Results ERROR: %v", err)
 					statement = false
 					//response to oracle
@@ -218,16 +206,10 @@ func GetRootCid(ctx context.Context) {
 				//response to oracle
 				_, err = config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
 				if err != nil {
-					log.Println("Req function get an Error : ", err)
+					logger.Errorf("Req function get an Error : ", err)
 				} else {
-					log.Println("[Get RootCid success]")
+					logger.Info("[Get RootCid success]", rootCid)
 				}
-			}
-			if restartflag {
-				log.Println("[restart GetRootCid for loop]:", err)
-				time.Sleep(5 * time.Second)
-				close(Logs)
-				break
 			}
 		}
 	}

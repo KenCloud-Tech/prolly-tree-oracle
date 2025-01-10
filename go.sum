@@ -135,8 +135,8 @@ github.com/holiman/uint256 v1.2.4 h1:jUc4Nk8fm9jZabQuqr2JzednajVmBpC+oiTiXZJEApU
 github.com/holiman/uint256 v1.2.4/go.mod h1:EOMSn4q6Nyt9P6efbI3bueV4e1b3dGlUCXeiRV4ng7E=
 github.com/huin/goupnp v1.3.0 h1:UvLUlWDNpoUdYzb2TCn+MuTWtcjXKSza2n6CBdQ0xXc=
 github.com/huin/goupnp v1.3.0/go.mod h1:gnGPsThkYa7bFi/KWmEysQRf48l2dvR5bxr2OFckNX8=
-github.com/hunjixin/ipld-prolly-indexer v0.0.0-20240910071929-6bc6de96d749 h1:XeuM5if5Tz04CrzANC/9Z7cqNC9ecOsO1yIYS6lp8qk=
-github.com/hunjixin/ipld-prolly-indexer v0.0.0-20240910071929-6bc6de96d749/go.mod h1:ObqbZUmvMZDlYaHugP8Gt+jNm4RuchBNflogZ2yzTTs=
+github.com/hunjixin/ipld-prolly-indexer v0.0.0-20250110135749-931ef4800504 h1:uN1wKNoLhSQN3zvFv+yLF8cWo0MvmhQoRuC4SMIwRXg=
+github.com/hunjixin/ipld-prolly-indexer v0.0.0-20250110135749-931ef4800504/go.mod h1:ObqbZUmvMZDlYaHugP8Gt+jNm4RuchBNflogZ2yzTTs=
 github.com/ipfs/bbloom v0.0.4 h1:Gi+8EGJ2y5qiD5FbsbpX/TMNcJw8gSqr7eyjHa4Fhvs=
 github.com/ipfs/bbloom v0.0.4/go.mod h1:cS9YprKXpoZ9lT0n/Mw/a6/aFV6DTjTLYHeA+gyqMG0=
 github.com/ipfs/go-bitfield v1.1.0 h1:fh7FIo8bSwaJEh6DdTWbCeZ1eqOaOkKFI74SCnsWbGA=

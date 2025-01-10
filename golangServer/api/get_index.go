@@ -2,18 +2,17 @@ package api
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	cid "github.com/ipfs/go-cid"
+	"go.uber.org/zap"
 )
 
-func GetRootCidEventListener(ctx context.Context) {
+func GetRootCidEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 	for {
-		restartflag := false
 		// Create a channel for logs
 		logs := make(chan *Oracle.OracleGetRootCid)
 
@@ -21,50 +20,44 @@ func GetRootCidEventListener(ctx context.Context) {
 		opts := &bind.WatchOpts{Context: ctx, Start: nil}
 
 		// Start Listening...
-		log.Println("GetRootCidEvent Listening ...")
+		logger.Info("GetRootCidEvent Listening ...")
 		eventSub, err := config.OracleContract.WatchGetRootCid(opts, logs)
 		if err != nil {
-			log.Fatal("Failed to subscribe to Get events:", err)
+			logger.Error("Failed to subscribe to Get events:", err)
 			time.Sleep(5 * time.Second)
 			close(logs)
 			continue
 		}
+	LOOP:
 		for {
 			select {
 			case err := <-eventSub.Err():
-				log.Println("[Error in Event GETROOTCID]:", err)
-				restartflag = true
-				break
+				logger.Error("[Error in Event GETROOTCID]:", err)
+				break LOOP
 			case event := <-logs:
-				log.Println("Received get root cid event ", event.ReqID)
-				getRootCid(ctx, event)
-			}
-			if restartflag {
-				log.Println("[restart GetRootCidEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				close(logs)
-				break
+				logger.Info("Received get root cid event ", event.ReqID)
+				getRootCid(ctx, event, logger)
 			}
 		}
 	}
 }
 
 // Get root cid from database
-func getRootCid(ctx context.Context, event *Oracle.OracleGetRootCid) {
+func getRootCid(ctx context.Context, event *Oracle.OracleGetRootCid, logger *zap.SugaredLogger) {
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	dbName := event.DbName
 	db, exists := config.Dbs[dbName]
 	if !exists || db == nil {
-		log.Println("Database not found or is nil for dbName:", dbName)
+		logger.Error("Database not found or is nil for dbName: %s", dbName)
 		statement = false
 		// Response to oracle
 		config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Database is not initialized")
 		return
 	}
 
-	log.Println("Attempting to get RootCid for database:", dbName)
+	logger.Infof("Attempting to get RootCid for database:", dbName)
 	rootCid := db.RootCid()
 	if rootCid == cid.Undef {
 		statement = false
@@ -78,8 +71,8 @@ func getRootCid(ctx context.Context, event *Oracle.OracleGetRootCid) {
 	// Response to oracle
 	_, err := config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
 	if err != nil {
-		log.Println("Req function encountered an error: ", err)
+		logger.Error("Req function encountered an error: ", err)
 	} else {
-		log.Println("[", dbName, "]", "Get Root CID success")
+		logger.Info("[", dbName, "]", "Get Root CID success")
 	}
 }

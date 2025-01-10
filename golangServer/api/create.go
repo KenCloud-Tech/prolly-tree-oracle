@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
@@ -11,61 +10,55 @@ import (
 	"Oracle.com/golangServer/config"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"go.uber.org/zap"
 )
 
-func CreatEventListener(ctx context.Context) {
+func CreatEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 	for {
-		restartflag := false
 		// Create channels for logs
 		Logs := make(chan *Oracle.OracleCreate)
 		// Subscribe to each event
 		opts := &bind.WatchOpts{Context: ctx, Start: nil}
 
 		// start Listening...
-		log.Println("CreateEvent Listening ...")
+		logger.Info("CreateEvent Listening ...")
 		eventSub, err := config.OracleContract.WatchCreate(opts, Logs)
 		if err != nil {
-			log.Fatal("Failed to subscribe to Get events:", err)
+			logger.Error("Failed to subscribe to Get events:", err)
 			time.Sleep(5 * time.Second)
 			close(Logs)
 			continue
 		}
+	LOOP:
 		for {
 			select {
 			case err := <-eventSub.Err():
-				log.Println("[Error in Event CREAT]:", err)
-				restartflag = true
-				break
+				logger.Errorf("[Error in Event CREAT]:", err)
+				break LOOP
 			case event := <-Logs:
-				log.Println("Received creat event ", event.ReqID)
-				create(ctx, event)
-			}
-			if restartflag {
-				log.Println("[restart CreatEventListener for loop]:", err)
-				time.Sleep(5 * time.Second)
-				close(Logs)
-				break
+				logger.Info("Received create event ", event.ReqID)
+				create(ctx, event, logger)
 			}
 		}
 	}
 }
 
 // create memory collection
-func create(ctx context.Context, event *Oracle.OracleCreate) {
+func create(ctx context.Context, event *Oracle.OracleCreate, logger *zap.SugaredLogger) {
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
 	dbName := event.DbName
-	log.Println("Create collection dbName: ", event.DbName)
-	log.Println("Create collection ColName: ", event.ColName)
-	log.Println("Create collection PrimaryKey: ", event.PrimaryKey)
+	logger.Info("Create collection dbName: ", event.DbName)
+	logger.Info("Create collection ColName: ", event.ColName)
+	logger.Info("Create collection PrimaryKey: ", event.PrimaryKey)
 	if db, ok := config.Dbs[dbName]; ok {
-		log.Println("existed dbName: ", event.DbName)
+		logger.Info("existed dbName: ", event.DbName)
 		colName := event.ColName
 		pK := strings.Split(event.PrimaryKey, ",")
 		_, err := db.Collection(ctx, colName, pK...)
 		if err != nil {
-			log.Println("Create collection ERROR: ", err)
+			logger.Error("Create collection ERROR: ", err)
 			info := fmt.Sprintf("Create collection ERROR: %v", err)
 			statement = false
 			//response to oracle
@@ -77,16 +70,16 @@ func create(ctx context.Context, event *Oracle.OracleCreate) {
 		//response to oracle
 		_, err = config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, info)
 		if err != nil {
-			log.Println("Req function get an Error : ", err)
+			logger.Error("Req function get an Error : ", err)
 			db.DeleteCol(colName)
 		} else {
-			log.Println("[", colName, "]", "Create collection success")
+			logger.Info("[", colName, "]", "Create collection success")
 		}
 	} else {
-		log.Println("non existed dbName: ", event.DbName)
+		logger.Info("non existed dbName: ", event.DbName)
 		db, err := indexer.NewMemoryDatabase()
 		if err != nil {
-			log.Println("New Memory Database ERROR: ", err)
+			logger.Error("New Memory Database ERROR: ", err)
 			info := fmt.Sprintf("New Memory Database ERROR: %v", err)
 			statement = false
 			//response to oracle
@@ -98,23 +91,23 @@ func create(ctx context.Context, event *Oracle.OracleCreate) {
 		pK := strings.Split(event.PrimaryKey, ",")
 		_, err = db.Collection(ctx, colName, pK...)
 		if err != nil {
-			log.Println("Create collection ERROR: ", err)
+			logger.Error("Create collection ERROR: ", err)
 			info := fmt.Sprintf("Create collection ERROR: %v", err)
 			statement = false
 			//response to oracle
 			config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, info)
 			return
 		}
-		log.Println("non existed dbName created success: ", event.DbName)
+		logger.Info("non existed dbName created success: ", event.DbName)
 		statement = true
 		info := fmt.Sprintf("Create non existed collection Success: %v", dbName)
 		//response to oracle
 		_, err = config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, colName, event.Owner, info)
 		if err != nil {
-			log.Println("Req function get an Error : ", err)
+			logger.Error("Req function get an Error : ", err)
 			db.DeleteCol(colName)
 		} else {
-			log.Println("[", colName, "]", "Create memory db success")
+			logger.Info("[", colName, "]", "Create memory db success")
 		}
 	}
 

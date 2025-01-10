@@ -22,10 +22,9 @@
 
 # Go workspace file
 go.work
-=======
 .idea/
 contracts/artifacts/
 tool.txt
 demo.go
 golangServer/savedDatas/*
->>>>>>> master
+golangServer/data
