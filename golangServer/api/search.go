@@ -13,9 +13,10 @@ import (
 )
 
 type SearchResults struct {
-	Status bool
-	Data   string
-	Error  string
+	Status   bool
+	RecordId []byte
+	Data     string
+	Error    string
 }
 type Results struct {
 	Id           int
@@ -106,9 +107,11 @@ func search(ctx context.Context, event *Oracle.OracleSearch, logger *zap.Sugared
 				})
 				continue
 			}
+			fmt.Println(record.Id)
 			records = append(records, SearchResults{
-				Status: true,
-				Data:   string(nodeTobyte(record.Data)),
+				Status:   true,
+				RecordId: record.Id,
+				Data:     string(nodeTobyte(record.Data)),
 			})
 		}
 		r = append(r, Results{

@@ -5,14 +5,18 @@ import (
 	"context"
 	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"math/big"
 	"strings"
+	"time"
 
 	"Oracle.com/golangServer/config"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ipld/go-ipld-prime"
 	"github.com/ipld/go-ipld-prime/codec/dagjson"
 	"github.com/ipld/go-ipld-prime/datamodel"
@@ -229,4 +233,24 @@ func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 		}
 	}
 	return
+}
+func sendTx(ctx context.Context, client *ethclient.Client, sendFunc func() (*types.Transaction, error)) error {
+	for {
+		tx, err := sendFunc()
+		if err != nil {
+			if strings.Contains(err.Error(), "replacement transaction underpriced") {
+				time.Sleep(time.Second * 2)
+				continue
+			}
+		}
+
+		receipt, err := bind.WaitMined(ctx, client, tx)
+		if err != nil {
+			return fmt.Errorf("wait miner  %s %w", tx.Hash().String(), err)
+		}
+		if receipt.Status != 0 {
+			return fmt.Errorf("receipt status is not 0 %s", tx.Hash().String())
+		}
+
+	}
 }

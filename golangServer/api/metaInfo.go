@@ -9,6 +9,7 @@ import (
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/core/types"
 	"go.uber.org/zap"
 )
 
@@ -116,7 +117,12 @@ func GetIndexes(ctx context.Context, logger *zap.SugaredLogger) {
 					info := fmt.Sprintf("Get collection ERROR: %v", err)
 					statement = false
 					//response to oracle
-					config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+						return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					})
+					if err != nil {
+						logger.Error("response error resp %v", err)
+					}
 					continue
 				}
 				indx, err := col.Indexes(ctx)
@@ -125,7 +131,12 @@ func GetIndexes(ctx context.Context, logger *zap.SugaredLogger) {
 					info := fmt.Sprintf("Get indexes ERROR: %v", err)
 					statement = false
 					//response to oracle
-					config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+						return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					})
+					if err != nil {
+						logger.Error("response error resp %v", err)
+					}
 					continue
 				}
 				var indexes []string
@@ -138,7 +149,12 @@ func GetIndexes(ctx context.Context, logger *zap.SugaredLogger) {
 					info := fmt.Sprintf("Trans to json ERROR: %v", err)
 					statement = false
 					//response to oracle
-					config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+						return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					})
+					if err != nil {
+						logger.Error("response error resp %v", err)
+					}
 					continue
 				}
 
@@ -148,12 +164,19 @@ func GetIndexes(ctx context.Context, logger *zap.SugaredLogger) {
 					info := fmt.Sprintf("Marshal Results ERROR: %v", err)
 					statement = false
 					//response to oracle
-					config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+						return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+					})
+					if err != nil {
+						logger.Error("response error resp %v", err)
+					}
 					continue
 				}
 				statement = true
 				//response to oracle
-				_, err = config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
+				err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+					return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
+				})
 				if err != nil {
 					logger.Error("Req function get an Error : ", err)
 				} else {
@@ -190,21 +213,14 @@ func GetRootCid(ctx context.Context, logger *zap.SugaredLogger) {
 				var statement bool
 				tps := GenTransactOpts(ctx, config.GasLimit)
 
+				fmt.Println(event.CallBack)
 				db := config.Dbs[event.DbName]
 				rootCid := db.RootCid().String()
-				marshal, err := json.Marshal(rootCid)
-				result, err := json.Marshal([][]byte{marshal})
-				if err != nil {
-					logger.Errorf("Marshal Results ERROR: ", err)
-					info := fmt.Sprintf("Marshal Results ERROR: %v", err)
-					statement = false
-					//response to oracle
-					config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					return
-				}
 				statement = true
 				//response to oracle
-				_, err = config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
+				err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+					return config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, []byte("\""+rootCid+"\""), event.CallBack, event.Sender, "")
+				})
 				if err != nil {
 					logger.Errorf("Req function get an Error : ", err)
 				} else {

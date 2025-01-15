@@ -33,7 +33,7 @@ func CreatEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 		for {
 			select {
 			case err := <-eventSub.Err():
-				logger.Errorf("[Error in Event CREAT]:", err)
+				logger.Errorf("[Error in Event CREATE]:", err)
 				break LOOP
 			case event := <-Logs:
 				logger.Info("Received create event ", event.ReqID)

@@ -45,7 +45,7 @@ const baseGasFee = handel.baseGasFee.toString()
 
 const dbName = ref('')
 const colName = ref('')
-const recordID = ref('[129, 99, 66, 111, 98]')
+const recordID = ref('gWNCb2I=')
 const value = ref(baseGasFee)
 const reqID = ref(0)
 const isShow = ref(true)
@@ -66,11 +66,27 @@ recordID:
     }
 }
 
+function base64ToUint8Array(base64) {
+    // 将 Base64 解码为二进制数据
+    const binaryString = atob(base64);
+    // 将二进制数据转为 Uint8Array
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+}
+
 async function callGet(){
     try {
         const amount = ethers.utils.parseUnits(value.value,"wei")
-        let byteArray = JSON.parse(recordID.value);
-        let dataB = new Uint8Array(byteArray);
+        let dataB = [];
+        try {
+            let byteArray = JSON.parse(recordID.value);
+            dataB = new Uint8Array(byteArray);
+        }catch{
+            dataB = base64ToUint8Array(recordID.value);
+        }
         const tx = await oracle.Get(dbName.value,colName.value,dataB,'', { value: amount });
         const receipt = await tx.wait();
         reqID.value=Number(receipt.events[0].args[0]._hex)

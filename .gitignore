@@ -28,3 +28,4 @@ tool.txt
 demo.go
 golangServer/savedDatas/*
 golangServer/data
+./data

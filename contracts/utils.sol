@@ -94,6 +94,12 @@ contract util is IOracle {
 
     function GetRootCidRsp(uint reqID, bool statement, bytes calldata data, string calldata callBack, address sender, string calldata info) onlyOracleOwner external {
         if (statement == true) {
+             if(isEmptyString(callBack)){
+                emit ReqState(reqID, sender, true, "Get RootCid success.");
+                emit CatchData(reqID, data);
+                reqStatement[reqID] = true;
+                return;
+            }
             (bool OK,) = sender.call(abi.encodeWithSignature(callBack, data));
             if (OK) {
                 emit ReqState(reqID, sender, true, "Get RootCid success.");

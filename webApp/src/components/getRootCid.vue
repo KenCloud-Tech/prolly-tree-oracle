@@ -17,10 +17,6 @@
             <p>Please input DbName<span>(String)</span></p>
             <el-input v-model="dbName"  placeholder="Please input DbName" clearable/>
         </li>
-        <li>
-            <p>Please input ColName<span>(String)</span></p>
-            <el-input v-model="colName"  placeholder="Please input ColName" clearable/>
-        </li>
         <!-- <li>
             <p>Please input Index<span>(String)</span></p>
             <el-input v-model="index"  placeholder="Please input Index" clearable/>
@@ -44,21 +40,18 @@ const oracle = handel.oracle
 const baseGasFee = handel.baseGasFee.toString()
 
 const dbName = ref('')
-const colName = ref('')
 // const index = ref('')
 const value = ref(baseGasFee)
 const reqID = ref(0)
 const emits = defineEmits(['isOk'])
 onMounted(() => {
     dbName.value = localStorage.getItem('dbName')
-    colName.value = localStorage.getItem('colName')
 })
 
 async function callGetRootCid(){
     try {
         const amount = ethers.utils.parseUnits(value.value,"wei")
-        // const tx = await oracle.GetIndex(dbName.value,colName.value,index.value, { value: amount });
-        const tx = await oracle.GetRootCid(dbName.value, colName.value, { value: amount });
+        const tx = await oracle.GetRootCid(dbName.value, "", { value: amount });
         const receipt = await tx.wait();
         reqID.value=Number(receipt.events[0].args[0]._hex)
         ElMessage({
