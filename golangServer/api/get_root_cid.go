@@ -7,6 +7,7 @@ import (
 	"Oracle.com/golangServer/Oracle"
 	"Oracle.com/golangServer/config"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/core/types"
 	cid "github.com/ipfs/go-cid"
 	"go.uber.org/zap"
 )
@@ -53,23 +54,35 @@ func getRootCid(ctx context.Context, event *Oracle.OracleGetRootCid, logger *zap
 		logger.Error("Database not found or is nil for dbName: %s", dbName)
 		statement = false
 		// Response to oracle
-		config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Database is not initialized")
+		err := sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+			return config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Database is not initialized")
+		})
+		if err != nil {
+			logger.Errorf("response error %w", err)
+		}
 		return
 	}
 
-	logger.Infof("Attempting to get RootCid for database:", dbName)
+	logger.Infof("Attempting to get RootCid for database: %s", dbName)
 	rootCid := db.RootCid()
 	if rootCid == cid.Undef {
 		statement = false
 		// Response to oracle
-		config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Root CID is undefined")
+		err := sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+			return config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "Root CID is undefined")
+		})
+		if err != nil {
+			logger.Errorf("response error %w", err)
+		}
 		return
 	}
 
 	statement = true
 	data := rootCid.Bytes() // Convert cid to bytes
 	// Response to oracle
-	_, err := config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
+	err := sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+		return config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
+	})
 	if err != nil {
 		logger.Error("Req function encountered an error: ", err)
 	} else {

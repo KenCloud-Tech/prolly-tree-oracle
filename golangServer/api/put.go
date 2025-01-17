@@ -58,7 +58,7 @@ func put(ctx context.Context, event *Oracle.OraclePut, logger *zap.SugaredLogger
 		config.OracleContract.PutRsp(tps, event.ReqID, statement, event.Sender, "DB is not exist")
 		return
 	}
-	dbC, err := db.Collection(ctx, colName, "")
+	dbC, err := db.Collection(ctx, colName)
 	if err != nil {
 		logger.Error("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)

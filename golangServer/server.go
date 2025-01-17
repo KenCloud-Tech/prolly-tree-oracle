@@ -2,14 +2,14 @@
 package main
 
 import (
-	"bufio"
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"os/signal"
 	"path"
-	"strings"
 	"syscall"
 
 	"Oracle.com/golangServer/Oracle"
@@ -19,6 +19,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/ipfs/go-cid"
 	"go.uber.org/zap"
 )
 
@@ -34,8 +35,22 @@ func Init(logger *zap.SugaredLogger) error {
 	// Set configuration values based on flags
 	config.SetConfig(*dataFlag, *urlFlag, *privateKeyFlag, *contractAddressFlag, int64(*chainIDFlag))
 
+	_, err := os.Stat(config.SaveDataPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			err = os.MkdirAll(config.SaveDataPath, 0755)
+			if err != nil {
+				return err
+			}
+			err = os.WriteFile(path.Join(config.SaveDataPath, "meta.json"), []byte("[]"), 0666)
+			if err != nil {
+				return err
+			}
+		} else {
+			return fmt.Errorf("inspect path %w", err)
+		}
+	}
 	// Connect to the Ethereum client
-	var err error
 	client, err := ethclient.Dial(config.URL)
 	if err != nil {
 		return fmt.Errorf("failed to connect to the Ethereum client: %w", err)
@@ -74,18 +89,23 @@ func main() {
 		return
 	}
 	logger.Info("Config init successfully. ")
-	dbs, err := loadDb(ctx, config.SaveDataPath)
+	cwd, err := os.Getwd()
+	if err != nil {
+		mainLogger.Errorf("get cwd directory %v", err)
+		return
+	}
+	mainLogger.Info("attemp to load db from", path.Join(cwd, config.SaveDataPath))
+	dbs, err := loadDb(ctx, mainLogger, config.SaveDataPath)
 	if err != nil {
 		mainLogger.Errorf("Init error %v", err)
 		return
 	}
-	logger.Info("Loading local db successfully. ")
+	mainLogger.With("dbNum", len(dbs)).Info("Loading local db successfully. ")
 
 	config.SetDatabases(dbs)
 	// Meta info listener
 	go api.GetCollections(ctx, sugar.Named("get_collection"))
 	go api.GetIndexes(ctx, sugar.Named("get_index"))
-	go api.GetRootCid(ctx, sugar.Named("get_rootcid"))
 	// Service listener
 	go api.CreatEventListener(ctx, sugar.Named("create_event"))
 	go api.PutEventListener(ctx, sugar.Named("put_event"))
@@ -102,7 +122,7 @@ func main() {
 	sig := <-sigs
 	mainLogger.Info("Received signal %s, exiting...", sig)
 
-	err = saveDB(ctx, config.SaveDataPath, config.Dbs) // Save db
+	err = saveDB(ctx, *mainLogger, config.Dbs, config.SaveDataPath) // Save db
 	if err != nil {
 		mainLogger.Errorf("save db file error %w", err)
 		return
@@ -110,80 +130,67 @@ func main() {
 	logger.Info("All data saved successfully. ")
 }
 
-func loadDb(ctx context.Context, savePath string) (map[string]*indexer.Database, error) {
+func loadDb(ctx context.Context, logger *zap.SugaredLogger, savePath string) (map[string]*indexer.Database, error) {
 	// Load saved databases if they exist
 	dbs := make(map[string]*indexer.Database)
-	file, err := os.Open(path.Join(savePath, "paths"))
+	file, err := os.Open(path.Join(savePath, "meta.json"))
 	if err != nil {
 		if !os.IsNotExist(err) {
 			return nil, fmt.Errorf("error opening file: %w", err)
 		}
 	} else {
 		defer file.Close()
-		scanner := bufio.NewScanner(file)
 
-		for scanner.Scan() {
-			filename := scanner.Text()
-
-			parts := strings.Split(filename, "/")
-			lastPart := parts[len(parts)-1]
-			fileNameParts := strings.Split(lastPart, ".")
-			result := fileNameParts[0]
-
-			db, err := indexer.ImportFromFile(path.Join(savePath, filename))
+		content, err := io.ReadAll(file)
+		if err != nil {
+			return nil, fmt.Errorf("read meta %w", err)
+		}
+		var metas []config.DbMeta
+		err = json.Unmarshal(content, &metas)
+		if err != nil {
+			return nil, fmt.Errorf("unmarshal meta %w", err)
+		}
+		for _, meta := range metas {
+			treeRoot, err := cid.Decode(meta.RootCid)
+			if err != nil {
+				return nil, fmt.Errorf("parse tree root %w", err)
+			}
+			db, err := indexer.ImportFromFile(path.Join(savePath, meta.FileName), treeRoot)
 			if err != nil {
 				return nil, fmt.Errorf("an error occurred while scanning path: %w", err)
 			}
-			dbs[result] = db
-		}
-		// Check whether errors are encountered during the Scan process
-		if scanner.Err() != nil {
-			return nil, fmt.Errorf("an error occurred while scanning the file %w", err)
+			logger.Infof("load db %s rootcid %s", meta.Name, db.RootCid())
+			dbs[meta.Name] = db
 		}
 	}
 	return dbs, nil
 }
 
-func saveDB(ctx context.Context, savePath string, dbs map[string]*indexer.Database) error {
-	tmpDir, err := os.MkdirTemp(os.TempDir(), "*")
-	if err != nil {
-		return fmt.Errorf("create tmp dir %w", err)
-	}
-
-	metaPath := path.Join(tmpDir, "paths")
-	file, err := os.OpenFile(metaPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0777)
-	if err != nil {
-		return fmt.Errorf("create paths file fail %w", err)
-	}
-
-	defer file.Close()
-
-	for cid, db := range dbs {
+func saveDB(ctx context.Context, logger zap.SugaredLogger, dbs map[string]*indexer.Database, savePath string) error {
+	var metas []config.DbMeta
+	for dbName, db := range dbs {
+		err := db.Close()
 		if err != nil {
-			return fmt.Errorf("unable to create or open file: %w", err)
+			logger.Errorf("flush db file %v", err)
 		}
-		// Path: tmpDir/{RootCid}.car
-		fileName := cid + ".car"
-		// Use fmt.Fprintln to write a string to a file
-		if _, err := fmt.Fprintln(file, fileName); err != nil {
-			return fmt.Errorf("unable to write to file: %w", err)
-
-		}
-		// Save db as db.car
-		err = db.ExportToFile(ctx, path.Join(tmpDir, fileName))
-		if err != nil {
-			return fmt.Errorf("export to file fail %w", err)
-		}
+		logger.Infof("flush db %s rootcid %s", dbName, db.RootCid().String())
+		metas = append(metas, config.DbMeta{
+			Name:     dbName,
+			FileName: dbName + ".car",
+			RootCid:  db.RootCid().String(),
+		})
 	}
 
-	err = os.RemoveAll(savePath)
+	metaBytes, err := json.Marshal(metas)
 	if err != nil {
-		return fmt.Errorf("remove  savepath %w", err)
+		return fmt.Errorf("marshal metas %w", err)
 	}
 
-	err = os.Rename(tmpDir, savePath)
+	err = os.WriteFile(path.Join(savePath, "meta.json"), metaBytes, 0666)
 	if err != nil {
-		return fmt.Errorf("move temp path %w", err)
+		return fmt.Errorf("write metas file %w", err)
 	}
+
+	logger.Infof("flush db successfully")
 	return nil
 }

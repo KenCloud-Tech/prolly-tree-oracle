@@ -6,13 +6,15 @@ require (
 	github.com/RangerMauve/ipld-prolly-indexer v0.0.0-20240908033524-ed83de72a852
 	github.com/ethereum/go-ethereum v1.14.3
 	github.com/gin-gonic/gin v1.10.0
+	github.com/ipfs/go-block-format v0.1.2
 	github.com/ipfs/go-cid v0.4.1
+	github.com/ipld/go-car/v2 v2.10.1
 	github.com/ipld/go-ipld-prime v0.21.0
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/zap v1.24.0
 )
 
-replace github.com/RangerMauve/ipld-prolly-indexer => github.com/hunjixin/ipld-prolly-indexer v0.0.0-20250110135749-931ef4800504
+replace github.com/RangerMauve/ipld-prolly-indexer => github.com/hunjixin/ipld-prolly-indexer v0.0.0-20250117112617-62aa0a9754eb
 
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
@@ -44,7 +46,6 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/holiman/uint256 v1.2.4 // indirect
 	github.com/ipfs/bbloom v0.0.4 // indirect
-	github.com/ipfs/go-block-format v0.1.2 // indirect
 	github.com/ipfs/go-datastore v0.6.0 // indirect
 	github.com/ipfs/go-ipfs-blockstore v1.3.0 // indirect
 	github.com/ipfs/go-ipfs-ds-help v1.1.0 // indirect
@@ -54,7 +55,6 @@ require (
 	github.com/ipfs/go-log v1.0.5 // indirect
 	github.com/ipfs/go-log/v2 v2.5.1 // indirect
 	github.com/ipfs/go-metrics-interface v0.0.1 // indirect
-	github.com/ipld/go-car/v2 v2.10.1 // indirect
 	github.com/jbenet/goprocess v0.1.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kenlabs/go-ipld-prolly-trees v0.0.0-20231003160144-80ff2aa00397 // indirect

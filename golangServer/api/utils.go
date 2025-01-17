@@ -234,12 +234,14 @@ func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 	}
 	return
 }
+
 func sendTx(ctx context.Context, client *ethclient.Client, sendFunc func() (*types.Transaction, error)) error {
 	for {
 		tx, err := sendFunc()
 		if err != nil {
 			if strings.Contains(err.Error(), "replacement transaction underpriced") {
 				time.Sleep(time.Second * 2)
+
 				continue
 			}
 		}
@@ -248,8 +250,8 @@ func sendTx(ctx context.Context, client *ethclient.Client, sendFunc func() (*typ
 		if err != nil {
 			return fmt.Errorf("wait miner  %s %w", tx.Hash().String(), err)
 		}
-		if receipt.Status != 0 {
-			return fmt.Errorf("receipt status is not 0 %s", tx.Hash().String())
+		if receipt.Status != types.ReceiptStatusSuccessful {
+			return fmt.Errorf("receipt status is not successful %d %s", receipt.Status, tx.Hash().String())
 		}
 
 	}

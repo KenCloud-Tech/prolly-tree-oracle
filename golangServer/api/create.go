@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"path"
 	"strings"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 	"Oracle.com/golangServer/config"
 	"github.com/RangerMauve/ipld-prolly-indexer/indexer"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ipfs/go-cid"
 	"go.uber.org/zap"
 )
 
@@ -77,10 +79,20 @@ func create(ctx context.Context, event *Oracle.OracleCreate, logger *zap.Sugared
 		}
 	} else {
 		logger.Info("non existed dbName: ", event.DbName)
-		db, err := indexer.NewMemoryDatabase()
+		dbPath, emptyRoot, err := createEmptyDbFile(ctx, config.SaveDataPath, event.DbName)
 		if err != nil {
-			logger.Error("New Memory Database ERROR: ", err)
-			info := fmt.Sprintf("New Memory Database ERROR: %v", err)
+			logger.Error("New Database ERROR: ", err)
+			info := fmt.Sprintf("New Database ERROR: %v", err)
+			statement = false
+			//response to oracle
+			config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, event.ColName, event.Owner, info)
+			return
+		}
+
+		db, err := indexer.ImportFromFile(dbPath, emptyRoot)
+		if err != nil {
+			logger.Error("New Database ERROR: ", err)
+			info := fmt.Sprintf("New Database ERROR: %v", err)
 			statement = false
 			//response to oracle
 			config.OracleContract.CreatRsp(tps, event.ReqID, statement, dbName, event.ColName, event.Owner, info)
@@ -107,8 +119,23 @@ func create(ctx context.Context, event *Oracle.OracleCreate, logger *zap.Sugared
 			logger.Error("Req function get an Error : ", err)
 			db.DeleteCol(colName)
 		} else {
-			logger.Info("[", colName, "]", "Create memory db success")
+			logger.Info("[", colName, "]", "Create db success")
 		}
 	}
 
+}
+
+func createEmptyDbFile(ctx context.Context, savepath string, dbName string) (string, cid.Cid, error) {
+	db, err := indexer.NewMemoryDatabase(ctx)
+	if err != nil {
+		return "", cid.Undef, err
+	}
+	fileName := dbName + ".car"
+	dbFile := path.Join(savepath, fileName)
+	err = db.ExportToFile(ctx, dbFile)
+	if err != nil {
+		return "", cid.Undef, err
+	}
+	defer db.Close()
+	return dbFile, db.RootCid(), nil
 }
