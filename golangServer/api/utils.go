@@ -236,14 +236,21 @@ func (q Queryer) Queryer2indexerQ() (nq indexer.Query) {
 }
 
 func sendTx(ctx context.Context, client *ethclient.Client, sendFunc func() (*types.Transaction, error)) error {
+	ctx, _ = context.WithTimeout(ctx, time.Minute*5)
 	for {
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("send tx context timeout")
+		default:
+		}
+
 		tx, err := sendFunc()
 		if err != nil {
 			if strings.Contains(err.Error(), "replacement transaction underpriced") {
 				time.Sleep(time.Second * 2)
-
 				continue
 			}
+			return err
 		}
 
 		receipt, err := bind.WaitMined(ctx, client, tx)
