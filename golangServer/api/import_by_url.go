@@ -43,7 +43,7 @@ func ImportEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 				logger.Errorf("[Error in Event IMPORT:", err)
 				break LOOP
 			case event := <-Logs:
-				logger.Info("Received put event ", event.ReqID)
+				logger.Info("Received import event ", event.ReqID)
 				importByUrl(ctx, event, logger)
 			}
 		}
@@ -88,17 +88,17 @@ func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl, logger 
 			_ = resp.Body.Close()
 		}
 	}()
-	ContentLength := resp.ContentLength
-	size = bigInt.SetInt64(ContentLength)
-
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		logger.Errorf("Get datas ERROR: ", err)
-		info := fmt.Sprintf("Get datas ERROR: %v", err)
+		logger.Errorf("Read response body ERROR: ", err)
+		info := fmt.Sprintf("Read response body ERROR: %v", err)
 		statement = false
 		//response to oracle
 		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
 		return
 	}
+	contentLength := len(body)
+
 	if resp.StatusCode != 200 {
 		logger.Errorf("Get datas Fail, StatusCode = ", resp.StatusCode)
 		info := fmt.Sprintf("Get datas Fail, StatusCode = %v", resp.StatusCode)
@@ -107,7 +107,7 @@ func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl, logger 
 		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
 		return
 	}
-	if ContentLength == 0 {
+	if contentLength == 0 {
 		info := fmt.Sprintf("Empty content, Content-Length = 0")
 		statement = false
 		//response to oracle
@@ -127,8 +127,11 @@ func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl, logger 
 		return
 	}
 
-	if event.Value.Int64() > gasPerByteByUrl.Int64()*ContentLength {
-		info := fmt.Sprintf("The data is too large and the gas paid is insufficient.")
+	logger.Infof("import event paid. pay(%d) price(%d), total(%d)",
+		event.Value.Int64(), gasPerByteByUrl.Int64(), gasPerByteByUrl.Int64()*int64(contentLength))
+	if event.Value.Int64() < gasPerByteByUrl.Int64()*int64(contentLength) {
+		info := fmt.Sprintf("The data is too large and the gas paid is insufficient. pay(%d) unit(%d), total(%d)",
+			event.Value.Int64(), gasPerByteByUrl.Int64(), gasPerByteByUrl.Int64()*int64(contentLength))
 		statement = false
 		//response to oracle
 		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
@@ -137,7 +140,6 @@ func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl, logger 
 
 	switch event.Format {
 	case "csv":
-		body, err := io.ReadAll(resp.Body)
 		reader := strings.NewReader(string(body))
 		err = IngestCSV(ctx, reader, dbC)
 		err = db.ApplyChanges(ctx)
@@ -152,7 +154,7 @@ func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl, logger 
 			statement = true
 		}
 	case "ndjson":
-		body, _ := io.ReadAll(resp.Body)
+
 		reader := strings.NewReader(string(body))
 		// insert Data
 		err = dbC.IndexNDJSON(ctx, reader)
