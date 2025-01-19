@@ -103,6 +103,15 @@ func main() {
 	mainLogger.With("dbNum", len(dbs)).Info("Loading local db successfully. ")
 
 	config.SetDatabases(dbs)
+	//todo ensure db is flush
+	defer func() {
+		err = saveDB(ctx, *mainLogger, config.Dbs, config.SaveDataPath) // Save db
+		if err != nil {
+			mainLogger.Errorf("save db file error %w", err)
+			return
+		}
+		logger.Info("All data saved successfully. ")
+	}()
 	// Meta info listener
 	go api.GetCollections(ctx, sugar.Named("get_collection"))
 	go api.GetIndexes(ctx, sugar.Named("get_index"))
@@ -122,12 +131,6 @@ func main() {
 	sig := <-sigs
 	mainLogger.Info("Received signal %s, exiting...", sig)
 
-	err = saveDB(ctx, *mainLogger, config.Dbs, config.SaveDataPath) // Save db
-	if err != nil {
-		mainLogger.Errorf("save db file error %w", err)
-		return
-	}
-	logger.Info("All data saved successfully. ")
 }
 
 func loadDb(ctx context.Context, logger *zap.SugaredLogger, savePath string) (map[string]*indexer.Database, error) {
