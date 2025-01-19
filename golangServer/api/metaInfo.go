@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"runtime/debug"
 	"time"
 
 	"Oracle.com/golangServer/Oracle"
@@ -37,48 +38,57 @@ func GetCollections(ctx context.Context, logger *zap.SugaredLogger) {
 				break LOOP
 			case event := <-Logs:
 				logger.Infof("Received GetCollections event ", event.ReqID)
-				var statement bool
-				tps := GenTransactOpts(ctx, config.GasLimit)
-
-				db := config.Dbs[event.DbName]
-				cols, err := db.ListCollections(ctx)
-				if err != nil {
-					logger.Error("[", event.DbName, "]", "List Collections ERROR: ", err)
-					info := fmt.Sprintf("List Collections ERROR: %v", err)
-					statement = false
-					//response to oracle
-					config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					continue
-				}
-
-				jsonBytes, err := json.Marshal(cols)
-				if err != nil {
-					logger.Error("[", event.DbName, "]", "Trans to json ERROR: ", err)
-					info := fmt.Sprintf("Trans to json ERROR: %v", err)
-					statement = false
-					//response to oracle
-					config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					continue
-				}
-				result, err := json.Marshal([][]byte{jsonBytes})
-				if err != nil {
-					logger.Error("Marshal Results ERROR: ", err)
-					info := fmt.Sprintf("Marshal Results ERROR: %v", err)
-					statement = false
-					//response to oracle
-					config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					continue
-				}
-				statement = true
-				//response to oracle
-				_, err = config.OracleContract.GetColRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
-				if err != nil {
-					logger.Error("Req function get an Error : ", err)
-				} else {
-					logger.Info("[Get collections success]")
-				}
+				getCollection(ctx, event, logger)
 			}
 		}
+	}
+}
+
+func getCollection(ctx context.Context, event *Oracle.OracleGetCol, logger *zap.SugaredLogger) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error("stacktrace from panic: " + string(debug.Stack()))
+		}
+	}()
+	var statement bool
+	tps := GenTransactOpts(ctx, config.GasLimit)
+
+	db := config.Dbs[event.DbName]
+	cols, err := db.ListCollections(ctx)
+	if err != nil {
+		logger.Error("[", event.DbName, "]", "List Collections ERROR: ", err)
+		info := fmt.Sprintf("List Collections ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		return
+	}
+
+	jsonBytes, err := json.Marshal(cols)
+	if err != nil {
+		logger.Error("[", event.DbName, "]", "Trans to json ERROR: ", err)
+		info := fmt.Sprintf("Trans to json ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.GetColRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		return
+	}
+	result, err := json.Marshal([][]byte{jsonBytes})
+	if err != nil {
+		logger.Error("Marshal Results ERROR: ", err)
+		info := fmt.Sprintf("Marshal Results ERROR: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		return
+	}
+	statement = true
+	//response to oracle
+	_, err = config.OracleContract.GetColRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
+	if err != nil {
+		logger.Error("Req function get an Error : ", err)
+	} else {
+		logger.Info("[Get collections success]")
 	}
 }
 
@@ -105,84 +115,93 @@ func GetIndexes(ctx context.Context, logger *zap.SugaredLogger) {
 				break LOOP
 			case event := <-Logs:
 				logger.Info("Received GetIndexes event ", event.ReqID)
-				var statement bool
-				ctx := ctx
-				tps := GenTransactOpts(ctx, config.GasLimit)
-
-				db := config.Dbs[event.DbName]
-				colName := event.ColName
-				col, err := db.Collection(ctx, colName, "")
-				if err != nil {
-					logger.Error("Get collection ERROR: ", err)
-					info := fmt.Sprintf("Get collection ERROR: %v", err)
-					statement = false
-					//response to oracle
-					err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
-						return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					})
-					if err != nil {
-						logger.Error("response error resp %v", err)
-					}
-					continue
-				}
-				indx, err := col.Indexes(ctx)
-				if err != nil {
-					logger.Error("Get indexes ERROR: ", err)
-					info := fmt.Sprintf("Get indexes ERROR: %v", err)
-					statement = false
-					//response to oracle
-					err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
-						return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					})
-					if err != nil {
-						logger.Error("response error resp %v", err)
-					}
-					continue
-				}
-				var indexes []string
-				for _, i := range indx {
-					indexes = append(indexes, i.Fields()...)
-				}
-				jsonBytes, err := json.Marshal(indexes)
-				if err != nil {
-					logger.Error("[", event.DbName, "]", "Trans to json ERROR: ", err)
-					info := fmt.Sprintf("Trans to json ERROR: %v", err)
-					statement = false
-					//response to oracle
-					err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
-						return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					})
-					if err != nil {
-						logger.Error("response error resp %v", err)
-					}
-					continue
-				}
-
-				result, err := json.Marshal([][]byte{jsonBytes})
-				if err != nil {
-					logger.Error("Marshal Results ERROR: ", err)
-					info := fmt.Sprintf("Marshal Results ERROR: %v", err)
-					statement = false
-					//response to oracle
-					err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
-						return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
-					})
-					if err != nil {
-						logger.Error("response error resp %v", err)
-					}
-					continue
-				}
-				statement = true
-				//response to oracle
-				err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
-					return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
-				})
-				if err != nil {
-					logger.Error("Req function get an Error : ", err)
-				} else {
-					logger.Info("[Get indexes success]")
-				}
+				getIndex(ctx, event, logger)
 			}
 		}
+	}
+}
+
+func getIndex(ctx context.Context, event *Oracle.OracleGetIndex, logger *zap.SugaredLogger) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error("stacktrace from panic: " + string(debug.Stack()))
+		}
+	}()
+
+	var statement bool
+	tps := GenTransactOpts(ctx, config.GasLimit)
+
+	db := config.Dbs[event.DbName]
+	colName := event.ColName
+	col, err := db.Collection(ctx, colName, "")
+	if err != nil {
+		logger.Error("Get collection ERROR: ", err)
+		info := fmt.Sprintf("Get collection ERROR: %v", err)
+		statement = false
+		//response to oracle
+		err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+			return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		})
+		if err != nil {
+			logger.Error("response error resp %v", err)
+		}
+		return
+	}
+	indx, err := col.Indexes(ctx)
+	if err != nil {
+		logger.Error("Get indexes ERROR: ", err)
+		info := fmt.Sprintf("Get indexes ERROR: %v", err)
+		statement = false
+		//response to oracle
+		err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+			return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		})
+		if err != nil {
+			logger.Error("response error resp %v", err)
+		}
+		return
+	}
+	var indexes []string
+	for _, i := range indx {
+		indexes = append(indexes, i.Fields()...)
+	}
+	jsonBytes, err := json.Marshal(indexes)
+	if err != nil {
+		logger.Error("[", event.DbName, "]", "Trans to json ERROR: ", err)
+		info := fmt.Sprintf("Trans to json ERROR: %v", err)
+		statement = false
+		//response to oracle
+		err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+			return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		})
+		if err != nil {
+			logger.Error("response error resp %v", err)
+		}
+		return
+	}
+
+	result, err := json.Marshal([][]byte{jsonBytes})
+	if err != nil {
+		logger.Error("Marshal Results ERROR: ", err)
+		info := fmt.Sprintf("Marshal Results ERROR: %v", err)
+		statement = false
+		//response to oracle
+		err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+			return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
+		})
+		if err != nil {
+			logger.Error("response error resp %v", err)
+		}
+		return
+	}
+	statement = true
+	//response to oracle
+	err = sendTx(ctx, config.Client, func() (*types.Transaction, error) {
+		return config.OracleContract.GetIndexRsp(tps, event.ReqID, statement, result, event.CallBack, event.Sender, "")
+	})
+	if err != nil {
+		logger.Error("Req function get an Error : ", err)
+	} else {
+		logger.Info("[Get indexes success]")
 	}
 }

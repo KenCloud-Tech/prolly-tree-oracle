@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"runtime/debug"
 	"time"
 
 	"Oracle.com/golangServer/Oracle"
@@ -46,6 +47,11 @@ func GetRootCidEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 
 // Get root cid from database
 func getRootCid(ctx context.Context, event *Oracle.OracleGetRootCid, logger *zap.SugaredLogger) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error("stacktrace from panic: " + string(debug.Stack()))
+		}
+	}()
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 

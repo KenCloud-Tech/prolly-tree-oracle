@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"runtime/debug"
 	"time"
 
 	"Oracle.com/golangServer/Oracle"
@@ -55,6 +56,11 @@ func SearchEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 
 // Search Data from memory db
 func search(ctx context.Context, event *Oracle.OracleSearch, logger *zap.SugaredLogger) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error("stacktrace from panic: " + string(debug.Stack()))
+		}
+	}()
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 

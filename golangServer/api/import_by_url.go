@@ -6,6 +6,7 @@ import (
 	"io"
 	"math/big"
 	"net/http"
+	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
@@ -51,6 +52,11 @@ func ImportEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 
 // Import Data to memory db
 func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl, logger *zap.SugaredLogger) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error("stacktrace from panic: " + string(debug.Stack()))
+		}
+	}()
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
@@ -69,7 +75,19 @@ func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl, logger 
 		return
 	}
 	resp, err := http.Get(event.Url)
-	defer resp.Body.Close()
+	if err != nil {
+		logger.Errorf("Request url %s content ERROR: ", event.Url, err)
+		info := fmt.Sprintf("Request url content: %v", err)
+		statement = false
+		//response to oracle
+		config.OracleContract.ImportFromUrlRsp(tps, event.ReqID, statement, size, event.Sender, info)
+		return
+	}
+	defer func() {
+		if resp.Body != nil {
+			_ = resp.Body.Close()
+		}
+	}()
 	ContentLength := resp.ContentLength
 	size = bigInt.SetInt64(ContentLength)
 

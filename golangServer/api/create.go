@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -47,6 +48,11 @@ func CreatEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 
 // create memory collection
 func create(ctx context.Context, event *Oracle.OracleCreate, logger *zap.SugaredLogger) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error("stacktrace from panic: " + string(debug.Stack()))
+		}
+	}()
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 

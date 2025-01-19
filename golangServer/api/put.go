@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -43,6 +44,11 @@ func PutEventListener(ctx context.Context, logger *zap.SugaredLogger) {
 
 // Put Data to memory db
 func put(ctx context.Context, event *Oracle.OraclePut, logger *zap.SugaredLogger) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error("stacktrace from panic: " + string(debug.Stack()))
+		}
+	}()
 	var statement bool
 	tps := GenTransactOpts(ctx, config.GasLimit)
 
