@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"Oracle.com/golangServer/Oracle"
@@ -78,10 +79,10 @@ func getRootCid(ctx context.Context, event *Oracle.OracleGetRootCid, logger *zap
 	}
 
 	statement = true
-	data := rootCid.Bytes() // Convert cid to bytes
 	// Response to oracle
+	jsonRoot, _ := json.Marshal(rootCid.String())
 	err := sendTx(ctx, config.Client, func() (*types.Transaction, error) {
-		return config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, data, event.CallBack, event.Sender, "")
+		return config.OracleContract.GetRootCidRsp(tps, event.ReqID, statement, jsonRoot, event.CallBack, event.Sender, "")
 	})
 	if err != nil {
 		logger.Error("Req function encountered an error: ", err)

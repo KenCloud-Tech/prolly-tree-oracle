@@ -260,6 +260,6 @@ func sendTx(ctx context.Context, client *ethclient.Client, sendFunc func() (*typ
 		if receipt.Status != types.ReceiptStatusSuccessful {
 			return fmt.Errorf("receipt status is not successful %d %s", receipt.Status, tx.Hash().String())
 		}
-
+		return nil
 	}
 }
