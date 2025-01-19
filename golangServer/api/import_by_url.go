@@ -65,7 +65,7 @@ func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl, logger 
 	colName := event.ColName
 	dbName := event.DbName
 	db := config.Dbs[dbName]
-	dbC, err := db.Collection(ctx, colName, "")
+	dbC, err := db.Collection(ctx, colName)
 	if err != nil {
 		logger.Errorf("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)
@@ -98,6 +98,7 @@ func importByUrl(ctx context.Context, event *Oracle.OracleImportFromUrl, logger 
 		return
 	}
 	contentLength := len(body)
+	size = size.SetInt64(int64(contentLength))
 
 	if resp.StatusCode != 200 {
 		logger.Errorf("Get datas Fail, StatusCode = ", resp.StatusCode)

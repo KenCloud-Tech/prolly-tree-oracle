@@ -74,7 +74,7 @@ func search(ctx context.Context, event *Oracle.OracleSearch, logger *zap.Sugared
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, info)
 		return
 	}
-	dbC, err := db.Collection(ctx, colName, "")
+	dbC, err := db.Collection(ctx, colName)
 	if err != nil {
 		logger.Error("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)

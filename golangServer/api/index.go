@@ -54,7 +54,7 @@ func index(ctx context.Context, event *Oracle.OracleIndex, logger *zap.SugaredLo
 
 	colName := event.ColName
 	db := config.Dbs[event.DbName]
-	dbC, err := db.Collection(ctx, colName, "")
+	dbC, err := db.Collection(ctx, colName)
 	if err != nil {
 		logger.Errorf("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)

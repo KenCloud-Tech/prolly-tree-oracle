@@ -60,7 +60,7 @@ func get(ctx context.Context, event *Oracle.OracleGet, logger *zap.SugaredLogger
 		config.OracleContract.GetRsp(tps, event.ReqID, statement, []byte{}, event.CallBack, event.Sender, "DB is not exist")
 		return
 	}
-	col, err := db.Collection(ctx, colName, "")
+	col, err := db.Collection(ctx, colName)
 	if err != nil {
 		logger.Errorf("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)

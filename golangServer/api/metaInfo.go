@@ -133,7 +133,7 @@ func getIndex(ctx context.Context, event *Oracle.OracleGetIndex, logger *zap.Sug
 
 	db := config.Dbs[event.DbName]
 	colName := event.ColName
-	col, err := db.Collection(ctx, colName, "")
+	col, err := db.Collection(ctx, colName)
 	if err != nil {
 		logger.Error("Get collection ERROR: ", err)
 		info := fmt.Sprintf("Get collection ERROR: %v", err)
