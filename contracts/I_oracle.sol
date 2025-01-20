@@ -16,7 +16,7 @@ contract IOracle {
     // A mapping of dbName to db owner`s addresses. dbName=>dbOwner address
     mapping(string => address) internal dbOwner;
     // A mapping of db owner`s addresses to db`s name. dbOwner address=>db`s name
-    mapping(address=>string) internal myDbName;
+    mapping(address=>string[]) internal myDbNames;
     // Mapping from dbName to whether collection exists   db`s name=>collection name=>isExist
     mapping(string => mapping(string => bool)) internal cols;
     // A mapping of user address to db control permission.  address=>db`s name=>permission

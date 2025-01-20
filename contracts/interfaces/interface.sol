@@ -14,7 +14,7 @@ pragma solidity ^0.8.0;
 interface OracleInterface{
 
 
-    function AllowWrite(address to) external payable;
+    function AllowWrite(string calldata dbName, address to) external payable;
     // event allowWrite(uint id, address user)
 
 

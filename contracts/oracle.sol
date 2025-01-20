@@ -16,10 +16,20 @@ contract Oracle is IOracle,OracleInterface, util {
     }
 
     // Allow a address write
-    function AllowWrite(address to) external payable{
+    function AllowWrite(string calldata dbName, address to) external payable{
         pay(0);
-        require( !isEmptyString(myDbName[msg.sender]), "You has not create a db.");
-        string memory dbName = myDbName[msg.sender];
+        require(myDbNames[msg.sender].length > 0, "You has not create a db.");
+        string[] memory dbNames = myDbNames[msg.sender];
+        bool found = false;
+        for(uint i = 0 ;i < dbNames.length;i++ ){
+            if (keccak256(abi.encodePacked(dbNames[i])) == keccak256(abi.encodePacked(dbName))){
+                found = true;
+                break ;
+            }
+        }
+
+        require(found, "input dbName not in db list");
+
         require(msg.sender == dbOwner[dbName], "Only the db owner can call this function");
         uint reqID = CurrentReqID;
         CurrentReqID++;
@@ -40,9 +50,9 @@ contract Oracle is IOracle,OracleInterface, util {
 
     function CreatRsp(uint reqID, bool statement,string calldata dbName, string calldata colName, address sender, string calldata info) onlyOracleOwner external {
         if (statement == true) {
-            if (dbOwner[dbName] ==address(0)){
+            if (dbOwner[dbName] == address(0)){
                 dbOwner[dbName] = sender;
-                myDbName[sender] = dbName;
+                myDbNames[sender].push(dbName);
             }
             cols[dbName][colName] = true;
             permission[dbOwner[dbName]][dbName] = Permission(true, true, true); //dbOwner

@@ -6,6 +6,10 @@
     </div>
     <div class="content">
         <li>
+            <p>Please input DbName<span>(String)</span></p>
+            <el-input v-model="dbName"  placeholder="Please input DbName" @blur="mouseBlur" clearable/>
+        </li>
+        <li>
             <p>Please input Address<span>(String)</span></p>
             <el-input v-model="addr"  placeholder="Please input Address" clearable/>
         </li>
@@ -19,21 +23,27 @@
 
 <script lang="ts" setup>
 
-import {ref} from 'vue'
+import {ref,onMounted} from 'vue'
 import {ethers} from "ethers";
 import {ElMessage} from "element-plus";
 
 const handel = defineProps(['oracle','baseGasFee'])
 const oracle = handel.oracle
 const baseGasFee = handel.baseGasFee.toString()
-const addr = ref('')
+const addr = ref('0xDF5Ec19a07F5Fd4136658Af5a1F7D531C8fEA842')
+const dbName  = ref('')
 const value = ref(baseGasFee)
 const reqID = ref(0)
+
+
+onMounted(() => {
+    dbName.value = localStorage.getItem('dbName')
+})
 
 async function callAllow(){
     try {
         const amount = ethers.utils.parseUnits(value.value,"wei")
-        const tx = await oracle.AllowWrite(addr.value, { value: amount });
+        const tx = await oracle.AllowWrite(dbName.value, addr.value, { value: amount });
         const receipt = await tx.wait();
         reqID.value=Number(receipt.events[0].args[0]._hex)
         console.log("reqID.value",reqID.value);
