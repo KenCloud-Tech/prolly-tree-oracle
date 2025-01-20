@@ -151,7 +151,7 @@ function onClickConnectButton() {
 
 }
 async function onClickOracle(oracleName){
-    const oracleAddress = "0x8d9822aa232c7b0a3838b33d2a7ae2da90f1e5bc"
+    const oracleAddress = "0x4097e064d1b0eb1780ee59b7e9266b3430ba7695"
     // const oracleAddress = await register.getValue(oracleName)
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()

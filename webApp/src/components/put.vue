@@ -98,9 +98,13 @@ async function callPut(){
             type: 'success',
         })
     } catch (error){
+        var msg = error.message;
+        if(error.data){
+            msg =  JSON.stringify(error.data)
+        }
         ElMessage({
             showClose: true,
-            message: 'Error Call Put'+error.data,
+            message: 'Error Call Put'+msg,
             type: 'error',
         })
     }
